@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14110d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Carnet d'Aria">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Carnet d'Aria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f3ead8;--card:#fffaf0;--card2:#f8f0de;--ink:#2a2118;--mute:#76664f;--line:#e0d1b3;
+  --gold:#8f6210;--red:#a03222;--green:#386b32;--blue:#2c5878;--violet:#5d3f86;--read:#f6ecd3;--chip:#ece0c4;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13100c;--card:#1d1813;--card2:#241e17;--ink:#eee3cc;--mute:#a7967b;--line:#382e23;
+  --gold:#dcaa4a;--red:#e57a68;--green:#94c486;--blue:#86b6da;--violet:#b79ae0;--read:#262016;--chip:#2c241a;}}
+:root[data-theme="dark"]{--bg:#13100c;--card:#1d1813;--card2:#241e17;--ink:#eee3cc;--mute:#a7967b;--line:#382e23;
+  --gold:#dcaa4a;--red:#e57a68;--green:#94c486;--blue:#86b6da;--violet:#b79ae0;--read:#262016;--chip:#2c241a;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
+body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;line-height:1.15}
+h1{font-size:1.9rem}h2{font-size:1.45rem}h3{font-size:1.15rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.wrap{max-width:640px;margin:0 auto;padding:0 12px}
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 0 8px}
+.top .wrap{display:flex;align-items:center;gap:10px}
+.emb{width:40px;height:40px;border-radius:50%;background:var(--card2);border:1px solid var(--gold);display:grid;place-items:center;font-size:1.3rem;flex:none}
+.who{flex:1;min-width:0}.who b{font-family:var(--serif);font-size:1.25rem;display:block;line-height:1.1}.who small{color:var(--mute);font-size:.75rem}
+.hpbox{text-align:center;min-width:64px}.hpbox b{font-family:var(--serif);font-size:1.5rem}.hpbox small{display:block;font-size:.65rem;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-top:-3px}
+.ibtn{border:1px solid var(--line);background:var(--card);border-radius:10px;width:40px;height:40px;flex:none}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;border:0;background:none;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.7rem;color:var(--mute)}
+nav.tabs button span{font-size:1.25rem;line-height:1}
+nav.tabs button.on{color:var(--gold);font-weight:600}
+.sec{padding:14px 0 6px}.sec>h2{margin:4px 2px 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;padding:12px 14px}
+.blk{border-radius:10px;padding:10px 12px;margin:8px 0;font-size:.93rem;background:var(--card2)}
+.blk b.lab{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;color:var(--gold)}
+.read{background:var(--read);font-family:var(--serif);font-size:1.1rem;line-height:1.45;border-left:3px solid var(--gold)}
+.read b.lab{font-family:var(--sans)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.grow{flex:1}
+.btn{border:1px solid var(--line);background:var(--card2);border-radius:10px;padding:9px 12px;font-weight:500;min-height:42px}
+.btn.p{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.btn.s{padding:5px 10px;min-height:34px;font-size:.85rem}.btn.d{color:var(--red)}
+.muted{color:var(--mute)}.small{font-size:.8rem}
+input[type=number],input[type=text],select,textarea{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:42px;width:100%}
+textarea{min-height:80px;resize:vertical}
+.num{width:70px!important;text-align:center}
+.stat{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:4px 0 8px}
+.stat div{background:var(--card2);border-radius:10px;padding:6px 2px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:1.35rem}.stat small{color:var(--mute);font-size:.65rem}
+.counter{display:flex;align-items:center;gap:6px}
+.counter b{min-width:40px;text-align:center;font-family:var(--serif);font-size:1.45rem}
+.counter button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card2);font-size:1.15rem}
+.hr{height:1px;background:var(--line);margin:12px 0}
+.skill{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
+.skill:last-child{border-bottom:0}
+.skill .n{flex:1}.skill .v{font-family:var(--serif);font-size:1.25rem;font-weight:700;min-width:46px;text-align:right}
+.skill .l{font-size:.7rem;color:var(--mute)}
+.skill.hi .v{color:var(--gold)}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick button{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 12px;text-align:left;min-height:150px;display:flex;flex-direction:column;gap:6px}
+.pick button .e{font-size:2rem}
+.pick button b{font-family:var(--serif);font-size:1.2rem}
+.pick button small{color:var(--mute);font-size:.78rem;line-height:1.35}
+.item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dotted var(--line)}
+.item:last-child{border-bottom:0}
+.item .q{min-width:34px;text-align:center;font-weight:600;background:var(--chip);border-radius:8px;padding:2px 6px;font-size:.85rem}
+.coin{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.dice{font-family:var(--serif);font-size:3rem;font-weight:700;text-align:center;line-height:1.1}
+.msg{text-align:center;font-weight:600;min-height:1.4em}
+.ok{color:var(--green)}.ko{color:var(--red)}.crit{color:var(--gold)}
+.sheet{position:fixed;inset:auto 0 0 0;z-index:60;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:640px;margin:0 auto;box-shadow:0 -8px 30px rgba(0,0,0,.35)}
+.sheet.show{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.show{opacity:1;pointer-events:auto}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.suit{font-size:1.5rem;border-radius:10px;border:1px solid var(--line);background:var(--card2);padding:6px 0}
+.suit.on{border-color:var(--gold);background:var(--read)}
+.redc{color:#c0392b}
+.cardface{width:120px;height:170px;margin:6px auto;border-radius:12px;background:#fdfaf2;color:#222;border:2px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.cardface b{font-size:2.6rem;line-height:1}.cardface span{font-size:3rem;line-height:1}
+.cardface.r{color:#b3261e}
+.pill{background:var(--chip);border-radius:999px;padding:2px 9px;font-size:.8rem;display:inline-block;margin:2px}
+details.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px}
+details.acc>summary{list-style:none;padding:13px 14px;font-family:var(--serif);font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary::after{content:"›";margin-left:auto;color:var(--mute);font-family:var(--sans);transition:transform .2s}
+details.acc[open]>summary::after{transform:rotate(90deg)}
+details.acc>.in{padding:0 14px 14px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+.tagline{font-family:var(--serif);font-style:italic;font-size:1.05rem}
+.sess{border-left:3px solid var(--gold);padding-left:12px;margin:12px 0}
+.hidden{display:none!important}
+.sess h3{margin-bottom:2px}.sess .d{font-size:.75rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<header class="top hidden" id="top"><div class="wrap">
+  <div class="emb" id="emb">?</div>
+  <div class="who"><b id="whoName">—</b><small id="whoClass"></small></div>
+  <div class="hpbox"><b id="hpTop">–</b><small>PV</small></div>
+  <button class="ibtn" id="btnTheme" aria-label="Changer de thème">◐</button>
+</div></header>
+<main class="wrap" id="main"></main>
+<nav class="tabs hidden" id="tabs">
+  <button data-tab="fiche"><span>📜</span>Fiche</button>
+  <button data-tab="sac"><span>🎒</span>Sac</button>
+  <button data-tab="pouvoir"><span id="powIcon">✨</span><i id="powLab" style="font-style:normal">Pouvoir</i></button>
+  <button data-tab="journal"><span>📖</span>Journal</button>
+  <button data-tab="regles"><span>🎲</span>Règles</button>
+</nav>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ Personnages ============ */
+const COMP=[["Artisanat, construire","DEX/INT"],["Combat rapproché","FOR/DEX"],["Combat à distance","DEX/INT"],["Connaissance de la nature","DEX/INT"],["Connaissance des secrets","INT/CHA"],["Courir, sauter","DEX/END"],["Discrétion","DEX/CHA"],["Droit","INT/CHA"],["Esquiver","DEX/INT"],["Intimider","FOR/CHA"],["Lire, écrire","INT/CHA"],["Mentir, convaincre","INT/CHA"],["Perception","INT/CHA"],["Piloter","DEX/END"],["Psychologie","END/INT"],["Réflexes","DEX/INT"],["Serrures et pièges","DEX/END"],["Soigner","INT/CHA"],["Survie","END/INT"],["Voler","DEX/INT"]];
+const HEROS={
+ reveka:{nom:"Reveka Cosovei",classe:"Sorcière du Kohest",emb:"🕷️",age:22,pv:12,prot:0,pouvoir:"mort",
+  carac:{FOR:9,DEX:10,END:12,INT:16,CHA:13},armes:[["Bâton","1d6"]],
+  comp:[65,45,65,65,70,70,45,70,65,65,70,60,70,55,70,75,55,70,65,65],spec:[["Magie de la mort",65]],
+  sac:["Bâton","Bouteille","Toile goudronnée","Torche|5","Gibecière","Canne de marche","Jeu de dés","Carte d'Aria"],rois:72,
+  pitch:"Sorcière exilée des siens pour avoir accepté l'aide d'un ennemi. Elle prie l'Araignée, le dieu oublié de la mort."},
+ honorin:{nom:"Honorin Bicastre",classe:"Disciple de l'académie d'Aria",emb:"🃏",age:22,pv:11,prot:0,pouvoir:"cartes",
+  carac:{FOR:9,DEX:10,END:11,INT:16,CHA:14},armes:[["Bâton","1d6"]],
+  comp:[65,45,65,75,75,40,60,75,65,55,80,75,75,60,65,65,50,65,65,65],spec:[["Modélisation",60]],
+  sac:["Jeu de cartes (25 + joker)","Bâton","Sablier","Longue-vue","Feuille de papier|10","Pinceau","Pot à encre","Traité de théologie"],rois:771,
+  pitch:"Mage de la couronne qui a désobéi une fois. Sa magie tient dans un paquet de cartes… et chaque carte jouée est perdue à jamais."},
+ calisse:{nom:"Calisse Lapointe",classe:"Chevalière errante du Rideau",emb:"🛡️",age:19,pv:14,prot:4,pouvoir:"combat",
+  carac:{FOR:15,DEX:13,END:14,INT:10,CHA:8},armes:[["Pertuisane","1d6+2"],["Épée courte","1d6"],["Bouclier","+20 % parade"]],
+  comp:[55,70,55,55,45,65,50,35,75,55,45,45,45,55,70,75,65,55,55,55],spec:[],
+  sac:["Plastron de cuir et métal (protection 4)","Pertuisane","Épée courte","Bouclier","Couverture","Gourde","Cataplasme|3","Rations de piste (1 semaine)","Sac à dos"],rois:532,
+  pitch:"Chevalière fidèle à ses vœux plus qu'à son seigneur. Elle a sauvé une sorcière, et l'a payé de son rang."},
+ basilis:{nom:"Basilis Presteroi",classe:"Voleur déguisé en barde",emb:"🎭",age:20,pv:11,prot:0,pouvoir:"ruses",
+  carac:{FOR:10,DEX:14,END:11,INT:14,CHA:11},armes:[["Dague","1d4"],["Hachette","1d6"]],
+  comp:[70,60,70,60,60,70,60,60,70,50,60,60,60,60,60,70,70,60,50,70],spec:[],
+  sac:["Dague","Hachette","Outils de crochetage","Passe-partout","Déguisement","Jeu de cartes truqué","Timbale (bonneteau)|3","Sifflet","Trousse de maquillage"],rois:427,
+  pitch:"Voleur jeté en prison avant même d'avoir volé quoi que ce soit : son spectacle de ménestrel était jugé trop mauvais."}
+};
+const MAGIE={rangs:["2","3-6","7-8","9-10","Valet","Dame-Roi","As"],
+ suits:{"♦":{nom:"Carreau",dom:"manipuler la matière existante",fx:["Pousser un caillou","Fermer une porte à distance","Renverser une carriole","Faire s'écrouler un mur","Faire s'écrouler une maison","Soulever un galion englouti","Faire tomber une météorite"]},
+  "♣":{nom:"Trèfle",dom:"faire naître un élément",fx:["Allumer une bougie","Remplir une gourde","Vent qui pousse un navire","Boule de feu","Colonne d'eau de mer","Changer la météo","Vent qui dévaste une capitale"]},
+  "♠":{nom:"Pique",dom:"agir sur les esprits",fx:["Trouver un cimetière","Chasser un esprit faible","Parler à un défunt sur sa tombe","Revivre le passé d'un lieu","Réanimer un cadavre frais","Convoquer un esprit gardien","Armée de squelettes"]},
+  "♥":{nom:"Cœur",dom:"toucher les sentiments",fx:["Aider à s'endormir","Provoquer le dégoût","Se faire apprécier d'un garde","Provoquer la peur","Subjuguer un petit groupe","Invisible aux yeux de la foule","Contrôler l'esprit d'un roi"]}}};
+const VAL=["2","3","4","5","6","7","8","9","10","V","D","R","A"];
+const rangIdx=v=>({"2":0,"3":1,"4":1,"5":1,"6":1,"7":2,"8":2,"9":3,"10":3,"V":4,"D":5,"R":5,"A":6})[v];
+const SORTS=[["Blesser une personne","1d4+1 PV (1d6+2 la nuit ou près d'un champ de bataille). Ne peut pas tuer."],["Convoquer et parler avec un mort","Sur le lieu du décès, pendant une heure. Vous seule l'entendez."],["Demander conseil aux esprits","Les âmes orientent vos choix sans donner la solution."],["Envoyer des cauchemars","Jusqu'à 5 personnes, pendant un mois : −20 % à tous leurs jets."],["Maudire une personne","Pendant 5 jours, elle rate tout jet dont le résultat est pair."],["Réveiller les esprits","Les âmes apparaissent, tous les non-initiés sont figés d'effroi."],["Réveiller un cadavre","Pour une nuit, le mort est lucide… et peut négocier."]];
+
+/* ============ État local ============ */
+const KEY="aria-carnet-v1";
+let S; try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
+if(!S) S={hero:null,tab:"fiche",perso:{}};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function P(){ return S.perso[S.hero]; }
+function H(){ return HEROS[S.hero]; }
+function initPerso(id){
+  const h=HEROS[id];
+  S.perso[id]={nom:h.nom,age:h.age,desc:"",genial:"",probleme:"",pv:h.pv,blessures:"",
+    comp:h.comp.slice(),spec:h.spec.map(x=>x.slice()),
+    sac:h.sac.map(s=>{const [n,q]=s.split("|");return {n,q:+(q||1)};}),
+    bourse:{c:0,o:0,s:0,r:h.rois},notes:"",
+    mort:10,cartes:25,joker:true,jouees:[],deck:null,sel:{suit:"♠",val:"7"}};
+}
+
+/* ============ Utilitaires ============ */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rnd=n=>1+Math.floor(Math.random()*n);
+const dd=n=>n===100?"00":String(n).padStart(2,"0");
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2200);}
+function openSheet(html){$("#sheet").innerHTML=html;$("#sheet").classList.add("show");$("#scrim").classList.add("show");}
+function closeSheet(){$("#sheet").classList.remove("show");$("#scrim").classList.remove("show");}
+$("#scrim").onclick=closeSheet;
+function applyTheme(){const t=localStorage.getItem("aria-theme");if(t)document.documentElement.dataset.theme=t;}
+$("#btnTheme").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const n=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=n;try{localStorage.setItem("aria-theme",n);}catch(e){}};
+
+/* ============ Rendu ============ */
+function render(){
+  const m=$("#main");
+  if(!S.hero){ $("#top").classList.add("hidden"); $("#tabs").classList.add("hidden"); m.innerHTML=vPick(); return; }
+  $("#top").classList.remove("hidden"); $("#tabs").classList.remove("hidden");
+  const h=H(),p=P();
+  $("#emb").textContent=h.emb; $("#whoName").textContent=p.nom; $("#whoClass").textContent=h.classe;
+  $("#hpTop").innerHTML=`${p.pv}<span class="muted" style="font-size:.9rem">/${h.pv}</span>`;
+  const pw={mort:["💀","Magie"],cartes:["🃏","Magie"],combat:["⚔️","Combat"],ruses:["🗝️","Ruses"]}[h.pouvoir];
+  $("#powIcon").textContent=pw[0]; $("#powLab").textContent=pw[1];
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===S.tab));
+  m.innerHTML=({fiche:vFiche,sac:vSac,pouvoir:vPouvoir,journal:vJournal,regles:vRegles})[S.tab]();
+  if(S.tab==="journal") loadJournal();
+}
+$("#tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.tab=b.dataset.tab;save();render();scrollTo(0,0);};
+
+function vPick(){
+  return `<div class="sec" style="padding-top:calc(24px + env(safe-area-inset-top))"><h1>Carnet d'Aria</h1>
+  <p class="tagline muted" style="margin:6px 2px 18px">Choisissez votre héros. Votre carnet reste sur ce téléphone.</p>
+  <div class="pick">${Object.entries(HEROS).map(([id,h])=>`<button data-act="choose" data-id="${id}"><span class="e">${h.emb}</span><b>${esc(h.nom)}</b><small>${esc(h.classe)}</small><small>${esc(h.pitch)}</small></button>`).join("")}</div>
+  <p class="small muted" style="margin-top:18px">Sur iPhone : Partager → « Sur l'écran d'accueil ». Sur Android : menu ⋮ → « Installer l'application ». Le carnet marche ensuite sans réseau.</p></div>`;
+}
+
+function vFiche(){
+  const h=H(),p=P();
+  return `<div class="sec">
+  <div class="card">
+    <div class="row" style="justify-content:space-between"><span>Points de vie</span><span class="counter"><button data-act="pv" data-d="-1">−</button><b>${p.pv}</b><button data-act="pv" data-d="1">+</button></span></div>
+    ${p.pv<=0?`<p class="ko small" style="margin:6px 0 0"><b>À terre !</b> Appelez vos compagnons.</p>`:""}
+    <div class="stat" style="margin-top:10px">${Object.entries(h.carac).map(([k,v])=>`<div><b>${v}</b><small>${k}</small></div>`).join("")}</div>
+    <div class="row small"><span class="pill">🛡 Protection ${h.prot}</span>${h.armes.map(a=>`<span class="pill">⚔ ${esc(a[0])} · ${esc(a[1])}</span>`).join("")}</div>
+  </div>
+  <div class="card" style="padding:4px 14px">
+    <p class="small muted" style="margin:8px 0 2px">Touchez une compétence pour la lancer (si vous n'avez pas vos dés).</p>
+    ${p.spec.map((s,i)=>`<button class="skill hi" data-act="roll" data-k="s${i}"><span class="n">${esc(s[0])}<br><span class="l">compétence spéciale</span></span><span class="v">${s[1]} %</span></button>`).join("")}
+    ${COMP.map((c,i)=>`<button class="skill ${p.comp[i]>=70?"hi":""}" data-act="roll" data-k="${i}"><span class="n">${esc(c[0])}<br><span class="l">${c[1]}</span></span><span class="v">${p.comp[i]} %</span></button>`).join("")}
+  </div>
+  <details class="acc"><summary>Mon personnage</summary><div class="in">
+    <label class="small muted">Nom</label><input type="text" data-f="nom" value="${esc(p.nom)}">
+    <div class="row" style="margin-top:8px"><div style="width:90px"><label class="small muted">Âge</label><input type="number" data-f="age" value="${esc(p.age)}"></div><div class="grow"><label class="small muted">Blessures</label><input type="text" data-f="blessures" value="${esc(p.blessures)}" placeholder="ex. bras en écharpe"></div></div>
+    <label class="small muted" style="display:block;margin-top:8px">Apparence, traits marquants</label><textarea data-f="desc" placeholder="Cheveux, cicatrice, manière de parler…">${esc(p.desc)}</textarea>
+    <label class="small muted" style="display:block;margin-top:8px">Je suis génial·e parce que…</label><textarea data-f="genial" style="min-height:60px">${esc(p.genial)}</textarea>
+    <label class="small muted" style="display:block;margin-top:8px">… mais la société a des problèmes avec moi parce que…</label><textarea data-f="probleme" style="min-height:60px">${esc(p.probleme)}</textarea>
+    <p class="small muted">${esc(h.pitch)}</p>
+  </div></details>
+  <details class="acc"><summary>Progression</summary><div class="in">
+    <p class="small muted" style="margin-top:0">Un succès critique (01-05) fait gagner 5 % à la compétence, un échec critique (96-00) 1 %. Le MJ peut aussi accorder des points.</p>
+    ${COMP.map((c,i)=>`<div class="row" style="padding:4px 0;border-bottom:1px dotted var(--line)"><span class="grow small">${esc(c[0])}</span><span class="counter"><button style="width:32px;height:32px" data-act="cp" data-i="${i}" data-d="-1">−</button><b style="font-size:1.1rem;min-width:34px">${p.comp[i]}</b><button style="width:32px;height:32px" data-act="cp" data-i="${i}" data-d="1">+</button></span></div>`).join("")}
+  </div></details>
+  <details class="acc"><summary>Réglages</summary><div class="in">
+    <div class="row"><button class="btn" data-act="export">⬇ Sauvegarder mon carnet</button><label class="btn" style="display:inline-flex;align-items:center">⬆ Restaurer<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
+    <div class="hr"></div><button class="btn s" data-act="switch">Changer de personnage</button> <button class="btn s d" data-act="reset">Remettre la fiche à zéro</button>
+  </div></details></div>`;
+}
+
+function total(b){return b.c*1000+b.o*100+b.s*10+b.r;}
+function vSac(){
+  const p=P(),b=p.bourse;
+  return `<div class="sec"><h2>Bourse</h2><div class="card">
+    <div class="coin">${[["c","Couronnes d'or","🟡"],["o","Orbes d'argent","⚪"],["s","Sceptres de cuivre","🟠"],["r","Rois de fer","⚫"]].map(([k,l,ic])=>`<span>${ic} ${l}</span><span class="counter"><button data-act="coin" data-k="${k}" data-d="-1">−</button><b>${b[k]}</b><button data-act="coin" data-k="${k}" data-d="1">+</button></span>`).join("")}</div>
+    <div class="hr"></div><div class="row"><span class="grow small muted">Total : ${total(b)} rois · 1 couronne = 10 orbes = 100 sceptres = 1000 rois</span><button class="btn s" data-act="change">Faire la monnaie</button></div>
+  </div>
+  <h2 style="margin:16px 2px 10px">Sac</h2><div class="card">
+    ${p.sac.length?p.sac.map((it,i)=>`<div class="item"><span class="q">×${it.q}</span><span class="grow">${esc(it.n)}</span><button class="btn s" data-act="iq" data-i="${i}" data-d="-1">−</button><button class="btn s" data-act="iq" data-i="${i}" data-d="1">+</button></div>`).join(""):'<p class="muted small">Sac vide.</p>'}
+    <div class="row" style="margin-top:10px"><input type="text" id="newItem" placeholder="Nouvel objet" style="flex:1"><button class="btn p" data-act="additem">Ajouter</button></div>
+    <p class="small muted">Mettre la quantité à 0 retire l'objet.</p>
+  </div>
+  <h2 style="margin:16px 2px 10px">Notes</h2><div class="card"><textarea data-f="notes" style="min-height:140px" placeholder="Noms, indices, promesses faites, dettes…">${esc(p.notes)}</textarea></div></div>`;
+}
+
+function vPouvoir(){
+  const h=H(),p=P();
+  if(h.pouvoir==="cartes"){
+    const su=MAGIE.suits[p.sel.suit],ri=rangIdx(p.sel.val);
+    return `<div class="sec"><h2>Noble magie d'Aria</h2>
+    <div class="card"><div class="row" style="justify-content:space-between"><span>Cartes dans le paquet</span><span class="counter"><button data-act="cartes" data-d="-1">−</button><b>${p.cartes}</b><button data-act="cartes" data-d="1">+</button></span></div>
+      <p class="small" style="margin:6px 0 0">${p.joker?"🃏 Le joker dort quelque part dans le paquet…":"🃏 Le joker a été joué."}</p>
+      <p class="small muted">Prenez la carte du dessus et regardez-la. Que vous l'utilisiez ou non, elle est perdue à jamais. Vous pouvez mélanger le paquet quand vous voulez.</p>
+      <div class="row"><button class="btn p grow" data-act="draw">Piocher une carte (paquet virtuel)</button></div>
+      <p class="small muted" style="margin-bottom:0">Le paquet virtuel ne sert que si vous n'avez pas de vrai jeu de cartes : 25 cartes au hasard plus le joker.</p>
+    </div>
+    <div class="card"><h3>Quelle carte avez-vous en main ?</h3>
+      <div class="grid4" style="margin-top:8px">${Object.keys(MAGIE.suits).map(s=>`<button class="suit ${s===p.sel.suit?"on":""} ${s==="♦"||s==="♥"?"redc":""}" data-act="suit" data-s="${s}">${s}</button>`).join("")}</div>
+      <div class="grid7" style="margin-top:6px">${VAL.map(v=>`<button class="btn s ${v===p.sel.val?"p":""}" style="padding:4px 0" data-act="val" data-v="${v}">${v}</button>`).join("")}</div>
+      <div class="blk read"><b class="lab">${su.nom} : ${su.dom}</b>Puissance d'un ${p.sel.val} : <i>« ${esc(su.fx[ri])} »</i>, ou un effet de même ampleur.</div>
+      <p class="small muted">Décrivez au MJ l'effet que vous voulez. Sans modélisation, c'est lui qui décrit le résultat… parfois surprenant. Réussir un jet de Modélisation (${p.spec[0]?p.spec[0][1]:60} %) vous permet de donner à l'effet la forme exacte que vous voulez, voire de le renforcer.</p>
+      <div class="row"><button class="btn p" data-act="play">J'ai joué cette carte</button><button class="btn" data-act="roll" data-k="s0">🎲 Modélisation</button></div>
+      ${p.jouees.length?`<p class="small" style="margin-bottom:0">Déjà jouées : ${p.jouees.map(c=>`<span class="pill ${c==="JOKER"?"":(/[♦♥]/.test(c)?"redc":"")}">${esc(c)}</span>`).join("")}</p>`:""}
+    </div>
+    <details class="acc"><summary>Table des puissances</summary><div class="in"><table style="width:100%;border-collapse:collapse;font-size:.8rem">
+      <tr><th style="text-align:left">Rang</th><th>♦</th><th>♣</th><th>♠</th><th class="redc">♥</th></tr>
+      ${MAGIE.rangs.map((r,i)=>`<tr style="border-top:1px solid var(--line)"><td><b>${r}</b></td>${Object.values(MAGIE.suits).map(s=>`<td style="padding:4px">${esc(s.fx[i])}</td>`).join("")}</tr>`).join("")}
+      <tr style="border-top:1px solid var(--line)"><td><b>Joker</b></td><td colspan="4" style="padding:4px">Tout est possible.</td></tr></table></div></details></div>`;
+  }
+  if(h.pouvoir==="mort"){
+    return `<div class="sec"><h2>Magie de la mort</h2>
+    <div class="card"><div class="row" style="justify-content:space-between"><span>Points de mort</span><span class="counter"><button data-act="mort" data-d="-1">−</button><b>${p.mort}</b><button data-act="mort" data-d="1">+</button></span></div>
+      <div class="row" style="margin-top:8px"><button class="btn s" data-act="mort" data-d="3">+3 animal</button><button class="btn s" data-act="mort" data-d="10">+10 humain</button><button class="btn s" data-act="mort" data-d="5">+5 mâle et femelle</button></div>
+      <div class="blk"><b class="lab">Aura sinistre</b>Tous vos jets sociaux (convaincre, intimider, psychologie…) subissent <b class="ko">−${p.mort} %</b>.</div>
+      <button class="btn p" style="width:100%" data-act="cast">🎲 Lancer un sort (jet sous ${p.mort})</button>
+      <div id="castOut" class="msg" style="margin-top:8px"></div>
+      <p class="small muted">Priez l'Araignée en silence, puis donnez la mort dans la minute qui suit. Jet réussi : le sort part et vos points de mort retombent à 0. Jet raté : vous perdez 10 points de mort.</p>
+    </div>
+    ${SORTS.map(([n,d])=>`<div class="card"><h3>${esc(n)}</h3><p class="small" style="margin:4px 0 0">${esc(d)}</p></div>`).join("")}</div>`;
+  }
+  if(h.pouvoir==="combat"){
+    return `<div class="sec"><h2>Au combat</h2>
+    <div class="card"><h3>Votre équipement</h3><p class="small">Plastron de cuir et métal : <b>retirez 4</b> à chaque dégât reçu. Bouclier (écu) : <b>+20 %</b> à la parade, soit ${P().comp[1]+20} %.</p></div>
+    <div class="card"><h3>Parer ou esquiver ?</h3><p class="small"><b>Parer</b> (Combat rapproché) : une fois par tour, contre un adversaire de votre taille ou plus petit, et vous pouvez encore attaquer.<br><b>Esquiver</b> (${P().comp[8]} %) : autant de fois que nécessaire, mais vous n'attaquez pas ce tour-là. −20 % contre les projectiles.</p></div>
+    <div class="card"><h3>Coup critique</h3><p class="small">01-05 en attaque : les dégâts sont lancés une deuxième fois, et ce second jet ignore l'armure. Décrivez votre exploit !</p></div>
+    <div class="card"><h3>Dégâts</h3><div class="row">${H().armes.filter(a=>/d/.test(a[1])).map(a=>`<button class="btn" data-act="dmg" data-d="${a[1]}">${esc(a[0])} ${a[1]}</button>`).join("")}</div><div id="dmgOut" class="dice" style="margin-top:8px"></div></div></div>`;
+  }
+  return `<div class="sec"><h2>Ruses & talents</h2>
+    <div class="card"><h3>Le voleur au travail</h3><p class="small"><b>Voler</b> (${P().comp[19]} %) : la victime a droit à un jet de Perception pour vous surprendre.<br><b>Discrétion</b> (${P().comp[6]} %) : avec un déguisement, vous pouvez prendre l'apparence de quelqu'un précis, à −20 %.<br><b>Serrures et pièges</b> (${P().comp[16]} %) : crocheter, verrouiller, poser ou désamorcer un piège mécanique.</p></div>
+    <div class="card"><h3>Le barde en scène</h3><p class="small"><b>Mentir, convaincre</b> (${P().comp[11]} %) : votre cible résiste avec sa Psychologie. Le jet le plus bas qui réussit l'emporte.<br>Pour une diversion, un tour de bonneteau ou une chanson, le MJ peut demander un jet de Charisme ×3 (${H().carac.CHA*3} %).</p></div>
+    <div class="card"><h3>Combat</h3><p class="small">Dague 1d4, hachette 1d6. Esquiver ${P().comp[8]} %. Pas d'armure : restez mobile !</p><div class="row"><button class="btn" data-act="dmg" data-d="1d4">Dague 1d4</button><button class="btn" data-act="dmg" data-d="1d6">Hachette 1d6</button></div><div id="dmgOut" class="dice" style="margin-top:8px"></div></div></div>`;
+}
+
+let JOURNAL=null;
+function vJournal(){
+  return `<div class="sec"><h2>Journal de la compagnie</h2><div id="jr"><p class="muted">Chargement…</p></div></div>`;
+}
+async function loadJournal(){
+  try{ const r=await fetch("campagne.json",{cache:"no-cache"}); JOURNAL=await r.json(); try{localStorage.setItem("aria-journal",JSON.stringify(JOURNAL));}catch(e){} }
+  catch(e){ try{JOURNAL=JSON.parse(localStorage.getItem("aria-journal")||"null");}catch(_){} }
+  const el=$("#jr"); if(!el) return;
+  if(!JOURNAL){ el.innerHTML='<p class="muted">Journal indisponible hors ligne pour le moment.</p>'; return; }
+  const J=JOURNAL;
+  let h=`<p class="small muted" style="margin:-4px 2px 10px">${esc(J.campagne)} · mis à jour le ${esc(J.maj)}</p>`;
+  if(J.avant) h+=`<div class="blk read"><b class="lab">${esc(J.avant.titre)}</b>${J.avant.texte.map(t=>`<p style="margin:6px 0">${esc(t)}</p>`).join("")}</div>`;
+  (J.seances||[]).slice().reverse().forEach(s=>{
+    h+=`<div class="sess"><h3>${esc(s.titre)}</h3><div class="d">${esc(s.date)}</div><p style="margin:6px 0">${esc(s.resume)}</p>
+      ${s.pnj&&s.pnj.length?`<p class="small"><b>Rencontres :</b> ${s.pnj.map(esc).join(" · ")}</p>`:""}
+      ${s.lieux&&s.lieux.length?`<p class="small"><b>Lieux :</b> ${s.lieux.map(esc).join(" · ")}</p>`:""}
+      ${s.butin&&s.butin.length?`<p class="small"><b>Butin & objets :</b> ${s.butin.map(esc).join(" · ")}</p>`:""}
+      ${s.pistes&&s.pistes.length?`<p class="small"><b>Pistes ouvertes :</b> ${s.pistes.map(esc).join(" · ")}</p>`:""}</div>`;
+  });
+  if(J.monde) h+=`<details class="acc" style="margin-top:14px"><summary>Le monde d'Aria</summary><div class="in">${J.monde.map(([t,d])=>`<p class="small"><b>${esc(t)}</b> : ${esc(d)}</p>`).join("")}</div></details>`;
+  el.innerHTML=h;
+}
+
+function vRegles(){
+  return `<div class="sec"><h2>Dés & règles</h2>
+  <div class="card"><div class="dice" id="dOut">—</div><div class="msg" id="dMsg"></div>
+    <div class="row" style="margin-top:8px"><input type="number" inputmode="numeric" id="dSk" class="num" placeholder="%"><button class="btn p grow" data-act="d100">Lancer 1d100</button></div>
+    <div class="row" style="margin-top:6px">${["1d3","1d4","1d6","1d8","2d6"].map(d=>`<button class="btn s grow" data-act="dx" data-d="${d}">${d}</button>`).join("")}</div>
+    <p class="small muted" style="margin-bottom:0">Vos vrais dés passent avant ! Ceci ne sert qu'en dépannage.</p></div>
+  <details class="acc" open><summary>Réussir un jet</summary><div class="in small">
+    <p>Lancez 2d10 : l'un donne les dizaines, l'autre les unités (00 = 100). <b>Résultat ≤ compétence = réussite.</b> Le MJ peut ajouter un bonus ou un malus de −30 à +30 %.</p>
+    <p><b class="crit">01 à 05 : succès critique.</b> Réussite éclatante, et +5 % à la compétence.<br><b class="ko">96 à 00 : échec critique.</b> Catastrophe, mais +1 % : on apprend de ses erreurs.</p>
+    <p><b>Sans compétence adaptée :</b> jet sous une caractéristique ×3 (×1 à ×5 selon la difficulté).</p>
+    <p><b>Opposition :</b> chacun lance sous sa compétence. Si les deux réussissent, ou si les deux ratent, le plus petit jet gagne. En cas d'égalité, les héros gagnent.</p></div></details>
+  <details class="acc"><summary>Combat</summary><div class="in small">
+    <p><b>Initiative :</b> tout le monde lance ses Réflexes. Le plus petit résultat agit en premier ; ceux qui ratent agissent en dernier.</p>
+    <p><b>Une action rapide par tour :</b> attaquer, se cacher, fuir, ramasser…</p>
+    <p><b>Parer :</b> une fois par tour, avec votre arme, et vous pouvez encore attaquer. <b>Esquiver :</b> autant de fois que vous voulez, sans attaquer ; −20 % contre les projectiles.</p>
+    <p><b>Armure :</b> retirez sa protection des dégâts. Bouclier écu +20 % à la parade, targe +10 %.</p>
+    <p><b>Soigner :</b> réussite = +1d6 PV ; échec = −1d3. Cataplasme : +1d4 PV.</p></div></details>
+  <details class="acc"><summary>Parler comme en Aria</summary><div class="in small">
+    <p><b>Septentrion</b> = nord · <b>Midi</b> = sud · <b>Levant</b> = est · <b>Ponant</b> = ouest.<br><b>À main faible</b> = à gauche · <b>À main forte</b> = à droite.</p>
+    <p><b>Monnaie :</b> 1 couronne d'or = 10 orbes d'argent = 100 sceptres de cuivre = 1000 rois de fer.</p></div></details></div>`;
+}
+
+/* ============ Actions ============ */
+function rollSkill(label,val){
+  const r=rnd(100), ok=r<=val, crit=r<=5?"s":r>=96?"e":"";
+  openSheet(`<p class="small muted" style="margin:0;text-align:center">${esc(label)} · ${val} %</p><div class="dice">${dd(r)}</div>
+    <div class="msg ${ok?"ok":"ko"}" style="font-size:1.15rem">${ok?"Réussite":"Échec"}</div>
+    ${crit==="s"?`<p class="crit" style="text-align:center;font-weight:600">Succès critique ! Votre compétence gagne 5 %.</p>`:""}
+    ${crit==="e"?`<p class="ko" style="text-align:center;font-weight:600">Échec critique… mais votre compétence gagne 1 %.</p>`:""}
+    <div class="row" style="margin-top:10px">${crit?`<button class="btn p grow" data-act="gain" data-g="${crit==="s"?5:1}">Ajouter +${crit==="s"?5:1} %</button>`:""}<button class="btn grow" data-act="close">Fermer</button></div>`);
+}
+let lastRollKey=null;
+function newDeck(){ const all=[]; ["♠","♥","♦","♣"].forEach(s=>VAL.forEach(v=>all.push(v+s))); for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];} const d=all.slice(0,25); d.push("JOKER"); for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];} return d; }
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return; const a=b.dataset.act, d=+b.dataset.d;
+  if(b.tagName==="INPUT") return;
+  const p=S.hero?P():null;
+  switch(a){
+    case "choose": S.hero=b.dataset.id; if(!S.perso[S.hero]) initPerso(S.hero); S.tab="fiche"; break;
+    case "switch": S.hero=null; break;
+    case "reset": if(confirm("Remettre la fiche à zéro ? Vos notes et votre inventaire seront effacés.")) initPerso(S.hero); break;
+    case "pv": p.pv=Math.max(-10,Math.min(H().pv,p.pv+d)); break;
+    case "cp": p.comp[+b.dataset.i]=Math.max(0,Math.min(99,p.comp[+b.dataset.i]+d)); break;
+    case "roll": { const k=b.dataset.k; lastRollKey=k; if(k[0]==="s"){const s=p.spec[+k.slice(1)]; if(!s) return; rollSkill(s[0],s[1]);} else rollSkill(COMP[+k][0],p.comp[+k]); return; }
+    case "gain": { const g=+b.dataset.g,k=lastRollKey; if(k[0]==="s") p.spec[+k.slice(1)][1]+=g; else p.comp[+k]+=g; closeSheet(); toast("Compétence améliorée de "+g+" %"); break; }
+    case "close": closeSheet(); return;
+    case "coin": p.bourse[b.dataset.k]=Math.max(0,p.bourse[b.dataset.k]+d); break;
+    case "change": { let t=total(p.bourse); p.bourse={c:Math.floor(t/1000),o:Math.floor(t%1000/100),s:Math.floor(t%100/10),r:t%10}; toast("Monnaie rangée"); break; }
+    case "iq": { const it=p.sac[+b.dataset.i]; it.q+=d; if(it.q<=0) p.sac.splice(+b.dataset.i,1); break; }
+    case "additem": { const n=$("#newItem").value.trim(); if(!n) return; p.sac.push({n,q:1}); break; }
+    case "cartes": p.cartes=Math.max(0,p.cartes+d); break;
+    case "suit": p.sel.suit=b.dataset.s; break;
+    case "val": p.sel.val=b.dataset.v; break;
+    case "play": if(p.cartes<=0) return toast("Votre paquet est vide…"); p.cartes--; p.jouees.push(p.sel.val+p.sel.suit); toast("Carte jouée. Il en reste "+p.cartes+"."); break;
+    case "draw": {
+      if(!p.deck) p.deck=newDeck();
+      if(!p.deck.length) return toast("Le paquet virtuel est vide");
+      const c=p.deck.shift(); p.cartes=p.deck.filter(x=>x!=="JOKER").length; save();
+      if(c==="JOKER"){ p.joker=false; p.jouees.push("JOKER"); save(); openSheet(`<div class="cardface"><b>🃏</b><span style="font-size:1.1rem">JOKER</span></div><p class="crit" style="text-align:center;font-weight:600">Le joker ! Tout est possible…</p><button class="btn p" style="width:100%" data-act="close">Fermer</button>`); render(); return; }
+      const v=c.slice(0,-1), s=c.slice(-1), su=MAGIE.suits[s];
+      p.sel={suit:s,val:v}; p.jouees.push(c); save(); render();
+      openSheet(`<div class="cardface ${s==="♦"||s==="♥"?"r":""}"><b>${v}</b><span>${s}</span></div><p style="text-align:center;margin:6px 0"><b>${su.nom}</b> : ${su.dom}<br><i class="muted">Puissance : « ${esc(su.fx[rangIdx(v)])} »</i></p><p class="small muted" style="text-align:center">La carte est perdue, que vous l'utilisiez ou non. Il en reste ${p.deck.length}.</p><button class="btn p" style="width:100%" data-act="close">Fermer</button>`); return; }
+    case "mort": p.mort=Math.max(0,p.mort+d); break;
+    case "cast": { const r=rnd(100), ok=r<=p.mort; const before=p.mort; p.mort=ok?0:Math.max(0,p.mort-10); save(); render(); $("#castOut").innerHTML=`${dd(r)} sous ${before} : ${ok?'<span class="ok">le sort est lancé !</span>':'<span class="ko">raté (−10 points de mort)</span>'}`; return; }
+    case "dmg": case "dx": { const m=b.dataset.d.match(/(\d*)d(\d+)\s*([+-]\d+)?/); if(!m) return; let t=0,rs=[]; for(let i=0;i<+(m[1]||1);i++){const x=rnd(+m[2]);rs.push(x);t+=x;} t+=+(m[3]||0); const out=$(a==="dmg"?"#dmgOut":"#dOut"); out.textContent=t; if(a==="dx") $("#dMsg").textContent=b.dataset.d+(rs.length>1||m[3]?" ("+rs.join("+")+(m[3]||"")+")":""); return; }
+    case "d100": { const r=rnd(100), sk=+$("#dSk").value; $("#dOut").textContent=dd(r); $("#dMsg").innerHTML=(sk?(r<=sk?'<span class="ok">Réussite</span>':'<span class="ko">Échec</span>')+" sous "+sk:"")+(r<=5?' <span class="crit">· critique !</span>':r>=96?' <span class="ko">· échec critique</span>':""); return; }
+    case "export": { const blob=new Blob([JSON.stringify({app:"carnet-aria",hero:S.hero,perso:S.perso[S.hero]},null,2)],{type:"application/json"}); const u=URL.createObjectURL(blob); const l=document.createElement("a"); l.href=u; l.download="carnet-"+S.hero+".json"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); return; }
+    default: return;
+  }
+  save(); render();
+});
+document.addEventListener("input",e=>{ const f=e.target.dataset.f; if(!f||!S.hero) return; P()[f]=e.target.type==="number"?+e.target.value:e.target.value; if(f==="nom") $("#whoName").textContent=e.target.value; save(); });
+document.addEventListener("change",e=>{ if(e.target.id!=="imp") return; const file=e.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.hero||!d.perso) throw 0; S.perso[d.hero]=d.perso; S.hero=d.hero; save(); render(); toast("Carnet restauré"); }catch(err){ toast("Fichier illisible"); } }; r.readAsText(file); });
+
+applyTheme(); render();
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+</script>
+</body>
+</html>

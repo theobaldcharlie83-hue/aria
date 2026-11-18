@@ -1,0 +1,22 @@
+{
+  "campagne": "Préludes : Jours de peste",
+  "maj": "18 novembre 2026",
+  "avant": {
+    "titre": "Avant la partie : ce que vous savez",
+    "texte": [
+      "Le fief du Rideau, au septentrion du royaume d'Aria, est tenu d'une main de fer par le seigneur Anne. Ses chevaliers chassent les sorcières du Kohest, ses mages obéissent à la couronne, et ses geôles dominent les eaux grondantes du Parcoul.",
+      "Il y a quelques semaines, vous étiez quatre condamnés dans ces geôles. Une chevalière qui avait épargné une sorcière. Un disciple de l'académie qui n'avait rien dit. Un ménestrel dont le spectacle avait déplu. Et, la nuit avant la pendaison, une sorcière est venue les chercher.",
+      "Depuis, vous fuyez ensemble vers les monts Staumos, au ponant, à travers des forêts sans chemin. Vous êtes recherchés, affamés, et vous ne vous connaissez pas encore vraiment.",
+      "Pour mardi : réfléchissez à ce que votre héros pense des trois autres, et à ce qu'il a ressenti la nuit de l'évasion."
+    ]
+  },
+  "seances": [],
+  "monde": [
+    ["Aria", "Le plus vaste royaume de la mer de la Morsure. Sa capitale garde l'embouchure du Parcoul."],
+    ["Le Rideau", "Fief du septentrion d'Aria, forteresse sur le Parcoul, rempart contre le Kohest et l'Osmanlie."],
+    ["Le Kohest", "Terres du septentrion où vivraient de terribles sorcières."],
+    ["L'Osmanlie", "Le « sombre pays », tombé dans l'anarchie et séparé du monde par un immense mur."],
+    ["Les dieux", "Le roi des dieux s'est exilé. L'Ennemi, qui veut la fin de toute civilisation, marche parmi les hommes. Ina est la déesse de la guérison et du pardon."],
+    ["La magie", "La noble magie est enseignée dans les académies et réservée à la noblesse. La petite magie (runes, signes, magie de la mort…) est rurale et mal vue."]
+  ]
+}
