@@ -397,7 +397,7 @@ document.addEventListener("click",e=>{
   switch(a){
     case "choose": S.hero=b.dataset.id; if(!S.perso[S.hero]) initPerso(S.hero); S.tab="fiche"; break;
     case "switch": S.hero=null; break;
-    case "reset": if(confirm("Remettre la fiche à zéro ? Vos notes et votre inventaire seront effacés.")) initPerso(S.hero); break;
+    case "reset": if(confirm("Remettre la fiche à zéro ? Vos notes, votre inventaire et les cartes déjà découvertes seront effacés.")){ initPerso(S.hero); lieuxReset(); toast("Fiche remise à zéro"); } break;
     case "pv": p.pv=Math.max(-10,Math.min(H().pv,p.pv+d)); break;
     case "cp": p.comp[+b.dataset.i]=Math.max(0,Math.min(99,p.comp[+b.dataset.i]+d)); break;
     case "roll": { const k=b.dataset.k; lastRollKey=k; if(k[0]==="s"){const s=p.spec[+k.slice(1)]; if(!s) return; rollSkill(s[0],s[1]);} else rollSkill(COMP[+k][0],p.comp[+k]); return; }
@@ -436,6 +436,10 @@ const LKEY="aria-lieux-v1";
 let L; try{L=JSON.parse(localStorage.getItem(LKEY)||"null");}catch(e){L=null;}
 if(!L||!L.found) L={found:{},cur:null,v:null};
 function lsave(){try{localStorage.setItem(LKEY,JSON.stringify(L));}catch(e){}}
+function lieuxReset(){ // oublie toutes les cartes découvertes : il faudra de nouveau les codes du MJ
+  L={found:{},cur:null,v:L.v}; lsave();
+  Object.keys(LURL).forEach(k=>{try{URL.revokeObjectURL(LURL[k]);}catch(e){} delete LURL[k];}); Object.keys(LKEYS).forEach(k=>delete LKEYS[k]);
+}
 let LDATA=null; const LKEYS={}, LURL={};
 const b64u=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function lieuxData(){
