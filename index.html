@@ -108,6 +108,7 @@ textarea{min-height:80px;resize:vertical}
 .bres{border-radius:10px;padding:10px 12px;background:var(--card2);font-size:.92rem;margin-bottom:10px}
 .conv{font-size:.8rem;color:var(--mute);margin:-2px 2px 10px}
 .pill{background:var(--chip);border-radius:999px;padding:2px 9px;font-size:.8rem;display:inline-block;margin:2px}
+.pill.jcard{border:1px solid var(--line);padding:6px 12px;font-size:.95rem;font-weight:600}
 details.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px}
 details.acc>summary{list-style:none;padding:13px 14px;font-family:var(--serif);font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
 details.acc>summary::-webkit-details-marker{display:none}
@@ -322,7 +323,7 @@ function vPouvoir(){
     const su=MAGIE.suits[p.sel.suit],ri=rangIdx(p.sel.val);
     return `<div class="sec"><h2>Noble magie d'Aria</h2>
     <div class="card"><div class="row" style="justify-content:space-between"><span>Cartes dans le paquet</span><span class="counter"><button data-act="cartes" data-d="-1">−</button><b>${p.cartes}</b><button data-act="cartes" data-d="1">+</button></span></div>
-      <p class="small" style="margin:6px 0 0">${p.joker?"🃏 Le joker dort quelque part dans le paquet…":"🃏 Le joker a été joué."}</p>
+      <div class="row" style="margin:6px 0 0;align-items:center"><span class="small grow">${p.joker?"🃏 Le joker dort quelque part dans le paquet…":"🃏 Le joker a été joué."}</span>${p.joker?`<button class="btn s" data-act="jjoker">J'ai joué le joker</button>`:`<button class="btn s" data-act="jjoker">↶ Remettre le joker</button>`}</div>
       <p class="small muted">Prenez la carte du dessus et regardez-la. Que vous l'utilisiez ou non, elle est perdue à jamais. Vous pouvez mélanger le paquet quand vous voulez.</p>
       <div class="row"><button class="btn p grow" data-act="draw">Piocher une carte (paquet virtuel)</button></div>
       <p class="small muted" style="margin-bottom:0">Le paquet virtuel ne sert que si vous n'avez pas de vrai jeu de cartes : 25 cartes au hasard plus le joker.</p>
@@ -333,7 +334,9 @@ function vPouvoir(){
       <div class="blk read"><b class="lab">${su.nom} : ${su.dom}</b>Puissance d'un ${p.sel.val} : <i>« ${esc(su.fx[ri])} »</i>, ou un effet de même ampleur.</div>
       <p class="small muted">Décrivez au MJ l'effet que vous voulez. Sans modélisation, c'est lui qui décrit le résultat… parfois surprenant. Réussir un jet de Modélisation (${p.spec[0]?p.spec[0][1]:60} %) vous permet de donner à l'effet la forme exacte que vous voulez, voire de le renforcer.</p>
       <div class="row"><button class="btn p" data-act="play">J'ai joué cette carte</button><button class="btn" data-act="roll" data-k="s0">🎲 Modélisation</button></div>
-      ${p.jouees.length?`<p class="small" style="margin-bottom:0">Déjà jouées : ${p.jouees.map(c=>`<span class="pill ${c==="JOKER"?"":(/[♦♥]/.test(c)?"redc":"")}">${esc(c)}</span>`).join("")}</p>`:""}
+      ${p.jouees.length?`<div class="hr"></div><p class="small" style="margin:0 0 4px">Déjà jouées <span class="muted">(touchez une carte pour la corriger ou la retirer)</span> :</p>
+      <div>${p.jouees.map((c,i)=>`<button class="pill jcard ${c==="JOKER"?"":(/[♦♥]/.test(c)?"redc":"")}" data-act="jedit" data-i="${i}">${c==="JOKER"?"🃏 Joker":esc(c)}</button>`).join("")}</div>
+      <button class="btn s" style="margin-top:8px;width:100%" data-act="undo">↶ Annuler la dernière carte (${esc(p.jouees[p.jouees.length-1]==="JOKER"?"Joker":p.jouees[p.jouees.length-1])})</button>`:""}
     </div>
     <details class="acc"><summary>Table des puissances</summary><div class="in"><table style="width:100%;border-collapse:collapse;font-size:.8rem">
       <tr><th style="text-align:left">Rang</th><th>♦</th><th>♣</th><th>♠</th><th class="redc">♥</th></tr>
@@ -419,6 +422,24 @@ function rollSkill(label,val){
     <div class="row" style="margin-top:10px">${crit?`<button class="btn p grow" data-act="gain" data-g="${crit==="s"?5:1}">Ajouter +${crit==="s"?5:1} %</button>`:""}<button class="btn grow" data-act="close">Fermer</button></div>`);
 }
 let lastRollKey=null;
+/* Cartes jouées : origine mémorisée pour pouvoir annuler proprement ("d" = paquet virtuel, "m" = saisie) */
+function jPush(p,c,src){ p.jouees.push(c); (p.jsrc||(p.jsrc=p.jouees.slice(0,-1).map(()=>"m"))).push(src); }
+function jRemove(p,i){
+  const c=p.jouees.splice(i,1)[0], src=(p.jsrc||[]).splice(i,1)[0]||"m";
+  if(src==="d"&&p.deck){ p.deck.unshift(c); p.cartes=p.deck.filter(x=>x!=="JOKER").length; }
+  else if(c!=="JOKER") p.cartes=Math.min(25,p.cartes+1);
+  if(c==="JOKER") p.joker=true;
+  return c;
+}
+let JE=null;
+function jEdit(i){ const c=P().jouees[i]; if(c===undefined) return; JE={i,s:c==="JOKER"?"♠":c.slice(-1),v:c==="JOKER"?"JOKER":c.slice(0,-1)}; openSheet('<div id="jedit"></div>'); jEditDraw(); }
+function jEditDraw(){ const el=$("#jedit"); if(!el||!JE) return; const old=P().jouees[JE.i];
+  el.innerHTML=`<h3 style="margin:0 0 4px">Corriger la carte n° ${JE.i+1}</h3><p class="small muted" style="margin:0 0 8px">Actuellement : <b>${old==="JOKER"?"Joker":esc(old)}</b></p>
+  <div class="grid4">${Object.keys(MAGIE.suits).map(s=>`<button class="suit ${JE.v!=="JOKER"&&s===JE.s?"on":""} ${s==="♦"||s==="♥"?"redc":""}" data-act="jsuit" data-s="${s}">${s}</button>`).join("")}</div>
+  <div class="grid7" style="margin-top:6px">${VAL.map(v=>`<button class="btn s ${v===JE.v?"p":""}" style="padding:4px 0" data-act="jval" data-v="${v}">${v}</button>`).join("")}<button class="btn s ${JE.v==="JOKER"?"p":""}" style="padding:4px 0" data-act="jval" data-v="JOKER">🃏</button></div>
+  <p style="text-align:center;margin:10px 0">Nouvelle valeur : <b>${JE.v==="JOKER"?"🃏 Joker":esc(JE.v+JE.s)}</b></p>
+  <div class="row"><button class="btn p grow" data-act="jsave">Enregistrer</button><button class="btn grow" data-act="close">Annuler</button></div>
+  <button class="btn s" style="width:100%;margin-top:8px" data-act="jdel">Retirer de la liste (la carte revient dans le paquet)</button>`; }
 function newDeck(){ const all=[]; ["♠","♥","♦","♣"].forEach(s=>VAL.forEach(v=>all.push(v+s))); for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];} const d=all.slice(0,25); d.push("JOKER"); for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];} return d; }
 
 document.addEventListener("click",e=>{
@@ -441,15 +462,25 @@ document.addEventListener("click",e=>{
     case "cartes": p.cartes=Math.max(0,p.cartes+d); break;
     case "suit": p.sel.suit=b.dataset.s; break;
     case "val": p.sel.val=b.dataset.v; break;
-    case "play": if(p.cartes<=0) return toast("Votre paquet est vide…"); p.cartes--; p.jouees.push(p.sel.val+p.sel.suit); toast("Carte jouée. Il en reste "+p.cartes+"."); break;
+    case "play": if(p.cartes<=0) return toast("Votre paquet est vide…"); p.cartes--; jPush(p,p.sel.val+p.sel.suit,"m"); toast("Carte jouée. Il en reste "+p.cartes+". Erreur ? « Annuler la dernière carte »."); break;
+    case "undo": { closeSheet(); if(!p.jouees.length) return; const c=jRemove(p,p.jouees.length-1); toast((c==="JOKER"?"Joker":c)+" annulé : la carte revient dans le paquet."); break; }
+    case "jjoker": { if(p.joker){ p.joker=false; jPush(p,"JOKER","m"); toast("Joker joué. Tout est possible…"); } else { const i=p.jouees.lastIndexOf("JOKER"); if(i>=0) jRemove(p,i); else p.joker=true; toast("Le joker revient dans le paquet."); } break; }
+    case "jedit": jEdit(+b.dataset.i); return;
+    case "jsuit": JE.s=b.dataset.s; JE.v=JE.v==="JOKER"?"7":JE.v; jEditDraw(); return;
+    case "jval": JE.v=b.dataset.v; jEditDraw(); return;
+    case "jsave": { const nv=JE.v==="JOKER"?"JOKER":JE.v+JE.s, old=p.jouees[JE.i]; if(old===undefined) return closeSheet();
+      if(old!=="JOKER"&&nv==="JOKER"){ if(!p.joker) return toast("Le joker est déjà joué."); p.joker=false; p.cartes++; }
+      if(old==="JOKER"&&nv!=="JOKER"){ p.joker=true; if(p.cartes>0) p.cartes--; }
+      p.jouees[JE.i]=nv; closeSheet(); toast("Carte corrigée : "+(nv==="JOKER"?"Joker":nv)); break; }
+    case "jdel": { const c=jRemove(p,JE.i); closeSheet(); toast((c==="JOKER"?"Joker":c)+" retiré : la carte revient dans le paquet."); break; }
     case "draw": {
       if(!p.deck) p.deck=newDeck();
       if(!p.deck.length) return toast("Le paquet virtuel est vide");
       const c=p.deck.shift(); p.cartes=p.deck.filter(x=>x!=="JOKER").length; save();
-      if(c==="JOKER"){ p.joker=false; p.jouees.push("JOKER"); save(); openSheet(`<div class="cardface"><b>🃏</b><span style="font-size:1.1rem">JOKER</span></div><p class="crit" style="text-align:center;font-weight:600">Le joker ! Tout est possible…</p><button class="btn p" style="width:100%" data-act="close">Fermer</button>`); render(); return; }
+      if(c==="JOKER"){ p.joker=false; jPush(p,"JOKER","d"); save(); openSheet(`<div class="cardface"><b>🃏</b><span style="font-size:1.1rem">JOKER</span></div><p class="crit" style="text-align:center;font-weight:600">Le joker ! Tout est possible…</p><div class="row"><button class="btn p grow" data-act="close">Fermer</button><button class="btn grow" data-act="undo">↶ Pioche par erreur</button></div>`); render(); return; }
       const v=c.slice(0,-1), s=c.slice(-1), su=MAGIE.suits[s];
-      p.sel={suit:s,val:v}; p.jouees.push(c); save(); render();
-      openSheet(`<div class="cardface ${s==="♦"||s==="♥"?"r":""}"><b>${v}</b><span>${s}</span></div><p style="text-align:center;margin:6px 0"><b>${su.nom}</b> : ${su.dom}<br><i class="muted">Puissance : « ${esc(su.fx[rangIdx(v)])} »</i></p><p class="small muted" style="text-align:center">La carte est perdue, que vous l'utilisiez ou non. Il en reste ${p.deck.length}.</p><button class="btn p" style="width:100%" data-act="close">Fermer</button>`); return; }
+      p.sel={suit:s,val:v}; jPush(p,c,"d"); save(); render();
+      openSheet(`<div class="cardface ${s==="♦"||s==="♥"?"r":""}"><b>${v}</b><span>${s}</span></div><p style="text-align:center;margin:6px 0"><b>${su.nom}</b> : ${su.dom}<br><i class="muted">Puissance : « ${esc(su.fx[rangIdx(v)])} »</i></p><p class="small muted" style="text-align:center">La carte est perdue, que vous l'utilisiez ou non. Il en reste ${p.deck.length}.</p><div class="row"><button class="btn p grow" data-act="close">Fermer</button><button class="btn grow" data-act="undo">↶ Pioche par erreur</button></div>`); return; }
     case "mort": p.mort=Math.max(0,p.mort+d); break;
     case "cast": { const r=rnd(100), ok=r<=p.mort; const before=p.mort; p.mort=ok?0:Math.max(0,p.mort-10); save(); render(); $("#castOut").innerHTML=`${dd(r)} sous ${before} : ${ok?'<span class="ok">le sort est lancé !</span>':'<span class="ko">raté (−10 points de mort)</span>'}`; return; }
     case "dmg": case "dx": { const m=b.dataset.d.match(/(\d*)d(\d+)\s*([+-]\d+)?/); if(!m) return; let t=0,rs=[]; for(let i=0;i<+(m[1]||1);i++){const x=rnd(+m[2]);rs.push(x);t+=x;} t+=+(m[3]||0); const out=$(a==="dmg"?"#dmgOut":"#dOut"); out.textContent=t; if(a==="dx") $("#dMsg").textContent=b.dataset.d+(rs.length>1||m[3]?" ("+rs.join("+")+(m[3]||"")+")":""); return; }
