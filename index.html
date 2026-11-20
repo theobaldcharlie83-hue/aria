@@ -102,6 +102,10 @@ textarea{min-height:80px;resize:vertical}
 .arow .n{flex:1;min-width:0}.arow .n small{display:block;color:var(--mute);font-size:.78rem;line-height:1.35}
 .arow .pr{text-align:right;white-space:nowrap;font-weight:600;color:var(--gold)}.arow .pr small{display:block;font-weight:400;color:var(--mute);font-size:.72rem}
 .arow.cher .pr{color:var(--mute);font-weight:400}
+.arow{align-items:center}.arow .abuy{flex:none;min-width:42px}
+.buyf{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;margin:12px 0}.buyf input,.buyf select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.buyp{display:flex;gap:8px}.buyp input{flex:1;min-width:0}.buyp select{flex:1.3}
+.bres{border-radius:10px;padding:10px 12px;background:var(--card2);font-size:.92rem;margin-bottom:10px}
 .conv{font-size:.8rem;color:var(--mute);margin:-2px 2px 10px}
 .pill{background:var(--chip);border-radius:999px;padding:2px 9px;font-size:.8rem;display:inline-block;margin:2px}
 details.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px}
@@ -625,7 +629,7 @@ function achDraw(){
     if(f.tri==="cat"&&x.cat!==last){ const c=ACH.cats[ordre[x.cat]]; h+=`<div class="agrp">${c.ic} ${esc(c.nom)}</div>`; last=x.cat; }
     const det=[x.dg?`🎲 ${x.dg}`:"",x.prot?`🛡️ protection ${x.prot}`:"",x.info||"",x.unite||"",f.tri!=="cat"&&f.cat==="all"?ACH.cats[ordre[x.cat]].nom.toLowerCase():""].filter(Boolean).join(" · ");
     const sub=fmtPrix(x.rois).endsWith("roi")||fmtPrix(x.rois).endsWith("rois")?"":`${x.rois.toLocaleString("fr-FR")} rois`;
-    h+=`<div class="arow ${x.rois>budget?"cher":""}"><span class="n"><b>${esc(x.nom)}</b>${det?`<small>${esc(det)}</small>`:""}</span><span class="pr">${fmtPrix(x.rois)}${x.unite?" / km":""}${sub?`<small>${sub}</small>`:""}${x.rois>budget?"<small>au-dessus de votre bourse</small>":""}</span></div>`;
+    h+=`<div class="arow ${x.rois>budget?"cher":""}"><span class="n"><b>${esc(x.nom)}</b>${det?`<small>${esc(det)}</small>`:""}</span><span class="pr">${fmtPrix(x.rois)}${x.unite?" / km":""}${sub?`<small>${sub}</small>`:""}${x.rois>budget?"<small>au-dessus de votre bourse</small>":""}</span>${S.hero?`<button class="btn s abuy" data-act="achbuy" data-i="${ACH.items.indexOf(x)}" aria-label="Acheter ${esc(x.nom)}">🛒</button>`:""}</div>`;
   }
   el.innerHTML=h;
   const on=document.querySelector(".chip.on"), bar=on&&on.parentElement; if(bar) bar.scrollLeft=on.offsetLeft-bar.offsetLeft-(bar.clientWidth-on.offsetWidth)/2;
@@ -633,6 +637,34 @@ function achDraw(){
 document.addEventListener("input",e=>{ if(e.target.id==="achQ"){ achQ=e.target.value; achDraw(); } });
 document.addEventListener("change",e=>{ if(e.target.id==="achTri"){ S.ach.tri=e.target.value; save(); achDraw(); } });
 document.addEventListener("click",e=>{ const b=e.target.closest('[data-act="achcat"]'); if(!b) return; S.ach.cat=b.dataset.c; save(); render(); });
+/* Acheter : l'objet passe dans le sac, le prix (négocié si besoin) est retiré de la bourse */
+const UNITES=[["couronnes",1000],["orbes",100],["sceptres",10],["rois",1]];
+const unitDe=r=>UNITES.find(([,v])=>r>=v&&r%v===0)||UNITES[3];
+const prixTxt=r=>{ const f=fmtPrix(r); return /rois?$/.test(f)?f:`${f} (${r} rois)`; };
+function achBuy(i){
+  const x=ACH.items[i]; if(!x||!S.hero) return; const [u,v]=unitDe(x.rois);
+  openSheet(`<h3 style="margin:0 0 4px">🛒 ${esc(x.nom)}</h3>
+  <p class="small muted" style="margin:0">Prix du livre : ${fmtPrix(x.rois)}${x.unite?" / km":""}. Vous avez négocié ? Changez le prix ci-dessous.</p>
+  <div class="buyf"><label for="bq">Quantité</label><input id="bq" type="number" inputmode="numeric" min="1" value="1">
+    <label for="bp">Prix pièce</label><div class="buyp"><input id="bp" type="number" inputmode="decimal" min="0" value="${x.rois/v}"><select id="bu">${UNITES.map(([n,val])=>`<option value="${val}"${n===u?" selected":""}>${n}</option>`).join("")}</select></div></div>
+  <div class="bres" id="bres"></div>
+  <div class="row"><button class="btn p grow" id="bok" data-act="achok" data-i="${i}">Acheter</button><button class="btn grow" data-act="close">Annuler</button></div>`);
+  achCalc();
+}
+function achCout(){ const q=Math.max(1,Math.floor(+$("#bq").value||1)), pr=Math.max(0,+$("#bp").value||0), un=+$("#bu").value; return {q,cout:Math.round(q*pr*un)}; }
+function achCalc(){ const el=$("#bres"); if(!el) return; const {cout}=achCout(), t=total(P().bourse), reste=t-cout, ok=reste>=0;
+  el.innerHTML=`Coût : <b>${cout?prixTxt(cout):"gratuit"}</b><br>${ok?`Il vous restera : <b>${reste?prixTxt(reste):"plus rien"}</b>`:`<span class="ko">Bourse insuffisante : il manque ${prixTxt(-reste)}.</span>`}`;
+  const b=$("#bok"); if(b) b.disabled=!ok; }
+document.addEventListener("input",e=>{ if(e.target.id==="bq"||e.target.id==="bp") achCalc(); });
+document.addEventListener("change",e=>{ if(e.target.id==="bu") achCalc(); });
+document.addEventListener("click",e=>{ const b=e.target.closest('[data-act="achbuy"],[data-act="achok"]'); if(!b) return;
+  if(b.dataset.act==="achbuy"){ achBuy(+b.dataset.i); return; }
+  const x=ACH.items[+b.dataset.i], p=P(), {q,cout}=achCout(), t=total(p.bourse);
+  if(cout>t){ toast("Bourse insuffisante"); return; }
+  const r=t-cout; p.bourse={c:Math.floor(r/1000),o:Math.floor(r%1000/100),s:Math.floor(r%100/10),r:r%10};
+  const it=p.sac.find(o=>norm(o.n)===norm(x.nom)); if(it) it.q+=q; else p.sac.push({n:x.nom,q});
+  save(); closeSheet(); render(); toast(`${q>1?q+" × ":""}${x.nom} dans le sac · reste ${r?fmtPrix(r):"plus rien"}`);
+});
 
 /* ============ Carte du monde (toujours accessible par 🌍) ============ */
 function mondeOpen(){
