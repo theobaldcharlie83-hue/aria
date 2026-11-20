@@ -128,6 +128,19 @@ details.acc>.in{padding:0 14px 14px}
 .zoomov .zb{position:absolute;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));display:flex;gap:8px}
 .zoomov .zb button,.zoomov .zx{width:48px;height:48px;border-radius:50%;border:1px solid #6b5134;background:#1d1813;color:#eee3cc;font-size:1.3rem}
 .zoomov .zx{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top))}
+.seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:3px;margin:0 0 12px}
+.seg button{flex:1;border:0;background:none;border-radius:9px;padding:9px 4px;font-weight:600;color:var(--mute)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.doc{border-radius:6px;padding:18px;margin:0 0 12px;font-family:var(--serif);font-size:calc(1.15rem * var(--fz,1));line-height:1.5;color:#3a2614;background:radial-gradient(ellipse at center,#f3e5c3 0%,#e6cf9d 65%,#c9a66b 100%);box-shadow:inset 0 0 30px rgba(90,55,15,.45)}
+.doc h4{margin:0 0 10px;text-align:center;font-size:1.15em;font-family:var(--serif)}
+.doc p{margin:0 0 .5em}.doc.grand{font-size:calc(1.6rem * var(--fz,1));text-align:center;padding:26px 18px}
+.doc.metal{background:linear-gradient(135deg,#7d848b,#c9ced3 45%,#868c92 70%,#6c7279);color:#1b2025;font-style:italic;text-align:center;box-shadow:inset 0 0 18px rgba(0,0,0,.55);border-radius:3px}
+.doc.bois{background:repeating-linear-gradient(90deg,#b98b5a 0 14px,#ae7f4c 14px 23px);color:#24140a;text-align:center;box-shadow:inset 0 0 22px rgba(60,30,5,.6)}
+.doc.journal{border-left:14px solid #1f3a66;font-style:italic}
+.trans{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:-4px 0 14px;font-size:calc(.95rem * var(--fz,1))}
+.trans summary{font-weight:600;font-size:.85rem;color:var(--gold);cursor:pointer}
+.trans p{margin:.45em 0 0}
+.docimg{display:block;max-width:100%;max-height:62vh;width:auto;margin:0 auto;border-radius:6px;cursor:zoom-in;background:#efe2c2}
 </style>
 </head>
 <body>
@@ -142,7 +155,7 @@ details.acc>.in{padding:0 14px 14px}
   <button data-tab="fiche"><span>📜</span>Fiche</button>
   <button data-tab="sac"><span>🎒</span>Sac</button>
   <button data-tab="pouvoir"><span id="powIcon">✨</span><i id="powLab" style="font-style:normal">Pouvoir</i></button>
-  <button data-tab="carte"><span>🗺️</span>Carte</button>
+  <button data-tab="carte"><span>🧭</span>Enquête</button>
   <button data-tab="journal"><span>📖</span>Journal</button>
   <button data-tab="regles"><span>🎲</span>Règles</button>
 </nav>
@@ -468,17 +481,39 @@ async function lieuImg(id,f){
   return LURL[f]=URL.createObjectURL(new Blob([pt],{type:"image/jpeg"}));
 }
 function lieuPlan(id){ const k="plan:"+id+":"+L.v; return LURL[k]||(LURL[k]=URL.createObjectURL(new Blob([L.found[id].p.plan],{type:"image/svg+xml"}))); }
-const lieuxTries=()=>Object.values(L.found).map(x=>x.p).sort((a,b)=>a.ordre-b.ordre);
+const lieuxTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind!=="piece").sort((a,b)=>a.ordre-b.ordre);
+const piecesTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind==="piece").sort((a,b)=>a.ordre-b.ordre);
 const lieuIcon=id=>({cabane:"🛖",aubepluie:"🌧️",pont:"🌉",malbouzon:"🏞️",manoir:"🏚️",cascade:"💧",vieille:"🏛️",archives:"📚",siege:"⛺"})[id]||"📍";
 
 function vCarte(){
-  const ls=lieuxTries(), cur=L.found[L.cur]?L.cur:null;
-  return `<div class="sec"><h2>Carte</h2>
-  <div class="card"><p class="small muted" style="margin:0 0 8px">Quand vous découvrez un lieu, le MJ vous donne un code à 3 chiffres. Touchez la carte pour l'agrandir.</p>
-    <div class="row"><input id="lcode" class="codein grow" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" placeholder="···" aria-label="Code du lieu"><button class="btn p" data-act="lunlock" style="min-height:56px">Révéler</button></div></div>
-  <div class="mapwrap" id="regionMap" style="aspect-ratio:10/7"></div>
-  ${ls.length?`<h3 style="margin:14px 2px 8px">Lieux découverts · ${ls.length}</h3>${ls.slice().reverse().map(p=>`<button class="lieu-it ${p.id===cur?"cur":""}" data-act="lieu" data-id="${p.id}"><span class="ic">${lieuIcon(p.id)}</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span>${p.id===cur?'<span class="here">📍 Vous êtes ici</span>':'<span class="muted">›</span>'}</button>`).join("")}`
-    :`<p class="small muted" style="text-align:center;margin:10px 0">Aucun lieu découvert pour l'instant. Le voyage commence…</p>`}</div>`;
+  const ls=lieuxTries(), ps=piecesTries(), cur=L.found[L.cur]?L.cur:null, seg=L.seg==="pieces"?"pieces":"carte";
+  let h=`<div class="sec"><h2>Enquête</h2>
+  <div class="card"><p class="small muted" style="margin:0 0 8px">Quand vous découvrez un lieu ou un document, le MJ vous donne un code à 3 chiffres.</p>
+    <div class="row"><input id="lcode" class="codein grow" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" placeholder="···" aria-label="Code donné par le MJ"><button class="btn p" data-act="lunlock" style="min-height:56px">Révéler</button></div></div>
+  <div class="seg"><button class="${seg==="carte"?"on":""}" data-act="lseg" data-s="carte">🗺️ Carte · ${ls.length}</button><button class="${seg==="pieces"?"on":""}" data-act="lseg" data-s="pieces">📜 Pièces · ${ps.length}</button></div>`;
+  if(seg==="carte"){
+    h+=`<div class="mapwrap" id="regionMap" style="aspect-ratio:10/7"></div><p class="small muted" style="margin:-6px 2px 10px">Touchez la carte pour l'agrandir.</p>
+    ${ls.length?`<h3 style="margin:14px 2px 8px">Lieux découverts</h3>${ls.slice().reverse().map(p=>`<button class="lieu-it ${p.id===cur?"cur":""}" data-act="lieu" data-id="${p.id}"><span class="ic">${lieuIcon(p.id)}</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span>${p.id===cur?'<span class="here">📍 Vous êtes ici</span>':'<span class="muted">›</span>'}</button>`).join("")}`
+      :`<p class="small muted" style="text-align:center;margin:10px 0">Aucun lieu découvert pour l'instant. Le voyage commence…</p>`}`;
+  } else {
+    h+=ps.length?ps.map(p=>`<button class="lieu-it" data-act="piece" data-id="${p.id}"><span class="ic">📜</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span><span class="muted">›</span></button>`).join("")
+      :`<p class="small muted" style="text-align:center;margin:10px 0">Aucune pièce pour l'instant. Les lettres, inscriptions et documents trouvés apparaîtront ici, à relire quand vous voulez.</p>`;
+  }
+  return h+`</div>`;
+}
+let FZ=1; try{FZ=+localStorage.getItem("aria-fz")||1;}catch(e){}
+function pieceOpen(id,neuf){
+  const F=L.found[id]; if(!F) return; const p=F.p, ov=$("#lieuOv");
+  const txt=b=>`<div class="doc ${b.style||"parch"} ${b.grand?"grand":""}">${b.titre?`<h4>${esc(b.titre)}</h4>`:""}${b.lignes.map(l=>`<p>${esc(l)}</p>`).join("")}</div>`;
+  const img=(b,i)=>`<img class="docimg" id="pim${i}" alt="${esc(b.leg||"")}" data-act="pzoom" data-i="${i}"><p class="leg">${esc(b.leg||"")} · touchez pour zoomer</p>${b.trans?`<details class="trans" open><summary>Transcription lisible</summary>${b.trans.map(l=>`<p>${esc(l)}</p>`).join("")}</details>`:""}`;
+  ov.innerHTML=`<div class="bar"><div class="wrap"><span style="font-size:1.4rem">📜</span><div class="grow" style="min-width:0"><h2 style="font-size:1.3rem">${esc(p.titre)}</h2><small class="muted">${esc(p.sous||"")}</small></div><button class="ibtn" data-act="lclose" aria-label="Fermer">✕</button></div></div>
+  <div class="wrap ${neuf?"reveal":""}" id="pieceBody" style="padding-top:12px;--fz:${FZ}">
+    <div class="row" style="justify-content:flex-end;margin:0 0 10px"><span class="small muted grow">Taille du texte</span><button class="btn s" data-act="fz" data-d="-1" aria-label="Texte plus petit">A−</button><button class="btn s" data-act="fz" data-d="1" aria-label="Texte plus grand">A+</button></div>
+    ${p.blocs.map((b,i)=>b.f?img(b,i):txt(b)).join("")}
+    <button class="btn p" style="width:100%;margin-top:6px" data-act="lclose">Retour aux pièces</button>
+  </div>`;
+  ov.classList.remove("hidden"); ov.scrollTop=0; document.body.style.overflow="hidden";
+  p.blocs.forEach((b,i)=>{ if(b.f) lieuImg(id,b.f).then(u=>{const e=$("#pim"+i); if(e) e.src=u;}).catch(()=>{const e=$("#pim"+i); if(e) e.replaceWith(Object.assign(document.createElement("p"),{className:"small muted",textContent:"Image indisponible hors ligne : la transcription reste lisible."}));}); });
 }
 async function drawCarte(){
   const el=$("#regionMap"); if(!el) return;
@@ -497,7 +532,9 @@ async function lieuUnlock(){
   let D; try{ D=await lieuxData(); }catch(e){ toast("Pas de réseau : impossible de vérifier le code"); return; }
   let p=null; try{ p=await lieuDecrypt(code); }catch(e){ p=null; }
   if(!p){ inp.value=""; inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake"); toast("Ce code ne mène nulle part…"); return; }
-  const neuf=!L.found[p.id]; L.found[p.id]={code,p}; L.cur=p.id; L.v=D.v; lsave();
+  const neuf=!L.found[p.id]; L.found[p.id]={code,p}; L.v=D.v;
+  if(p.kind==="piece"){ L.seg="pieces"; lsave(); p.blocs.forEach(b=>{ if(b.f) fetch(b.f).catch(()=>{}); }); render(); pieceOpen(p.id,neuf); return; }
+  L.cur=p.id; L.seg="carte"; lsave();
   p.imgs.forEach(im=>fetch(im.f).catch(()=>{})); // met les illustrations en cache pour le hors-ligne
   render(); lieuOpen(p.id,neuf);
 }
@@ -527,6 +564,10 @@ document.addEventListener("click",e=>{
   switch(a){
     case "lunlock": lieuUnlock(); break;
     case "lieu": closeSheet(); lieuOpen(b.dataset.id); break;
+    case "piece": pieceOpen(b.dataset.id); break;
+    case "lseg": L.seg=b.dataset.s; lsave(); render(); break;
+    case "fz": { FZ=Math.max(.8,Math.min(1.8,Math.round((FZ+(+b.dataset.d)*.15)*100)/100)); try{localStorage.setItem("aria-fz",FZ);}catch(e){} const pb=$("#pieceBody"); if(pb) pb.style.setProperty("--fz",FZ); break; }
+    case "pzoom": { if(!b.src) break; const ov=$("#zoomOv"); $("#zoomImg").src=b.src; ov.classList.remove("hidden"); ZOOM=1; setTimeout(()=>zoomSet(2),30); break; }
     case "lieux-pt": { const ids=b.dataset.ids.split(","); if(ids.length===1){ lieuOpen(ids[0]); break; }
       openSheet(`<h3 style="margin:0 0 10px">Lieux découverts ici</h3>${ids.map(id=>L.found[id].p).sort((x,y)=>x.ordre-y.ordre).map(p=>`<button class="lieu-it" data-act="lieu" data-id="${p.id}"><span class="ic">${lieuIcon(p.id)}</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span></button>`).join("")}<button class="btn" style="width:100%" data-act="close">Fermer</button>`); break; }
     case "lclose": lieuClose(); break;
