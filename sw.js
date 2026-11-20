@@ -1,8 +1,8 @@
 // Cache hors ligne du Carnet d'Aria et du Grimoire MJ.
 // Changer VERSION à chaque mise en ligne pour forcer la mise à jour.
-const VERSION = "aria-v1";
+const VERSION = "aria-20261120-1727";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "campagne.json",
-               "mj/", "mj/index.html", "mj/manifest.webmanifest"];
+               "mj/", "mj/index.html", "mj/manifest.webmanifest", "lieux.json"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => Promise.all(SHELL.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
