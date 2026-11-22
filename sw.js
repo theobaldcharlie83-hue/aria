@@ -1,6 +1,6 @@
 // Cache hors ligne du Carnet d'Aria et du Grimoire MJ.
 // Changer VERSION à chaque mise en ligne pour forcer la mise à jour.
-const VERSION = "aria-20261121-0057";
+const VERSION = "aria-20261122-1224";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "campagne.json",
                "mj/", "mj/index.html", "mj/manifest.webmanifest", "lieux.json", "achats.json", "monde.jpg"];
 
