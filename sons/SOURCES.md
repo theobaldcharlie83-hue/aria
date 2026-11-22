@@ -20,3 +20,4 @@ Tous les sons viennent de Freesound, sous licence **CC0** (domaine public). Ils 
 | campement.mp3 | https://freesound.org/people/Duophonic/sounds/248303/ |
 | fete.mp3 | https://freesound.org/people/hobonski/sounds/703644/ |
 | musique.mp3 | https://freesound.org/people/ZHR%C3%98/sounds/623427/ |
+| combat.mp3 | https://freesound.org/people/MusicByMisterbates/sounds/608811/ (« War Around Us ») |
