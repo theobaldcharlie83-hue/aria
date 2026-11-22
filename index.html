@@ -35,7 +35,11 @@ button{cursor:pointer}
 .top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 0 8px}
 .top .wrap{display:flex;align-items:center;gap:10px}
 .emb{width:40px;height:40px;border-radius:50%;background:var(--card2);border:1px solid var(--gold);display:grid;place-items:center;font-size:1.3rem;flex:none}
-.who{flex:1;min-width:0}.who b{font-family:var(--serif);font-size:1.25rem;display:block;line-height:1.1}.who small{color:var(--mute);font-size:.75rem}
+.herosw{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.herosw .emb{position:relative}
+.herosw .emb::after{content:"⇄";position:absolute;right:-4px;bottom:-4px;width:17px;height:17px;border-radius:50%;background:var(--gold);color:var(--bg);font-size:.68rem;line-height:17px;text-align:center;font-weight:700}
+.herosw:active .emb{transform:scale(.94)}
+.who{flex:1;min-width:0;display:block}.who b{font-family:var(--serif);font-size:1.25rem;display:block;line-height:1.1}.who small{color:var(--mute);font-size:.75rem}
 .hpbox{text-align:center;min-width:64px}.hpbox b{font-family:var(--serif);font-size:1.5rem}.hpbox small{display:block;font-size:.65rem;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-top:-3px}
 .ibtn{border:1px solid var(--line);background:var(--card);border-radius:10px;width:40px;height:40px;flex:none}
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
@@ -161,8 +165,7 @@ details.acc>.in{padding:0 14px 14px}
 </head>
 <body>
 <header class="top hidden" id="top"><div class="wrap">
-  <div class="emb" id="emb">?</div>
-  <div class="who"><b id="whoName">—</b><small id="whoClass"></small></div>
+  <button class="herosw" data-act="switch" aria-label="Changer de personnage" title="Changer de personnage"><span class="emb" id="emb">?</span><span class="who"><b id="whoName">—</b><small id="whoClass"></small></span></button>
   <div class="hpbox"><b id="hpTop">–</b><small>PV</small></div>
   <button class="ibtn" id="btnMonde" aria-label="Carte du monde" title="Carte du monde">🌍</button>
   <button class="ibtn" id="btnTheme" aria-label="Changer de thème">◐</button>
@@ -266,6 +269,7 @@ $("#tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.tab=b.d
 function vPick(){
   return `<div class="sec" style="padding-top:calc(24px + env(safe-area-inset-top))"><h1>Carnet d'Aria</h1>
   <p class="tagline muted" style="margin:6px 2px 18px">Choisissez votre héros. Votre carnet reste sur ce téléphone.</p>
+  ${S.prev&&HEROS[S.prev]&&S.perso[S.prev]?`<button class="btn s" data-act="choose" data-id="${S.prev}" style="margin:-6px 0 14px">← Revenir à ${esc(S.perso[S.prev].nom||HEROS[S.prev].nom)}</button>`:""}
   <div class="pick">${Object.entries(HEROS).map(([id,h])=>`<button data-act="choose" data-id="${id}"><span class="e">${h.emb}</span><b>${esc(h.nom)}</b><small>${esc(h.classe)}</small><small>${esc(h.pitch)}</small></button>`).join("")}</div>
   <p class="small muted" style="margin-top:18px">Sur iPhone : Partager → « Sur l'écran d'accueil ». Sur Android : menu ⋮ → « Installer l'application ». Le carnet marche ensuite sans réseau.</p></div>`;
 }
@@ -448,7 +452,7 @@ document.addEventListener("click",e=>{
   const p=S.hero?P():null;
   switch(a){
     case "choose": S.hero=b.dataset.id; if(!S.perso[S.hero]) initPerso(S.hero); S.tab="fiche"; break;
-    case "switch": S.hero=null; break;
+    case "switch": S.prev=S.hero; S.hero=null; scrollTo(0,0); break;
     case "reset": if(confirm("Remettre la fiche à zéro ? Vos notes, votre inventaire et les cartes déjà découvertes seront effacés.")){ initPerso(S.hero); lieuxReset(); toast("Fiche remise à zéro"); } break;
     case "pv": p.pv=Math.max(-10,Math.min(H().pv,p.pv+d)); break;
     case "cp": p.comp[+b.dataset.i]=Math.max(0,Math.min(99,p.comp[+b.dataset.i]+d)); break;
