@@ -148,6 +148,7 @@ details.acc>.in{padding:0 14px 14px}
 .zoomov .zb{position:absolute;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));display:flex;gap:8px}
 .zoomov .zb button,.zoomov .zx{width:48px;height:48px;border-radius:50%;border:1px solid #6b5134;background:#1d1813;color:#eee3cc;font-size:1.3rem}
 .zoomov .zx{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top))}
+.zoomov .zback{position:absolute;left:12px;bottom:calc(16px + env(safe-area-inset-bottom));height:48px;padding:0 18px;border-radius:24px;border:1px solid #6b5134;background:#1d1813;color:#eee3cc;font-size:1rem;font-weight:600}
 .seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:3px;margin:0 0 12px}
 .seg button{flex:1;border:0;background:none;border-radius:9px;padding:9px 4px;font-weight:600;color:var(--mute)}
 .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
@@ -184,7 +185,7 @@ details.acc>.in{padding:0 14px 14px}
 <div class="sheet" id="sheet"></div>
 <div class="toast" id="toast"></div>
 <div class="ov hidden" id="lieuOv"></div>
-<div class="zoomov hidden" id="zoomOv"><div class="sc" id="zoomSc"><img id="zoomImg" alt="Plan agrandi"></div><button class="zx" data-act="zclose" aria-label="Fermer">✕</button><div class="zb"><button data-act="zout" aria-label="Dézoomer">−</button><button data-act="zin" aria-label="Zoomer">+</button></div></div>
+<div class="zoomov hidden" id="zoomOv"><div class="sc" id="zoomSc"><img id="zoomImg" alt="Plan agrandi"></div><button class="zx" data-act="zclose" aria-label="Fermer">✕</button><button class="zback" data-act="zclose" aria-label="Retour">‹ Retour</button><div class="zb"><button data-act="zout" aria-label="Dézoomer">−</button><button data-act="zin" aria-label="Zoomer">+</button></div></div>
 
 <script>
 /* ============ Personnages ============ */
@@ -712,6 +713,16 @@ $("#btnMonde").onclick=mondeOpen;
 
 applyTheme(); render();
 if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+
+/* Bouton/geste « retour » du téléphone : ferme la visionneuse ou la fiche ouverte au lieu de quitter l'appli */
+(function(){ const ids=["zoomOv","lieuOv"]; let skip=0;
+  ids.forEach(id=>{ const el=document.getElementById(id); if(!el) return; let was=!el.classList.contains("hidden");
+    new MutationObserver(()=>{ const vis=!el.classList.contains("hidden"); if(vis===was) return; was=vis;
+      if(vis) history.pushState({ov:id},"");
+      else if(history.state&&history.state.ov===id){ skip++; history.back(); } }).observe(el,{attributes:true,attributeFilter:["class"]}); });
+  addEventListener("popstate",()=>{ if(skip){ skip--; return; }
+    for(const id of ids){ const el=document.getElementById(id); if(el&&!el.classList.contains("hidden")){ const b=el.querySelector('[data-act="zclose"],[data-act="lclose"]'); if(b) b.click(); else el.classList.add("hidden"); return; } } });
+})();
 </script>
 </body>
 </html>
