@@ -536,7 +536,7 @@ async function lieuImg(id,f){
 function lieuPlan(id){ const k="plan:"+id+":"+L.v; return LURL[k]||(LURL[k]=URL.createObjectURL(new Blob([L.found[id].p.plan],{type:"image/svg+xml"}))); }
 const lieuxTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind!=="piece").sort((a,b)=>a.ordre-b.ordre);
 const piecesTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind==="piece").sort((a,b)=>a.ordre-b.ordre);
-const lieuIcon=id=>({cabane:"🛖",aubepluie:"🌧️",pont:"🌉",malbouzon:"🏞️",manoir:"🏚️",cascade:"💧",vieille:"🏛️",archives:"📚",siege:"⛺"})[id]||"📍";
+const lieuIcon=id=>({cabane:"🛖",aubepluie:"🌧️",pont:"🌉",malbouzon:"🏞️",manoir:"🏚️",cascade:"💧",vieille:"🏛️",archives:"📚",siege:"⛺",delivrance:"✨"})[id]||"📍";
 
 function vCarte(){
   const ls=lieuxTries(), ps=piecesTries(), cur=L.found[L.cur]?L.cur:null, seg=L.seg==="pieces"?"pieces":"carte";
