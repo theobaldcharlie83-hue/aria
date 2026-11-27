@@ -3,726 +3,115 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#14110d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Carnet d'Aria">
+<meta name="theme-color" content="#111014">
+<title>Ma table de jeu</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>Carnet d'Aria</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Oswald:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f3ead8;--card:#fffaf0;--card2:#f8f0de;--ink:#2a2118;--mute:#76664f;--line:#e0d1b3;
-  --gold:#8f6210;--red:#a03222;--green:#386b32;--blue:#2c5878;--violet:#5d3f86;--read:#f6ecd3;--chip:#ece0c4;
-  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#13100c;--card:#1d1813;--card2:#241e17;--ink:#eee3cc;--mute:#a7967b;--line:#382e23;
-  --gold:#dcaa4a;--red:#e57a68;--green:#94c486;--blue:#86b6da;--violet:#b79ae0;--read:#262016;--chip:#2c241a;}}
-:root[data-theme="dark"]{--bg:#13100c;--card:#1d1813;--card2:#241e17;--ink:#eee3cc;--mute:#a7967b;--line:#382e23;
-  --gold:#dcaa4a;--red:#e57a68;--green:#94c486;--blue:#86b6da;--violet:#b79ae0;--read:#262016;--chip:#2c241a;}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans)}
-body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
-h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;line-height:1.15}
-h1{font-size:1.9rem}h2{font-size:1.45rem}h3{font-size:1.15rem}
-button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
-.wrap{max-width:640px;margin:0 auto;padding:0 12px}
-.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 0 8px}
-.top .wrap{display:flex;align-items:center;gap:10px}
-.emb{width:40px;height:40px;border-radius:50%;background:var(--card2);border:1px solid var(--gold);display:grid;place-items:center;font-size:1.3rem;flex:none}
-.herosw{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.herosw .emb{position:relative}
-.herosw .emb::after{content:"⇄";position:absolute;right:-4px;bottom:-4px;width:17px;height:17px;border-radius:50%;background:var(--gold);color:var(--bg);font-size:.68rem;line-height:17px;text-align:center;font-weight:700}
-.herosw:active .emb{transform:scale(.94)}
-.who{flex:1;min-width:0;display:block}.who b{font-family:var(--serif);font-size:1.25rem;display:block;line-height:1.1}.who small{color:var(--mute);font-size:.75rem}
-.hpbox{text-align:center;min-width:64px}.hpbox b{font-family:var(--serif);font-size:1.5rem}.hpbox small{display:block;font-size:.65rem;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin-top:-3px}
-.ibtn{border:1px solid var(--line);background:var(--card);border-radius:10px;width:40px;height:40px;flex:none}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav.tabs button{flex:1;min-width:0;border:0;background:none;padding:8px 0 7px;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.66rem;color:var(--mute)}
-nav.tabs button span{font-size:1.25rem;line-height:1}
-nav.tabs button.on{color:var(--gold);font-weight:600}
-.sec{padding:14px 0 6px}.sec>h2{margin:4px 2px 10px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;padding:12px 14px}
-.blk{border-radius:10px;padding:10px 12px;margin:8px 0;font-size:.93rem;background:var(--card2)}
-.blk b.lab{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;color:var(--gold)}
-.read{background:var(--read);font-family:var(--serif);font-size:1.1rem;line-height:1.45;border-left:3px solid var(--gold)}
-.read b.lab{font-family:var(--sans)}
-.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.grow{flex:1}
-.btn{border:1px solid var(--line);background:var(--card2);border-radius:10px;padding:9px 12px;font-weight:500;min-height:42px}
-.btn.p{background:var(--gold);border-color:var(--gold);color:var(--bg)}
-.btn.s{padding:5px 10px;min-height:34px;font-size:.85rem}.btn.d{color:var(--red)}
-.muted{color:var(--mute)}.small{font-size:.8rem}
-input[type=number],input[type=text],select,textarea{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:42px;width:100%}
-textarea{min-height:80px;resize:vertical}
-.num{width:70px!important;text-align:center}
-.stat{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:4px 0 8px}
-.stat div{background:var(--card2);border-radius:10px;padding:6px 2px;text-align:center}
-.stat b{display:block;font-family:var(--serif);font-size:1.35rem}.stat small{color:var(--mute);font-size:.65rem}
-.counter{display:flex;align-items:center;gap:6px}
-.counter b{min-width:40px;text-align:center;font-family:var(--serif);font-size:1.45rem}
-.counter button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--card2);font-size:1.15rem}
-.hr{height:1px;background:var(--line);margin:12px 0}
-.skill{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left}
-.skill:last-child{border-bottom:0}
-.skill .n{flex:1}.skill .v{font-family:var(--serif);font-size:1.25rem;font-weight:700;min-width:46px;text-align:right}
-.skill .l{font-size:.7rem;color:var(--mute)}
-.skill.hi .v{color:var(--gold)}
-.pick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pick button{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 12px;text-align:left;min-height:150px;display:flex;flex-direction:column;gap:6px}
-.pick button .e{font-size:2rem}
-.pick button b{font-family:var(--serif);font-size:1.2rem}
-.pick button small{color:var(--mute);font-size:.78rem;line-height:1.35}
-.item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dotted var(--line)}
-.item:last-child{border-bottom:0}
-.item .q{min-width:34px;text-align:center;font-weight:600;background:var(--chip);border-radius:8px;padding:2px 6px;font-size:.85rem}
-.coin{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
-.dice{font-family:var(--serif);font-size:3rem;font-weight:700;text-align:center;line-height:1.1}
-.msg{text-align:center;font-weight:600;min-height:1.4em}
-.ok{color:var(--green)}.ko{color:var(--red)}.crit{color:var(--gold)}
-.sheet{position:fixed;inset:auto 0 0 0;z-index:60;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .22s ease;max-width:640px;margin:0 auto;box-shadow:0 -8px 30px rgba(0,0,0,.35)}
-.sheet.show{transform:none}
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
-.scrim.show{opacity:1;pointer-events:auto}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.suit{font-size:1.5rem;border-radius:10px;border:1px solid var(--line);background:var(--card2);padding:6px 0}
-.suit.on{border-color:var(--gold);background:var(--read)}
-.redc{color:#c0392b}
-.cardface{width:120px;height:170px;margin:6px auto;border-radius:12px;background:#fdfaf2;color:#222;border:2px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);box-shadow:0 6px 18px rgba(0,0,0,.3)}
-.cardface b{font-size:2.6rem;line-height:1}.cardface span{font-size:3rem;line-height:1}
-.cardface.r{color:#b3261e}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin:0 -2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
-.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 11px;white-space:nowrap;font-size:.85rem;flex:none}
-.chip.on{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:600}
-.asearch{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);margin-bottom:8px}
-.atri{display:flex;align-items:center;gap:8px;margin:0 2px 6px;font-size:.85rem;color:var(--mute)}.atri select{flex:1;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card)}
-.agrp{margin:16px 2px 2px;font-family:var(--serif);font-size:1.15rem;font-weight:700}
-.arow{display:flex;gap:10px;align-items:baseline;padding:9px 2px;border-bottom:1px solid var(--line)}
-.arow .n{flex:1;min-width:0}.arow .n small{display:block;color:var(--mute);font-size:.78rem;line-height:1.35}
-.arow .pr{text-align:right;white-space:nowrap;font-weight:600;color:var(--gold)}.arow .pr small{display:block;font-weight:400;color:var(--mute);font-size:.72rem}
-.arow.cher .pr{color:var(--mute);font-weight:400}
-.arow{align-items:center}.arow .abuy{flex:none;min-width:42px}
-.buyf{display:grid;grid-template-columns:auto 1fr;gap:8px 10px;align-items:center;margin:12px 0}.buyf input,.buyf select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-.buyp{display:flex;gap:8px}.buyp input{flex:1;min-width:0}.buyp select{flex:1.3}
-.bres{border-radius:10px;padding:10px 12px;background:var(--card2);font-size:.92rem;margin-bottom:10px}
-.conv{font-size:.8rem;color:var(--mute);margin:-2px 2px 10px}
-.pill{background:var(--chip);border-radius:999px;padding:2px 9px;font-size:.8rem;display:inline-block;margin:2px}
-.pill.jcard{border:1px solid var(--line);padding:6px 12px;font-size:.95rem;font-weight:600}
-details.acc{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:0 0 10px}
-details.acc>summary{list-style:none;padding:13px 14px;font-family:var(--serif);font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
-details.acc>summary::-webkit-details-marker{display:none}
-details.acc>summary::after{content:"›";margin-left:auto;color:var(--mute);font-family:var(--sans);transition:transform .2s}
-details.acc[open]>summary::after{transform:rotate(90deg)}
-details.acc>.in{padding:0 14px 14px}
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:.88rem;z-index:70;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90vw;text-align:center}
-.toast.show{opacity:1}
-.tagline{font-family:var(--serif);font-style:italic;font-size:1.05rem}
-.sess{border-left:3px solid var(--gold);padding-left:12px;margin:12px 0}
-.hidden{display:none!important}
-.sess h3{margin-bottom:2px}.sess .d{font-size:.75rem;color:var(--mute)}
-/* Cartes des lieux */
-.mapwrap{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#efe2c2;line-height:0;margin:0 0 12px}
-.mapwrap svg{width:100%;height:auto;display:block}
-.codein{font-family:var(--serif);font-size:2rem;font-weight:700;letter-spacing:.45em;text-align:center;padding-left:.45em!important;min-height:56px!important}
-.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
-.lieu-it{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:0 0 8px}
-.lieu-it .ic{width:44px;height:44px;border-radius:10px;background:var(--card2);display:grid;place-items:center;font-size:1.4rem;flex:none}
-.lieu-it b{font-family:var(--serif);font-size:1.15rem;display:block;line-height:1.15}.lieu-it small{color:var(--mute);font-size:.78rem}
-.lieu-it.cur{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
-.here{color:var(--red);font-weight:600;font-size:.75rem;white-space:nowrap}
-.ov{position:fixed;inset:0;z-index:80;background:var(--bg);overflow:auto;-webkit-overflow-scrolling:touch;padding:0 0 calc(24px + env(safe-area-inset-bottom))}
-.ov .bar{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 0 8px}
-.ov .bar .wrap{display:flex;align-items:center;gap:10px}
-.ill{width:100%;display:block;border-radius:12px;background:var(--card2);min-height:140px;object-fit:cover;margin:0 0 4px}
-.leg{font-size:.78rem;color:var(--mute);font-style:italic;margin:0 2px 12px}
-.plan{width:100%;display:block;border-radius:10px;border:1px solid var(--line);background:#efe2c2;cursor:zoom-in}
-.reveal{animation:rv 1.1s ease}@keyframes rv{from{opacity:0;filter:blur(10px) sepia(1);transform:scale(1.03)}to{opacity:1;filter:none;transform:none}}
-.zoomov{position:fixed;inset:0;z-index:90;background:#0d0b08}
-.zoomov .sc{position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch}
-.zoomov img{display:block;max-width:none}
-.zoomov .zb{position:absolute;right:12px;bottom:calc(16px + env(safe-area-inset-bottom));display:flex;gap:8px}
-.zoomov .zb button,.zoomov .zx{width:48px;height:48px;border-radius:50%;border:1px solid #6b5134;background:#1d1813;color:#eee3cc;font-size:1.3rem}
-.zoomov .zx{position:absolute;right:12px;top:calc(12px + env(safe-area-inset-top))}
-.zoomov .zback{position:absolute;left:12px;bottom:calc(16px + env(safe-area-inset-bottom));height:48px;padding:0 18px;border-radius:24px;border:1px solid #6b5134;background:#1d1813;color:#eee3cc;font-size:1rem;font-weight:600}
-.seg{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:3px;margin:0 0 12px}
-.seg button{flex:1;border:0;background:none;border-radius:9px;padding:9px 4px;font-weight:600;color:var(--mute)}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.doc{border-radius:6px;padding:18px;margin:0 0 12px;font-family:var(--serif);font-size:calc(1.15rem * var(--fz,1));line-height:1.5;color:#3a2614;background:radial-gradient(ellipse at center,#f3e5c3 0%,#e6cf9d 65%,#c9a66b 100%);box-shadow:inset 0 0 30px rgba(90,55,15,.45)}
-.doc h4{margin:0 0 10px;text-align:center;font-size:1.15em;font-family:var(--serif)}
-.doc p{margin:0 0 .5em}.doc.grand{font-size:calc(1.6rem * var(--fz,1));text-align:center;padding:26px 18px}
-.doc.metal{background:linear-gradient(135deg,#7d848b,#c9ced3 45%,#868c92 70%,#6c7279);color:#1b2025;font-style:italic;text-align:center;box-shadow:inset 0 0 18px rgba(0,0,0,.55);border-radius:3px}
-.doc.bois{background:repeating-linear-gradient(90deg,#b98b5a 0 14px,#ae7f4c 14px 23px);color:#24140a;text-align:center;box-shadow:inset 0 0 22px rgba(60,30,5,.6)}
-.doc.journal{border-left:14px solid #1f3a66;font-style:italic}
-.trans{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:-4px 0 14px;font-size:calc(.95rem * var(--fz,1))}
-.trans summary{font-weight:600;font-size:.85rem;color:var(--gold);cursor:pointer}
-.trans p{margin:.45em 0 0}
-.docimg{display:block;max-width:100%;max-height:62vh;width:auto;margin:0 auto;border-radius:6px;cursor:zoom-in;background:#efe2c2}
+:root{--bg:#111014;--card:#1b1a20;--ink:#ecebf0;--mute:#9d9aa8;--line:#2d2b34;--acc:#c9b37a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{min-height:100vh;padding:max(16px,env(safe-area-inset-top)) 16px 40px}
+.wrap{max-width:560px;margin:0 auto}
+header{display:flex;align-items:center;gap:12px;margin:8px 0 22px}
+header .logo{width:44px;height:44px;border-radius:12px;background:url(icon-192.png) center/cover}
+header h1{font:600 1.35rem Inter,sans-serif;margin:0;letter-spacing:.2px}
+header p{margin:0;color:var(--mute);font-size:.85rem}
+.etapes{display:flex;gap:6px;margin:0 0 14px;font-size:.8rem;color:var(--mute);flex-wrap:wrap}
+.etapes button{all:unset;cursor:pointer;padding:3px 10px;border:1px solid var(--line);border-radius:99px}
+.etapes button.on{color:var(--ink);border-color:var(--acc)}
+.etapes button:disabled{opacity:.4;cursor:default}
+h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mute);margin:22px 0 10px;font-weight:600}
+.jeu{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:18px;padding:20px 18px;margin:0 0 12px;cursor:pointer;color:var(--c-ink);background:var(--c-bg);position:relative;overflow:hidden;font:inherit}
+.jeu::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--c-acc) 22%,transparent),transparent 60%);pointer-events:none}
+.jeu .nom{font-size:2rem;line-height:1.05;margin:0 0 4px;letter-spacing:.02em}
+.jeu .genre{padding-right:84px;font-size:.75rem;text-transform:uppercase;letter-spacing:.16em;color:var(--c-acc);font-weight:600}
+.jeu .acc{margin:8px 0 0;font-size:.92rem;opacity:.85}
+.jeu .nb{position:absolute;right:16px;top:16px;font-size:.75rem;opacity:.7}
+.sc{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 10px;color:var(--ink);font:inherit;cursor:pointer}
+.sc b{font-size:1.15rem;display:block}
+.sc small{color:var(--mute);display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
+.sc span{display:block;font-size:.9rem;margin-top:4px;opacity:.85}
+.choix{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.choix .t{font-size:1.4rem;margin:0}
+.choix .s{color:var(--mute);margin:2px 0 14px;font-size:.9rem}
+.go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;border:0;font:600 1.05rem Inter,sans-serif;text-decoration:none;margin:8px 0 0;cursor:pointer}
+.go.p{background:var(--acc);color:#111}
+.go.g{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.reprendre{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:1px solid var(--acc);border-radius:14px;padding:12px 14px;color:var(--ink);text-decoration:none;margin:0 0 6px}
+.reprendre .i{font-size:1.6rem}
+.reprendre small{display:block;color:var(--mute);font-size:.78rem}
+.lien{color:var(--mute);font-size:.85rem;text-align:center;margin:30px 0 0}
+.lien a{color:var(--mute)}
+.mjtag{display:inline-block;background:#5a1d1d;color:#ffd9d3;font-size:.7rem;letter-spacing:.1em;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#000c;color:#fff;padding:10px 16px;border-radius:10px;transition:.25s;font-size:.9rem}
+#toast.show{transform:translateX(-50%)}
 </style>
 </head>
 <body>
-<header class="top hidden" id="top"><div class="wrap">
-  <button class="herosw" data-act="switch" aria-label="Changer de personnage" title="Changer de personnage"><span class="emb" id="emb">?</span><span class="who"><b id="whoName">—</b><small id="whoClass"></small></span></button>
-  <div class="hpbox"><b id="hpTop">–</b><small>PV</small></div>
-  <button class="ibtn" id="btnMonde" aria-label="Carte du monde" title="Carte du monde">🌍</button>
-  <button class="ibtn" id="btnTheme" aria-label="Changer de thème">◐</button>
-</div></header>
-<main class="wrap" id="main"></main>
-<nav class="tabs hidden" id="tabs">
-  <button data-tab="fiche"><span>📜</span>Fiche</button>
-  <button data-tab="sac"><span>🎒</span>Sac</button>
-  <button data-tab="pouvoir"><span id="powIcon">✨</span><i id="powLab" style="font-style:normal">Pouvoir</i></button>
-  <button data-tab="carte"><span>🧭</span>Enquête</button>
-  <button data-tab="achat"><span>🪙</span>Achat</button>
-  <button data-tab="journal"><span>📖</span>Journal</button>
-  <button data-tab="regles"><span>🎲</span>Règles</button>
-</nav>
-<div class="scrim" id="scrim"></div>
-<div class="sheet" id="sheet"></div>
-<div class="toast" id="toast"></div>
-<div class="ov hidden" id="lieuOv"></div>
-<div class="zoomov hidden" id="zoomOv"><div class="sc" id="zoomSc"><img id="zoomImg" alt="Plan agrandi"></div><button class="zx" data-act="zclose" aria-label="Fermer">✕</button><button class="zback" data-act="zclose" aria-label="Retour">‹ Retour</button><div class="zb"><button data-act="zout" aria-label="Dézoomer">−</button><button data-act="zin" aria-label="Zoomer">+</button></div></div>
-
+<div class="wrap">
+  <header><div class="logo"></div><div><h1 id="titre"></h1><p id="sous"></p></div></header>
+  <div id="app"></div>
+  <p class="lien" id="bas"></p>
+</div>
+<div id="toast"></div>
 <script>
-/* ============ Personnages ============ */
-const COMP=[["Artisanat, construire","DEX/INT"],["Combat rapproché","FOR/DEX"],["Combat à distance","DEX/INT"],["Connaissance de la nature","DEX/INT"],["Connaissance des secrets","INT/CHA"],["Courir, sauter","DEX/END"],["Discrétion","DEX/CHA"],["Droit","INT/CHA"],["Esquiver","DEX/INT"],["Intimider","FOR/CHA"],["Lire, écrire","INT/CHA"],["Mentir, convaincre","INT/CHA"],["Perception","INT/CHA"],["Piloter","DEX/END"],["Psychologie","END/INT"],["Réflexes","DEX/INT"],["Serrures et pièges","DEX/END"],["Soigner","INT/CHA"],["Survie","END/INT"],["Voler","DEX/INT"]];
-const HEROS={
- reveka:{nom:"Reveka Cosovei",classe:"Sorcière du Kohest",emb:"🕷️",age:22,pv:12,prot:0,pouvoir:"mort",
-  carac:{FOR:9,DEX:10,END:12,INT:16,CHA:13},armes:[["Bâton","1d6"]],
-  comp:[65,45,65,65,70,70,45,70,65,65,70,60,70,55,70,75,55,70,65,65],spec:[["Magie de la mort",65]],
-  sac:["Bâton","Bouteille","Toile goudronnée","Torche|5","Gibecière","Canne de marche","Jeu de dés","Carte d'Aria"],rois:72,
-  pitch:"Sorcière exilée des siens pour avoir accepté l'aide d'un ennemi. Elle prie l'Araignée, le dieu oublié de la mort."},
- honorin:{nom:"Honorin Bicastre",classe:"Disciple de l'académie d'Aria",emb:"🃏",age:22,pv:11,prot:0,pouvoir:"cartes",
-  carac:{FOR:9,DEX:10,END:11,INT:16,CHA:14},armes:[["Bâton","1d6"]],
-  comp:[65,45,65,75,75,40,60,75,65,55,80,75,75,60,65,65,50,65,65,65],spec:[["Modélisation",60]],
-  sac:["Jeu de cartes (25 + joker)","Bâton","Sablier","Longue-vue","Feuille de papier|10","Pinceau","Pot à encre","Traité de théologie"],rois:771,
-  pitch:"Mage de la couronne qui a désobéi une fois. Sa magie tient dans un paquet de cartes… et chaque carte jouée est perdue à jamais."},
- calisse:{nom:"Calisse Lapointe",classe:"Chevalière errante du Rideau",emb:"🛡️",age:19,pv:14,prot:4,pouvoir:"combat",
-  carac:{FOR:15,DEX:13,END:14,INT:10,CHA:8},armes:[["Pertuisane","1d6+2"],["Épée courte","1d6"],["Bouclier","+20 % parade"]],
-  comp:[55,70,55,55,45,65,50,35,75,55,45,45,45,55,70,75,65,55,55,55],spec:[],
-  sac:["Plastron de cuir et métal (protection 4)","Pertuisane","Épée courte","Bouclier","Couverture","Gourde","Cataplasme|3","Rations de piste (1 semaine)","Sac à dos"],rois:532,
-  pitch:"Chevalière fidèle à ses vœux plus qu'à son seigneur. Elle a sauvé une sorcière, et l'a payé de son rang."},
- basilis:{nom:"Basilis Presteroi",classe:"Voleur déguisé en barde",emb:"🎭",age:20,pv:11,prot:0,pouvoir:"ruses",
-  carac:{FOR:10,DEX:14,END:11,INT:14,CHA:11},armes:[["Dague","1d4"],["Hachette","1d6"]],
-  comp:[70,60,70,60,60,70,60,60,70,50,60,60,60,60,60,70,70,60,50,70],spec:[],
-  sac:["Dague","Hachette","Outils de crochetage","Passe-partout","Déguisement","Jeu de cartes truqué","Timbale (bonneteau)|3","Sifflet","Trousse de maquillage"],rois:427,
-  pitch:"Voleur jeté en prison avant même d'avoir volé quoi que ce soit : son spectacle de ménestrel était jugé trop mauvais."}
-};
-const MAGIE={rangs:["2","3-6","7-8","9-10","Valet","Dame-Roi","As"],
- suits:{"♦":{nom:"Carreau",dom:"manipuler la matière existante",fx:["Pousser un caillou","Fermer une porte à distance","Renverser une carriole","Faire s'écrouler un mur","Faire s'écrouler une maison","Soulever un galion englouti","Faire tomber une météorite"]},
-  "♣":{nom:"Trèfle",dom:"faire naître un élément",fx:["Allumer une bougie","Remplir une gourde","Vent qui pousse un navire","Boule de feu","Colonne d'eau de mer","Changer la météo","Vent qui dévaste une capitale"]},
-  "♠":{nom:"Pique",dom:"agir sur les esprits",fx:["Trouver un cimetière","Chasser un esprit faible","Parler à un défunt sur sa tombe","Revivre le passé d'un lieu","Réanimer un cadavre frais","Convoquer un esprit gardien","Armée de squelettes"]},
-  "♥":{nom:"Cœur",dom:"toucher les sentiments",fx:["Aider à s'endormir","Provoquer le dégoût","Se faire apprécier d'un garde","Provoquer la peur","Subjuguer un petit groupe","Invisible aux yeux de la foule","Contrôler l'esprit d'un roi"]}}};
-const VAL=["2","3","4","5","6","7","8","9","10","V","D","R","A"];
-const rangIdx=v=>({"2":0,"3":1,"4":1,"5":1,"6":1,"7":2,"8":2,"9":3,"10":3,"V":4,"D":5,"R":5,"A":6})[v];
-const SORTS=[["Blesser une personne","1d4+1 PV (1d6+2 la nuit ou près d'un champ de bataille). Ne peut pas tuer."],["Convoquer et parler avec un mort","Sur le lieu du décès, pendant une heure. Vous seule l'entendez."],["Demander conseil aux esprits","Les âmes orientent vos choix sans donner la solution."],["Envoyer des cauchemars","Jusqu'à 5 personnes, pendant un mois : −20 % à tous leurs jets."],["Maudire une personne","Pendant 5 jours, elle rate tout jet dont le résultat est pair."],["Réveiller les esprits","Les âmes apparaissent, tous les non-initiés sont figés d'effroi."],["Réveiller un cadavre","Pour une nuit, le mort est lucide… et peut négocier."]];
-
-/* ============ État local ============ */
-const KEY="aria-carnet-v1";
-let S; try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
-if(!S) S={hero:null,tab:"fiche",perso:{}};
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-function P(){ return S.perso[S.hero]; }
-function H(){ return HEROS[S.hero]; }
-function initPerso(id){
-  const h=HEROS[id];
-  S.perso[id]={nom:h.nom,age:h.age,desc:"",genial:"",probleme:"",pv:h.pv,blessures:"",
-    comp:h.comp.slice(),spec:h.spec.map(x=>x.slice()),
-    sac:h.sac.map(s=>{const [n,q]=s.split("|");return {n,q:+(q||1)};}),
-    bourse:{c:0,o:0,s:0,r:h.rois},notes:"",
-    mort:10,cartes:25,joker:true,jouees:[],deck:null,sel:{suit:"♠",val:"7"}};
-}
-
-/* ============ Utilitaires ============ */
-const $=(s,r=document)=>r.querySelector(s);
+const JEUX=[{"id":"aria","nom":"Aria","genre":"Fantasy médiévale","accroche":"Royaume d'Aria · magie, intrigues et vieilles légendes.","couleurs":{"fond":"#1b140c","encre":"#f1e4c6","accent":"#dcaa4a"},"police":"'Cormorant Garamond',Georgia,serif","scenarios":[{"id":"jours-de-peste","nom":"Jours de peste","type":"Prélude 2 · one-shot ~4 h","resume":"Une épidémie, un village qui se meurt et un seigneur qui se fait attendre.","joueurs":"aria/","mj":"aria/mj/"}]},{"id":"channel-fear","nom":"Channel Fear","genre":"Horreur contemporaine · found footage","accroche":"Une équipe de télé-réalité paranormale sillonne les États-Unis… et disparaît.","couleurs":{"fond":"#0b0b0c","encre":"#ecebe6","accent":"#e0322b"},"police":"Oswald,'Arial Narrow',sans-serif","scenarios":[{"id":"s01e02","nom":"24H/24","type":"Saison 1 · épisode 2 · ~2 h","resume":"Le temps d'un plein, une station-service perdue dans la nuit… dont on ne repart jamais.","joueurs":"channel-fear/?ep=s01e02","mj":"channel-fear/mj/?ep=s01e02"}]}];
+const MODE="joueur";          // "joueur" (racine du site) ou "mj" (site/mj/)
+const RACINE=MODE==="mj"?"../":"./";      // liens du catalogue relatifs à la racine du site
+const KEY="table-accueil-"+MODE;
+const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const rnd=n=>1+Math.floor(Math.random()*n);
-const dd=n=>n===100?"00":String(n).padStart(2,"0");
+let st={jeu:null,sc:null};
+let dernier=null; try{dernier=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
+const jeu=id=>JEUX.find(j=>j.id===id), scen=(j,id)=>j&&j.scenarios.find(s=>s.id===id);
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2200);}
-function openSheet(html){$("#sheet").innerHTML=html;$("#sheet").classList.add("show");$("#scrim").classList.add("show");}
-function closeSheet(){$("#sheet").classList.remove("show");$("#scrim").classList.remove("show");}
-$("#scrim").onclick=closeSheet;
-function applyTheme(){const t=localStorage.getItem("aria-theme");if(t)document.documentElement.dataset.theme=t;}
-$("#btnTheme").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const n=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=n;try{localStorage.setItem("aria-theme",n);}catch(e){}};
+function lienDe(j,s,role){return RACINE+(role==="mj"?s.mj:s.joueurs);}
+function theme(j){return `--c-bg:${j.couleurs.fond};--c-ink:${j.couleurs.encre};--c-acc:${j.couleurs.accent}`;}
 
-/* ============ Rendu ============ */
 function render(){
-  const m=$("#main");
-  if(!S.hero){ $("#top").classList.add("hidden"); $("#tabs").classList.add("hidden"); m.innerHTML=vPick(); return; }
-  $("#top").classList.remove("hidden"); $("#tabs").classList.remove("hidden");
-  const h=H(),p=P();
-  $("#emb").textContent=h.emb; $("#whoName").textContent=p.nom; $("#whoClass").textContent=h.classe;
-  $("#hpTop").innerHTML=`${p.pv}<span class="muted" style="font-size:.9rem">/${h.pv}</span>`;
-  const pw={mort:["💀","Magie"],cartes:["🃏","Magie"],combat:["⚔️","Combat"],ruses:["🗝️","Ruses"]}[h.pouvoir];
-  $("#powIcon").textContent=pw[0]; $("#powLab").textContent=pw[1];
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===S.tab));
-  m.innerHTML=({fiche:vFiche,sac:vSac,pouvoir:vPouvoir,carte:vCarte,achat:vAchat,journal:vJournal,regles:vRegles})[S.tab]();
-  if(S.tab==="achat") achDraw();
-  if(S.tab==="journal") loadJournal();
-  if(S.tab==="carte") drawCarte();
-}
-$("#tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;S.tab=b.dataset.tab;save();render();scrollTo(0,0);};
-
-function vPick(){
-  return `<div class="sec" style="padding-top:calc(24px + env(safe-area-inset-top))"><h1>Carnet d'Aria</h1>
-  <p class="tagline muted" style="margin:6px 2px 18px">Choisissez votre héros. Votre carnet reste sur ce téléphone.</p>
-  ${S.prev&&HEROS[S.prev]&&S.perso[S.prev]?`<button class="btn s" data-act="choose" data-id="${S.prev}" style="margin:-6px 0 14px">← Revenir à ${esc(S.perso[S.prev].nom||HEROS[S.prev].nom)}</button>`:""}
-  <div class="pick">${Object.entries(HEROS).map(([id,h])=>`<button data-act="choose" data-id="${id}"><span class="e">${h.emb}</span><b>${esc(h.nom)}</b><small>${esc(h.classe)}</small><small>${esc(h.pitch)}</small></button>`).join("")}</div>
-  <p class="small muted" style="margin-top:18px">Sur iPhone : Partager → « Sur l'écran d'accueil ». Sur Android : menu ⋮ → « Installer l'application ». Le carnet marche ensuite sans réseau.</p></div>`;
-}
-
-function vFiche(){
-  const h=H(),p=P();
-  return `<div class="sec">
-  <div class="card">
-    <div class="row" style="justify-content:space-between"><span>Points de vie</span><span class="counter"><button data-act="pv" data-d="-1">−</button><b>${p.pv}</b><button data-act="pv" data-d="1">+</button></span></div>
-    ${p.pv<=0?`<p class="ko small" style="margin:6px 0 0"><b>À terre !</b> Appelez vos compagnons.</p>`:""}
-    <div class="stat" style="margin-top:10px">${Object.entries(h.carac).map(([k,v])=>`<div><b>${v}</b><small>${k}</small></div>`).join("")}</div>
-    <div class="row small"><span class="pill">🛡 Protection ${h.prot}</span>${h.armes.map(a=>`<span class="pill">⚔ ${esc(a[0])} · ${esc(a[1])}</span>`).join("")}</div>
-  </div>
-  <div class="card" style="padding:4px 14px">
-    <p class="small muted" style="margin:8px 0 2px">Touchez une compétence pour la lancer (si vous n'avez pas vos dés).</p>
-    ${p.spec.map((s,i)=>`<button class="skill hi" data-act="roll" data-k="s${i}"><span class="n">${esc(s[0])}<br><span class="l">compétence spéciale</span></span><span class="v">${s[1]} %</span></button>`).join("")}
-    ${COMP.map((c,i)=>`<button class="skill ${p.comp[i]>=70?"hi":""}" data-act="roll" data-k="${i}"><span class="n">${esc(c[0])}<br><span class="l">${c[1]}</span></span><span class="v">${p.comp[i]} %</span></button>`).join("")}
-  </div>
-  <details class="acc"><summary>Mon personnage</summary><div class="in">
-    <label class="small muted">Nom</label><input type="text" data-f="nom" value="${esc(p.nom)}">
-    <div class="row" style="margin-top:8px"><div style="width:90px"><label class="small muted">Âge</label><input type="number" data-f="age" value="${esc(p.age)}"></div><div class="grow"><label class="small muted">Blessures</label><input type="text" data-f="blessures" value="${esc(p.blessures)}" placeholder="ex. bras en écharpe"></div></div>
-    <label class="small muted" style="display:block;margin-top:8px">Apparence, traits marquants</label><textarea data-f="desc" placeholder="Cheveux, cicatrice, manière de parler…">${esc(p.desc)}</textarea>
-    <label class="small muted" style="display:block;margin-top:8px">Je suis génial·e parce que…</label><textarea data-f="genial" style="min-height:60px">${esc(p.genial)}</textarea>
-    <label class="small muted" style="display:block;margin-top:8px">… mais la société a des problèmes avec moi parce que…</label><textarea data-f="probleme" style="min-height:60px">${esc(p.probleme)}</textarea>
-    <p class="small muted">${esc(h.pitch)}</p>
-  </div></details>
-  <details class="acc"><summary>Progression</summary><div class="in">
-    <p class="small muted" style="margin-top:0">Un succès critique (01-05) fait gagner 5 % à la compétence, un échec critique (96-00) 1 %. Le MJ peut aussi accorder des points.</p>
-    ${COMP.map((c,i)=>`<div class="row" style="padding:4px 0;border-bottom:1px dotted var(--line)"><span class="grow small">${esc(c[0])}</span><span class="counter"><button style="width:32px;height:32px" data-act="cp" data-i="${i}" data-d="-1">−</button><b style="font-size:1.1rem;min-width:34px">${p.comp[i]}</b><button style="width:32px;height:32px" data-act="cp" data-i="${i}" data-d="1">+</button></span></div>`).join("")}
-  </div></details>
-  <details class="acc"><summary>Réglages</summary><div class="in">
-    <div class="row"><button class="btn" data-act="export">⬇ Sauvegarder mon carnet</button><label class="btn" style="display:inline-flex;align-items:center">⬆ Restaurer<input type="file" id="imp" accept=".json,application/json" hidden></label></div>
-    <div class="hr"></div><button class="btn s" data-act="switch">Changer de personnage</button> <button class="btn s d" data-act="reset">Remettre la fiche à zéro</button>
-  </div></details></div>`;
-}
-
-function total(b){return b.c*1000+b.o*100+b.s*10+b.r;}
-function vSac(){
-  const p=P(),b=p.bourse;
-  return `<div class="sec"><h2>Bourse</h2><div class="card">
-    <div class="coin">${[["c","Couronnes d'or","🟡"],["o","Orbes d'argent","⚪"],["s","Sceptres de cuivre","🟠"],["r","Rois de fer","⚫"]].map(([k,l,ic])=>`<span>${ic} ${l}</span><span class="counter"><button data-act="coin" data-k="${k}" data-d="-1">−</button><b>${b[k]}</b><button data-act="coin" data-k="${k}" data-d="1">+</button></span>`).join("")}</div>
-    <div class="hr"></div><div class="row"><span class="grow small muted">Total : ${total(b)} rois · 1 couronne = 10 orbes = 100 sceptres = 1000 rois</span><button class="btn s" data-act="change">Faire la monnaie</button></div>
-  </div>
-  <h2 style="margin:16px 2px 10px">Sac</h2><div class="card">
-    ${p.sac.length?p.sac.map((it,i)=>`<div class="item"><span class="q">×${it.q}</span><span class="grow">${esc(it.n)}</span><button class="btn s" data-act="iq" data-i="${i}" data-d="-1">−</button><button class="btn s" data-act="iq" data-i="${i}" data-d="1">+</button></div>`).join(""):'<p class="muted small">Sac vide.</p>'}
-    <div class="row" style="margin-top:10px"><input type="text" id="newItem" placeholder="Nouvel objet" style="flex:1"><button class="btn p" data-act="additem">Ajouter</button></div>
-    <p class="small muted">Mettre la quantité à 0 retire l'objet.</p>
-  </div>
-  <h2 style="margin:16px 2px 10px">Notes</h2><div class="card"><textarea data-f="notes" style="min-height:140px" placeholder="Noms, indices, promesses faites, dettes…">${esc(p.notes)}</textarea></div></div>`;
-}
-
-function vPouvoir(){
-  const h=H(),p=P();
-  if(h.pouvoir==="cartes"){
-    const su=MAGIE.suits[p.sel.suit],ri=rangIdx(p.sel.val);
-    return `<div class="sec"><h2>Noble magie d'Aria</h2>
-    <div class="card"><div class="row" style="justify-content:space-between"><span>Cartes dans le paquet</span><span class="counter"><button data-act="cartes" data-d="-1">−</button><b>${p.cartes}</b><button data-act="cartes" data-d="1">+</button></span></div>
-      <div class="row" style="margin:6px 0 0;align-items:center"><span class="small grow">${p.joker?"🃏 Le joker dort quelque part dans le paquet…":"🃏 Le joker a été joué."}</span>${p.joker?`<button class="btn s" data-act="jjoker">J'ai joué le joker</button>`:`<button class="btn s" data-act="jjoker">↶ Remettre le joker</button>`}</div>
-      <p class="small muted">Prenez la carte du dessus et regardez-la. Que vous l'utilisiez ou non, elle est perdue à jamais. Vous pouvez mélanger le paquet quand vous voulez.</p>
-      <div class="row"><button class="btn p grow" data-act="draw">Piocher une carte (paquet virtuel)</button></div>
-      <p class="small muted" style="margin-bottom:0">Le paquet virtuel ne sert que si vous n'avez pas de vrai jeu de cartes : 25 cartes au hasard plus le joker.</p>
-    </div>
-    <div class="card"><h3>Quelle carte avez-vous en main ?</h3>
-      <div class="grid4" style="margin-top:8px">${Object.keys(MAGIE.suits).map(s=>`<button class="suit ${s===p.sel.suit?"on":""} ${s==="♦"||s==="♥"?"redc":""}" data-act="suit" data-s="${s}">${s}</button>`).join("")}</div>
-      <div class="grid7" style="margin-top:6px">${VAL.map(v=>`<button class="btn s ${v===p.sel.val?"p":""}" style="padding:4px 0" data-act="val" data-v="${v}">${v}</button>`).join("")}</div>
-      <div class="blk read"><b class="lab">${su.nom} : ${su.dom}</b>Puissance d'un ${p.sel.val} : <i>« ${esc(su.fx[ri])} »</i>, ou un effet de même ampleur.</div>
-      <p class="small muted">Décrivez au MJ l'effet que vous voulez. Sans modélisation, c'est lui qui décrit le résultat… parfois surprenant. Réussir un jet de Modélisation (${p.spec[0]?p.spec[0][1]:60} %) vous permet de donner à l'effet la forme exacte que vous voulez, voire de le renforcer.</p>
-      <div class="row"><button class="btn p" data-act="play">J'ai joué cette carte</button><button class="btn" data-act="roll" data-k="s0">🎲 Modélisation</button></div>
-      ${p.jouees.length?`<div class="hr"></div><p class="small" style="margin:0 0 4px">Déjà jouées <span class="muted">(touchez une carte pour la corriger ou la retirer)</span> :</p>
-      <div>${p.jouees.map((c,i)=>`<button class="pill jcard ${c==="JOKER"?"":(/[♦♥]/.test(c)?"redc":"")}" data-act="jedit" data-i="${i}">${c==="JOKER"?"🃏 Joker":esc(c)}</button>`).join("")}</div>
-      <button class="btn s" style="margin-top:8px;width:100%" data-act="undo">↶ Annuler la dernière carte (${esc(p.jouees[p.jouees.length-1]==="JOKER"?"Joker":p.jouees[p.jouees.length-1])})</button>`:""}
-    </div>
-    <details class="acc"><summary>Table des puissances</summary><div class="in"><table style="width:100%;border-collapse:collapse;font-size:.8rem">
-      <tr><th style="text-align:left">Rang</th><th>♦</th><th>♣</th><th>♠</th><th class="redc">♥</th></tr>
-      ${MAGIE.rangs.map((r,i)=>`<tr style="border-top:1px solid var(--line)"><td><b>${r}</b></td>${Object.values(MAGIE.suits).map(s=>`<td style="padding:4px">${esc(s.fx[i])}</td>`).join("")}</tr>`).join("")}
-      <tr style="border-top:1px solid var(--line)"><td><b>Joker</b></td><td colspan="4" style="padding:4px">Tout est possible.</td></tr></table></div></details></div>`;
-  }
-  if(h.pouvoir==="mort"){
-    return `<div class="sec"><h2>Magie de la mort</h2>
-    <div class="card"><div class="row" style="justify-content:space-between"><span>Points de mort</span><span class="counter"><button data-act="mort" data-d="-1">−</button><b>${p.mort}</b><button data-act="mort" data-d="1">+</button></span></div>
-      <div class="row" style="margin-top:8px"><button class="btn s" data-act="mort" data-d="3">+3 animal</button><button class="btn s" data-act="mort" data-d="10">+10 humain</button><button class="btn s" data-act="mort" data-d="5">+5 mâle et femelle</button></div>
-      <div class="blk"><b class="lab">Aura sinistre</b>Tous vos jets sociaux (convaincre, intimider, psychologie…) subissent <b class="ko">−${p.mort} %</b>.</div>
-      <button class="btn p" style="width:100%" data-act="cast">🎲 Lancer un sort (jet sous ${p.mort})</button>
-      <div id="castOut" class="msg" style="margin-top:8px"></div>
-      <p class="small muted">Priez l'Araignée en silence, puis donnez la mort dans la minute qui suit. Jet réussi : le sort part et vos points de mort retombent à 0. Jet raté : vous perdez 10 points de mort.</p>
-    </div>
-    ${SORTS.map(([n,d])=>`<div class="card"><h3>${esc(n)}</h3><p class="small" style="margin:4px 0 0">${esc(d)}</p></div>`).join("")}</div>`;
-  }
-  if(h.pouvoir==="combat"){
-    return `<div class="sec"><h2>Au combat</h2>
-    <div class="card"><h3>Votre équipement</h3><p class="small">Plastron de cuir et métal : <b>retirez 4</b> à chaque dégât reçu. Bouclier (écu) : <b>+20 %</b> à la parade, soit ${P().comp[1]+20} %.</p></div>
-    <div class="card"><h3>Parer ou esquiver ?</h3><p class="small"><b>Parer</b> (Combat rapproché) : une fois par tour, contre un adversaire de votre taille ou plus petit, et vous pouvez encore attaquer.<br><b>Esquiver</b> (${P().comp[8]} %) : autant de fois que nécessaire, mais vous n'attaquez pas ce tour-là. −20 % contre les projectiles.</p></div>
-    <div class="card"><h3>Coup critique</h3><p class="small">01-05 en attaque : les dégâts sont lancés une deuxième fois, et ce second jet ignore l'armure. Décrivez votre exploit !</p></div>
-    <div class="card"><h3>Dégâts</h3><div class="row">${H().armes.filter(a=>/d/.test(a[1])).map(a=>`<button class="btn" data-act="dmg" data-d="${a[1]}">${esc(a[0])} ${a[1]}</button>`).join("")}</div><div id="dmgOut" class="dice" style="margin-top:8px"></div></div></div>`;
-  }
-  return `<div class="sec"><h2>Ruses & talents</h2>
-    <div class="card"><h3>Le voleur au travail</h3><p class="small"><b>Voler</b> (${P().comp[19]} %) : la victime a droit à un jet de Perception pour vous surprendre.<br><b>Discrétion</b> (${P().comp[6]} %) : avec un déguisement, vous pouvez prendre l'apparence de quelqu'un précis, à −20 %.<br><b>Serrures et pièges</b> (${P().comp[16]} %) : crocheter, verrouiller, poser ou désamorcer un piège mécanique.</p></div>
-    <div class="card"><h3>Le barde en scène</h3><p class="small"><b>Mentir, convaincre</b> (${P().comp[11]} %) : votre cible résiste avec sa Psychologie. Le jet le plus bas qui réussit l'emporte.<br>Pour une diversion, un tour de bonneteau ou une chanson, le MJ peut demander un jet de Charisme ×3 (${H().carac.CHA*3} %).</p></div>
-    <div class="card"><h3>Combat</h3><p class="small">Dague 1d4, hachette 1d6. Esquiver ${P().comp[8]} %. Pas d'armure : restez mobile !</p><div class="row"><button class="btn" data-act="dmg" data-d="1d4">Dague 1d4</button><button class="btn" data-act="dmg" data-d="1d6">Hachette 1d6</button></div><div id="dmgOut" class="dice" style="margin-top:8px"></div></div></div>`;
-}
-
-let JOURNAL=null;
-function vJournal(){
-  return `<div class="sec"><h2>Journal de la compagnie</h2><div id="jr"><p class="muted">Chargement…</p></div></div>`;
-}
-async function loadJournal(){
-  try{ const r=await fetch("campagne.json",{cache:"no-cache"}); JOURNAL=await r.json(); try{localStorage.setItem("aria-journal",JSON.stringify(JOURNAL));}catch(e){} }
-  catch(e){ try{JOURNAL=JSON.parse(localStorage.getItem("aria-journal")||"null");}catch(_){} }
-  const el=$("#jr"); if(!el) return;
-  if(!JOURNAL){ el.innerHTML='<p class="muted">Journal indisponible hors ligne pour le moment.</p>'; return; }
-  const J=JOURNAL;
-  let h=`<p class="small muted" style="margin:-4px 2px 10px">${esc(J.campagne)} · mis à jour le ${esc(J.maj)}</p>`;
-  if(J.avant) h+=`<div class="blk read"><b class="lab">${esc(J.avant.titre)}</b>${J.avant.texte.map(t=>`<p style="margin:6px 0">${esc(t)}</p>`).join("")}</div>`;
-  (J.seances||[]).slice().reverse().forEach(s=>{
-    h+=`<div class="sess"><h3>${esc(s.titre)}</h3><div class="d">${esc(s.date)}</div><p style="margin:6px 0">${esc(s.resume)}</p>
-      ${s.pnj&&s.pnj.length?`<p class="small"><b>Rencontres :</b> ${s.pnj.map(esc).join(" · ")}</p>`:""}
-      ${s.lieux&&s.lieux.length?`<p class="small"><b>Lieux :</b> ${s.lieux.map(esc).join(" · ")}</p>`:""}
-      ${s.butin&&s.butin.length?`<p class="small"><b>Butin & objets :</b> ${s.butin.map(esc).join(" · ")}</p>`:""}
-      ${s.pistes&&s.pistes.length?`<p class="small"><b>Pistes ouvertes :</b> ${s.pistes.map(esc).join(" · ")}</p>`:""}</div>`;
-  });
-  if(J.monde) h+=`<details class="acc" style="margin-top:14px"><summary>Le monde d'Aria</summary><div class="in">${J.monde.map(([t,d])=>`<p class="small"><b>${esc(t)}</b> : ${esc(d)}</p>`).join("")}</div></details>`;
-  el.innerHTML=h;
-}
-
-function vRegles(){
-  return `<div class="sec"><h2>Dés & règles</h2>
-  <div class="card"><div class="dice" id="dOut">—</div><div class="msg" id="dMsg"></div>
-    <div class="row" style="margin-top:8px"><input type="number" inputmode="numeric" id="dSk" class="num" placeholder="%"><button class="btn p grow" data-act="d100">Lancer 1d100</button></div>
-    <div class="row" style="margin-top:6px">${["1d3","1d4","1d6","1d8","2d6"].map(d=>`<button class="btn s grow" data-act="dx" data-d="${d}">${d}</button>`).join("")}</div>
-    <p class="small muted" style="margin-bottom:0">Vos vrais dés passent avant ! Ceci ne sert qu'en dépannage.</p></div>
-  <details class="acc" open><summary>Réussir un jet</summary><div class="in small">
-    <p>Lancez 2d10 : l'un donne les dizaines, l'autre les unités (00 = 100). <b>Résultat ≤ compétence = réussite.</b> Le MJ peut ajouter un bonus ou un malus de −30 à +30 %.</p>
-    <p><b class="crit">01 à 05 : succès critique.</b> Réussite éclatante, et +5 % à la compétence.<br><b class="ko">96 à 00 : échec critique.</b> Catastrophe, mais +1 % : on apprend de ses erreurs.</p>
-    <p><b>Sans compétence adaptée :</b> jet sous une caractéristique ×3 (×1 à ×5 selon la difficulté).</p>
-    <p><b>Opposition :</b> chacun lance sous sa compétence. Si les deux réussissent, ou si les deux ratent, le plus petit jet gagne. En cas d'égalité, les héros gagnent.</p></div></details>
-  <details class="acc"><summary>Combat</summary><div class="in small">
-    <p><b>Initiative :</b> tout le monde lance ses Réflexes. Le plus petit résultat agit en premier ; ceux qui ratent agissent en dernier.</p>
-    <p><b>Une action rapide par tour :</b> attaquer, se cacher, fuir, ramasser…</p>
-    <p><b>Parer :</b> une fois par tour, avec votre arme, et vous pouvez encore attaquer. <b>Esquiver :</b> autant de fois que vous voulez, sans attaquer ; −20 % contre les projectiles.</p>
-    <p><b>Armure :</b> retirez sa protection des dégâts. Bouclier écu +20 % à la parade, targe +10 %.</p>
-    <p><b>Soigner :</b> réussite = +1d6 PV ; échec = −1d3. Cataplasme : +1d4 PV.</p></div></details>
-  <details class="acc"><summary>Parler comme en Aria</summary><div class="in small">
-    <p><b>Septentrion</b> = nord · <b>Midi</b> = sud · <b>Levant</b> = est · <b>Ponant</b> = ouest.<br><b>À main faible</b> = à gauche · <b>À main forte</b> = à droite.</p>
-    <p><b>Monnaie :</b> 1 couronne d'or = 10 orbes d'argent = 100 sceptres de cuivre = 1000 rois de fer.</p></div></details></div>`;
-}
-
-/* ============ Actions ============ */
-function rollSkill(label,val){
-  const r=rnd(100), ok=r<=val, crit=r<=5?"s":r>=96?"e":"";
-  openSheet(`<p class="small muted" style="margin:0;text-align:center">${esc(label)} · ${val} %</p><div class="dice">${dd(r)}</div>
-    <div class="msg ${ok?"ok":"ko"}" style="font-size:1.15rem">${ok?"Réussite":"Échec"}</div>
-    ${crit==="s"?`<p class="crit" style="text-align:center;font-weight:600">Succès critique ! Votre compétence gagne 5 %.</p>`:""}
-    ${crit==="e"?`<p class="ko" style="text-align:center;font-weight:600">Échec critique… mais votre compétence gagne 1 %.</p>`:""}
-    <div class="row" style="margin-top:10px">${crit?`<button class="btn p grow" data-act="gain" data-g="${crit==="s"?5:1}">Ajouter +${crit==="s"?5:1} %</button>`:""}<button class="btn grow" data-act="close">Fermer</button></div>`);
-}
-let lastRollKey=null;
-/* Cartes jouées : origine mémorisée pour pouvoir annuler proprement ("d" = paquet virtuel, "m" = saisie) */
-function jPush(p,c,src){ p.jouees.push(c); (p.jsrc||(p.jsrc=p.jouees.slice(0,-1).map(()=>"m"))).push(src); }
-function jRemove(p,i){
-  const c=p.jouees.splice(i,1)[0], src=(p.jsrc||[]).splice(i,1)[0]||"m";
-  if(src==="d"&&p.deck){ p.deck.unshift(c); p.cartes=p.deck.filter(x=>x!=="JOKER").length; }
-  else if(c!=="JOKER") p.cartes=Math.min(25,p.cartes+1);
-  if(c==="JOKER") p.joker=true;
-  return c;
-}
-let JE=null;
-function jEdit(i){ const c=P().jouees[i]; if(c===undefined) return; JE={i,s:c==="JOKER"?"♠":c.slice(-1),v:c==="JOKER"?"JOKER":c.slice(0,-1)}; openSheet('<div id="jedit"></div>'); jEditDraw(); }
-function jEditDraw(){ const el=$("#jedit"); if(!el||!JE) return; const old=P().jouees[JE.i];
-  el.innerHTML=`<h3 style="margin:0 0 4px">Corriger la carte n° ${JE.i+1}</h3><p class="small muted" style="margin:0 0 8px">Actuellement : <b>${old==="JOKER"?"Joker":esc(old)}</b></p>
-  <div class="grid4">${Object.keys(MAGIE.suits).map(s=>`<button class="suit ${JE.v!=="JOKER"&&s===JE.s?"on":""} ${s==="♦"||s==="♥"?"redc":""}" data-act="jsuit" data-s="${s}">${s}</button>`).join("")}</div>
-  <div class="grid7" style="margin-top:6px">${VAL.map(v=>`<button class="btn s ${v===JE.v?"p":""}" style="padding:4px 0" data-act="jval" data-v="${v}">${v}</button>`).join("")}<button class="btn s ${JE.v==="JOKER"?"p":""}" style="padding:4px 0" data-act="jval" data-v="JOKER">🃏</button></div>
-  <p style="text-align:center;margin:10px 0">Nouvelle valeur : <b>${JE.v==="JOKER"?"🃏 Joker":esc(JE.v+JE.s)}</b></p>
-  <div class="row"><button class="btn p grow" data-act="jsave">Enregistrer</button><button class="btn grow" data-act="close">Annuler</button></div>
-  <button class="btn s" style="width:100%;margin-top:8px" data-act="jdel">Retirer de la liste (la carte revient dans le paquet)</button>`; }
-function newDeck(){ const all=[]; ["♠","♥","♦","♣"].forEach(s=>VAL.forEach(v=>all.push(v+s))); for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];} const d=all.slice(0,25); d.push("JOKER"); for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];} return d; }
-
-document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-act]"); if(!b) return; const a=b.dataset.act, d=+b.dataset.d;
-  if(b.tagName==="INPUT") return;
-  const p=S.hero?P():null;
-  switch(a){
-    case "choose": S.hero=b.dataset.id; if(!S.perso[S.hero]) initPerso(S.hero); S.tab="fiche"; break;
-    case "switch": S.prev=S.hero; S.hero=null; scrollTo(0,0); break;
-    case "reset": if(confirm("Remettre la fiche à zéro ? Vos notes, votre inventaire et les cartes déjà découvertes seront effacés.")){ initPerso(S.hero); lieuxReset(); toast("Fiche remise à zéro"); } break;
-    case "pv": p.pv=Math.max(-10,Math.min(H().pv,p.pv+d)); break;
-    case "cp": p.comp[+b.dataset.i]=Math.max(0,Math.min(99,p.comp[+b.dataset.i]+d)); break;
-    case "roll": { const k=b.dataset.k; lastRollKey=k; if(k[0]==="s"){const s=p.spec[+k.slice(1)]; if(!s) return; rollSkill(s[0],s[1]);} else rollSkill(COMP[+k][0],p.comp[+k]); return; }
-    case "gain": { const g=+b.dataset.g,k=lastRollKey; if(k[0]==="s") p.spec[+k.slice(1)][1]+=g; else p.comp[+k]+=g; closeSheet(); toast("Compétence améliorée de "+g+" %"); break; }
-    case "close": closeSheet(); return;
-    case "coin": p.bourse[b.dataset.k]=Math.max(0,p.bourse[b.dataset.k]+d); break;
-    case "change": { let t=total(p.bourse); p.bourse={c:Math.floor(t/1000),o:Math.floor(t%1000/100),s:Math.floor(t%100/10),r:t%10}; toast("Monnaie rangée"); break; }
-    case "iq": { const it=p.sac[+b.dataset.i]; it.q+=d; if(it.q<=0) p.sac.splice(+b.dataset.i,1); break; }
-    case "additem": { const n=$("#newItem").value.trim(); if(!n) return; p.sac.push({n,q:1}); break; }
-    case "cartes": p.cartes=Math.max(0,p.cartes+d); break;
-    case "suit": p.sel.suit=b.dataset.s; break;
-    case "val": p.sel.val=b.dataset.v; break;
-    case "play": if(p.cartes<=0) return toast("Votre paquet est vide…"); p.cartes--; jPush(p,p.sel.val+p.sel.suit,"m"); toast("Carte jouée. Il en reste "+p.cartes+". Erreur ? « Annuler la dernière carte »."); break;
-    case "undo": { closeSheet(); if(!p.jouees.length) return; const c=jRemove(p,p.jouees.length-1); toast((c==="JOKER"?"Joker":c)+" annulé : la carte revient dans le paquet."); break; }
-    case "jjoker": { if(p.joker){ p.joker=false; jPush(p,"JOKER","m"); toast("Joker joué. Tout est possible…"); } else { const i=p.jouees.lastIndexOf("JOKER"); if(i>=0) jRemove(p,i); else p.joker=true; toast("Le joker revient dans le paquet."); } break; }
-    case "jedit": jEdit(+b.dataset.i); return;
-    case "jsuit": JE.s=b.dataset.s; JE.v=JE.v==="JOKER"?"7":JE.v; jEditDraw(); return;
-    case "jval": JE.v=b.dataset.v; jEditDraw(); return;
-    case "jsave": { const nv=JE.v==="JOKER"?"JOKER":JE.v+JE.s, old=p.jouees[JE.i]; if(old===undefined) return closeSheet();
-      if(old!=="JOKER"&&nv==="JOKER"){ if(!p.joker) return toast("Le joker est déjà joué."); p.joker=false; p.cartes++; }
-      if(old==="JOKER"&&nv!=="JOKER"){ p.joker=true; if(p.cartes>0) p.cartes--; }
-      p.jouees[JE.i]=nv; closeSheet(); toast("Carte corrigée : "+(nv==="JOKER"?"Joker":nv)); break; }
-    case "jdel": { const c=jRemove(p,JE.i); closeSheet(); toast((c==="JOKER"?"Joker":c)+" retiré : la carte revient dans le paquet."); break; }
-    case "draw": {
-      if(!p.deck) p.deck=newDeck();
-      if(!p.deck.length) return toast("Le paquet virtuel est vide");
-      const c=p.deck.shift(); p.cartes=p.deck.filter(x=>x!=="JOKER").length; save();
-      if(c==="JOKER"){ p.joker=false; jPush(p,"JOKER","d"); save(); openSheet(`<div class="cardface"><b>🃏</b><span style="font-size:1.1rem">JOKER</span></div><p class="crit" style="text-align:center;font-weight:600">Le joker ! Tout est possible…</p><div class="row"><button class="btn p grow" data-act="close">Fermer</button><button class="btn grow" data-act="undo">↶ Pioche par erreur</button></div>`); render(); return; }
-      const v=c.slice(0,-1), s=c.slice(-1), su=MAGIE.suits[s];
-      p.sel={suit:s,val:v}; jPush(p,c,"d"); save(); render();
-      openSheet(`<div class="cardface ${s==="♦"||s==="♥"?"r":""}"><b>${v}</b><span>${s}</span></div><p style="text-align:center;margin:6px 0"><b>${su.nom}</b> : ${su.dom}<br><i class="muted">Puissance : « ${esc(su.fx[rangIdx(v)])} »</i></p><p class="small muted" style="text-align:center">La carte est perdue, que vous l'utilisiez ou non. Il en reste ${p.deck.length}.</p><div class="row"><button class="btn p grow" data-act="close">Fermer</button><button class="btn grow" data-act="undo">↶ Pioche par erreur</button></div>`); return; }
-    case "mort": p.mort=Math.max(0,p.mort+d); break;
-    case "cast": { const r=rnd(100), ok=r<=p.mort; const before=p.mort; p.mort=ok?0:Math.max(0,p.mort-10); save(); render(); $("#castOut").innerHTML=`${dd(r)} sous ${before} : ${ok?'<span class="ok">le sort est lancé !</span>':'<span class="ko">raté (−10 points de mort)</span>'}`; return; }
-    case "dmg": case "dx": { const m=b.dataset.d.match(/(\d*)d(\d+)\s*([+-]\d+)?/); if(!m) return; let t=0,rs=[]; for(let i=0;i<+(m[1]||1);i++){const x=rnd(+m[2]);rs.push(x);t+=x;} t+=+(m[3]||0); const out=$(a==="dmg"?"#dmgOut":"#dOut"); out.textContent=t; if(a==="dx") $("#dMsg").textContent=b.dataset.d+(rs.length>1||m[3]?" ("+rs.join("+")+(m[3]||"")+")":""); return; }
-    case "d100": { const r=rnd(100), sk=+$("#dSk").value; $("#dOut").textContent=dd(r); $("#dMsg").innerHTML=(sk?(r<=sk?'<span class="ok">Réussite</span>':'<span class="ko">Échec</span>')+" sous "+sk:"")+(r<=5?' <span class="crit">· critique !</span>':r>=96?' <span class="ko">· échec critique</span>':""); return; }
-    case "export": { const blob=new Blob([JSON.stringify({app:"carnet-aria",hero:S.hero,perso:S.perso[S.hero]},null,2)],{type:"application/json"}); const u=URL.createObjectURL(blob); const l=document.createElement("a"); l.href=u; l.download="carnet-"+S.hero+".json"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); return; }
-    default: return;
-  }
-  save(); render();
-});
-document.addEventListener("input",e=>{ const f=e.target.dataset.f; if(!f||!S.hero) return; P()[f]=e.target.type==="number"?+e.target.value:e.target.value; if(f==="nom") $("#whoName").textContent=e.target.value; save(); });
-document.addEventListener("change",e=>{ if(e.target.id!=="imp") return; const file=e.target.files[0]; if(!file) return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result); if(!d.hero||!d.perso) throw 0; S.perso[d.hero]=d.perso; S.hero=d.hero; save(); render(); toast("Carnet restauré"); }catch(err){ toast("Fichier illisible"); } }; r.readAsText(file); });
-
-/* ============ Cartes des lieux (débloquées par code du MJ) ============ */
-const LKEY="aria-lieux-v1";
-let L; try{L=JSON.parse(localStorage.getItem(LKEY)||"null");}catch(e){L=null;}
-if(!L||!L.found) L={found:{},cur:null,v:null};
-function lsave(){try{localStorage.setItem(LKEY,JSON.stringify(L));}catch(e){}}
-function lieuxReset(){ // oublie toutes les cartes découvertes : il faudra de nouveau les codes du MJ
-  L={found:{},cur:null,v:L.v}; lsave();
-  Object.keys(LURL).forEach(k=>{try{URL.revokeObjectURL(LURL[k]);}catch(e){} delete LURL[k];}); Object.keys(LKEYS).forEach(k=>delete LKEYS[k]);
-}
-let LDATA=null; const LKEYS={}, LURL={};
-const b64u=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
-async function lieuxData(){
-  if(LDATA) return LDATA;
-  const r=await fetch("lieux.json",{cache:"no-cache"}); LDATA=await r.json();
-  if(L.v&&L.v!==LDATA.v){ // le MJ a mis les cartes à jour : on redéchiffre ce qui était déjà découvert
-    for(const id of Object.keys(L.found)){ const p=await lieuDecrypt(L.found[id].code); if(p) L.found[p.id]={code:L.found[id].code,p}; else delete L.found[id]; }
-  }
-  L.v=LDATA.v; lsave(); return LDATA;
-}
-async function lieuTag(code){ const h=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("aria-lieu|"+code)); return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,"0")).join("").slice(0,16); }
-async function lieuKey(code,salt){ const k=code+"|"+salt; if(LKEYS[k]) return LKEYS[k];
-  const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(code),"PBKDF2",false,["deriveKey"]);
-  return LKEYS[k]=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64u(salt),iterations:LDATA.it,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]); }
-async function lieuDecrypt(code){
-  const t=await lieuTag(code), e=LDATA.entries.find(x=>x.t===t); if(!e) return null;
-  const k=await lieuKey(code,e.s);
-  const p=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:b64u(e.i)},k,b64u(e.c))));
-  p.salt=e.s; return p;
-}
-async function lieuImg(id,f){
-  if(LURL[f]) return LURL[f];
-  const F=L.found[id]; const k=await lieuKey(F.code,F.p.salt);
-  const buf=new Uint8Array(await (await fetch(f)).arrayBuffer());
-  const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:buf.slice(0,12)},k,buf.slice(12));
-  return LURL[f]=URL.createObjectURL(new Blob([pt],{type:"image/jpeg"}));
-}
-function lieuPlan(id){ const k="plan:"+id+":"+L.v; return LURL[k]||(LURL[k]=URL.createObjectURL(new Blob([L.found[id].p.plan],{type:"image/svg+xml"}))); }
-const lieuxTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind!=="piece").sort((a,b)=>a.ordre-b.ordre);
-const piecesTries=()=>Object.values(L.found).map(x=>x.p).filter(p=>p.kind==="piece").sort((a,b)=>a.ordre-b.ordre);
-const lieuIcon=id=>({cabane:"🛖",aubepluie:"🌧️",pont:"🌉",malbouzon:"🏞️",manoir:"🏚️",cascade:"💧",vieille:"🏛️",archives:"📚",siege:"⛺",delivrance:"✨"})[id]||"📍";
-
-function vCarte(){
-  const ls=lieuxTries(), ps=piecesTries(), cur=L.found[L.cur]?L.cur:null, seg=L.seg==="pieces"?"pieces":"carte";
-  let h=`<div class="sec"><h2>Enquête</h2>
-  <div class="card"><p class="small muted" style="margin:0 0 8px">Quand vous découvrez un lieu ou un document, le MJ vous donne un code à 3 chiffres.</p>
-    <div class="row"><input id="lcode" class="codein grow" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" autocomplete="off" placeholder="···" aria-label="Code donné par le MJ"><button class="btn p" data-act="lunlock" style="min-height:56px">Révéler</button></div></div>
-  <div class="seg"><button class="${seg==="carte"?"on":""}" data-act="lseg" data-s="carte">🗺️ Carte · ${ls.length}</button><button class="${seg==="pieces"?"on":""}" data-act="lseg" data-s="pieces">📜 Pièces · ${ps.length}</button></div>`;
-  if(seg==="carte"){
-    h+=`<div class="mapwrap" id="regionMap" style="aspect-ratio:10/7"></div><p class="small muted" style="margin:-6px 2px 10px">Touchez la carte pour l'agrandir. <button class="btn s" data-act="monde" style="margin-left:4px">🌍 Carte du monde</button></p>
-    ${ls.length?`<h3 style="margin:14px 2px 8px">Lieux découverts</h3>${ls.slice().reverse().map(p=>`<button class="lieu-it ${p.id===cur?"cur":""}" data-act="lieu" data-id="${p.id}"><span class="ic">${lieuIcon(p.id)}</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span>${p.id===cur?'<span class="here">📍 Vous êtes ici</span>':'<span class="muted">›</span>'}</button>`).join("")}`
-      :`<p class="small muted" style="text-align:center;margin:10px 0">Aucun lieu découvert pour l'instant. Le voyage commence…</p>`}`;
+  $("#titre").innerHTML=MODE==="mj"?'Ma table · MJ <span class="mjtag">MJ</span>':"Ma table de jeu";
+  $("#sous").textContent=MODE==="mj"?"Choisis le jeu, puis le scénario à mener.":"Choisis ton jeu, puis le scénario de la soirée.";
+  const j=jeu(st.jeu), s=scen(j,st.sc);
+  let h=`<nav class="etapes"><button class="${!j?"on":""}" data-go="0">1 · Jeu</button><button class="${j&&!s?"on":""}" data-go="1" ${j?"":"disabled"}>2 · Scénario</button><button class="${s?"on":""}" ${s?"":"disabled"}>3 · ${MODE==="mj"?"Mener":"Jouer"}</button></nav>`;
+  if(!j){
+    const dj=dernier&&jeu(dernier.jeu), ds=scen(dj,dernier&&dernier.sc);
+    if(ds) h+=`<a class="reprendre" href="${lienDe(dj,ds,MODE)}"><span class="i">▶</span><span><b>Reprendre : ${esc(dj.nom)} — ${esc(ds.nom)}</b><small>${MODE==="mj"?"Espace MJ":"Mon carnet"} · dernière partie ouverte</small></span></a>`;
+    h+=`<h2>Jeux de rôle</h2>`+JEUX.map(x=>`<button class="jeu" style="${theme(x)}" data-jeu="${x.id}"><span class="nb">${x.scenarios.length} scénario${x.scenarios.length>1?"s":""}</span><div class="genre">${esc(x.genre)}</div><div class="nom" style="font-family:${x.police}">${esc(x.nom)}</div><p class="acc">${esc(x.accroche)}</p></button>`).join("");
+  } else if(!s){
+    h+=`<button class="jeu" style="${theme(j)};padding:14px 18px" data-go="0"><div class="genre">← Changer de jeu</div><div class="nom" style="font-family:${j.police};font-size:1.6rem">${esc(j.nom)}</div></button>`;
+    h+=`<h2>Scénarios</h2>`+j.scenarios.map(x=>`<button class="sc" data-sc="${x.id}"><small>${esc(x.type)}</small><b>${esc(x.nom)}</b><span>${esc(x.resume)}</span></button>`).join("");
   } else {
-    h+=ps.length?ps.map(p=>`<button class="lieu-it" data-act="piece" data-id="${p.id}"><span class="ic">📜</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span><span class="muted">›</span></button>`).join("")
-      :`<p class="small muted" style="text-align:center;margin:10px 0">Aucune pièce pour l'instant. Les lettres, inscriptions et documents trouvés apparaîtront ici, à relire quand vous voulez.</p>`;
+    h+=`<div class="choix" style="${theme(j)};background:var(--c-bg);color:var(--c-ink)">
+      <div class="genre" style="font-size:.75rem;text-transform:uppercase;letter-spacing:.16em;color:var(--c-acc);font-weight:600">${esc(j.nom)} · ${esc(s.type)}</div>
+      <p class="t" style="font-family:${j.police}">${esc(s.nom)}</p><p class="s">${esc(s.resume)}</p>`;
+    if(MODE==="mj"){
+      h+=`<a class="go p" style="background:var(--c-acc)" href="${lienDe(j,s,"mj")}" data-memo>🔒 Ouvrir l'espace MJ</a>
+          <a class="go g" style="color:var(--c-ink)" href="${lienDe(j,s,"joueur")}" target="_blank">👁 Voir l'appli des joueurs</a>
+          <button class="go g" style="color:var(--c-ink)" data-copie="${lienDe(j,s,"joueur")}">🔗 Copier le lien joueurs (Discord)</button>`;
+    } else {
+      h+=`<a class="go p" style="background:var(--c-acc);color:var(--c-bg)" href="${lienDe(j,s,"joueur")}" data-memo>Ouvrir mon carnet</a>`;
+    }
+    h+=`<button class="go g" style="color:var(--c-ink)" data-go="1">← Autre scénario</button></div>`;
   }
-  return h+`</div>`;
+  $("#app").innerHTML=h;
+  $("#bas").innerHTML=MODE==="mj"?`<a href="../">Accueil des joueurs</a>`:`<a href="mj/">Espace MJ</a>`;
 }
-let FZ=1; try{FZ=+localStorage.getItem("aria-fz")||1;}catch(e){}
-function pieceOpen(id,neuf){
-  const F=L.found[id]; if(!F) return; const p=F.p, ov=$("#lieuOv");
-  const txt=b=>`<div class="doc ${b.style||"parch"} ${b.grand?"grand":""}">${b.titre?`<h4>${esc(b.titre)}</h4>`:""}${b.lignes.map(l=>`<p>${esc(l)}</p>`).join("")}</div>`;
-  const img=(b,i)=>`<img class="docimg" id="pim${i}" alt="${esc(b.leg||"")}" data-act="pzoom" data-i="${i}"><p class="leg">${esc(b.leg||"")} · touchez pour zoomer</p>${b.trans?`<details class="trans" open><summary>Transcription lisible</summary>${b.trans.map(l=>`<p>${esc(l)}</p>`).join("")}</details>`:""}`;
-  ov.innerHTML=`<div class="bar"><div class="wrap"><span style="font-size:1.4rem">📜</span><div class="grow" style="min-width:0"><h2 style="font-size:1.3rem">${esc(p.titre)}</h2><small class="muted">${esc(p.sous||"")}</small></div><button class="ibtn" data-act="lclose" aria-label="Fermer">✕</button></div></div>
-  <div class="wrap ${neuf?"reveal":""}" id="pieceBody" style="padding-top:12px;--fz:${FZ}">
-    <div class="row" style="justify-content:flex-end;margin:0 0 10px"><span class="small muted grow">Taille du texte</span><button class="btn s" data-act="fz" data-d="-1" aria-label="Texte plus petit">A−</button><button class="btn s" data-act="fz" data-d="1" aria-label="Texte plus grand">A+</button></div>
-    ${p.blocs.map((b,i)=>b.f?img(b,i):txt(b)).join("")}
-    <button class="btn p" style="width:100%;margin-top:6px" data-act="lclose">Retour aux pièces</button>
-  </div>`;
-  ov.classList.remove("hidden"); ov.scrollTop=0; document.body.style.overflow="hidden";
-  p.blocs.forEach((b,i)=>{ if(b.f) lieuImg(id,b.f).then(u=>{const e=$("#pim"+i); if(e) e.src=u;}).catch(()=>{const e=$("#pim"+i); if(e) e.replaceWith(Object.assign(document.createElement("p"),{className:"small muted",textContent:"Image indisponible hors ligne : la transcription reste lisible."}));}); });
-}
-async function drawCarte(){
-  const el=$("#regionMap"); if(!el) return;
-  try{ await lieuxData(); }catch(e){ el.style.aspectRatio="auto"; el.innerHTML='<p class="muted small" style="padding:14px;line-height:1.4">Carte indisponible : ouvrez le carnet une fois avec du réseau.</p>'; return; }
-  const ls=lieuxTries(), cur=L.found[L.cur]?L.found[L.cur].p:null;
-  let over=ls.map(p=>p.region.layer||"").join("");
-  const pts={}; ls.forEach(p=>{const k=p.region.x+","+p.region.y; (pts[k]=pts[k]||[]).push(p.id);});
-  over+=Object.entries(pts).map(([k,ids])=>{const [x,y]=k.split(","); return `<g data-act="lieux-pt" data-ids="${ids.join(",")}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="30" fill="#000" fill-opacity="0"/></g>`;}).join("");
-  if(cur){ const {x,y}=cur.region; over+=`<g pointer-events="none"><circle cx="${x}" cy="${y}" r="12" fill="none" stroke="#9b2d1f" stroke-width="3"><animate attributeName="r" values="10;24;10" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;.2;1" dur="2.4s" repeatCount="indefinite"/></circle><circle cx="${x}" cy="${y}" r="6" fill="#9b2d1f"/><text x="${x}" y="${+y-22}" text-anchor="middle" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#9b2d1f" stroke="#efe2c2" stroke-width="4" paint-order="stroke">Vous êtes ici</text></g>`; }
-  el.innerHTML=LDATA.base.replace(/<\/svg>\s*$/,over+"</svg>");
-  el.onclick=e=>{ if(e.target.closest("[data-act]")) return; const svg=el.innerHTML.replace(/<animate[^>]*>/g,""); $("#zoomImg").src=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml"})); $("#zoomOv").classList.remove("hidden"); ZOOM=1; setTimeout(()=>zoomSet(2),30); };
-}
-async function lieuUnlock(){
-  const inp=$("#lcode"); if(!inp) return; const code=inp.value.replace(/\D/g,"");
-  if(code.length!==3){ toast("Le code a 3 chiffres"); return; }
-  let D; try{ D=await lieuxData(); }catch(e){ toast("Pas de réseau : impossible de vérifier le code"); return; }
-  let p=null; try{ p=await lieuDecrypt(code); }catch(e){ p=null; }
-  if(!p){ inp.value=""; inp.classList.remove("shake"); void inp.offsetWidth; inp.classList.add("shake"); toast("Ce code ne mène nulle part…"); return; }
-  const neuf=!L.found[p.id]; L.found[p.id]={code,p}; L.v=D.v;
-  if(p.kind==="piece"){ L.seg="pieces"; lsave(); p.blocs.forEach(b=>{ if(b.f) fetch(b.f).catch(()=>{}); }); render(); pieceOpen(p.id,neuf); return; }
-  L.cur=p.id; L.seg="carte"; lsave();
-  p.imgs.forEach(im=>fetch(im.f).catch(()=>{})); // met les illustrations en cache pour le hors-ligne
-  render(); lieuOpen(p.id,neuf);
-}
-async function lieuOpen(id,neuf){
-  const F=L.found[id]; if(!F) return; const p=F.p, ov=$("#lieuOv");
-  ov.innerHTML=`<div class="bar"><div class="wrap"><span style="font-size:1.4rem">${lieuIcon(id)}</span><div class="grow" style="min-width:0"><h2 style="font-size:1.3rem">${esc(p.titre)}</h2><small class="muted">${esc(p.sous||"")}</small></div><button class="ibtn" data-act="lclose" aria-label="Fermer">✕</button></div></div>
-  <div class="wrap ${neuf?"reveal":""}" style="padding-top:12px">
-    ${p.imgs.map((im,i)=>`<img class="ill" id="lim${i}" alt="${esc(im.leg)}"><p class="leg">${esc(im.leg)}</p>`).join("")}
-    ${p.texte.map(t=>`<div class="blk read">${esc(t)}</div>`).join("")}
-    <h3 style="margin:16px 2px 8px">Plan du lieu</h3>
-    <img class="plan" src="${lieuPlan(id)}" alt="Plan : ${esc(p.titre)}" data-act="lzoom" data-id="${id}">
-    <p class="small muted" style="margin:6px 2px 14px">Touchez le plan pour l'agrandir.</p>
-    <div class="row">${L.cur===id?'<span class="here grow" style="font-size:.9rem;text-align:center">📍 Vous êtes ici</span>':`<button class="btn grow" data-act="lhere" data-id="${id}">📍 Nous sommes ici</button>`}<button class="btn p grow" data-act="lclose">Retour à la carte</button></div>
-  </div>`;
-  ov.classList.remove("hidden"); ov.scrollTop=0; document.body.style.overflow="hidden";
-  p.imgs.forEach((im,i)=>lieuImg(id,im.f).then(u=>{const e=$("#lim"+i); if(e) e.src=u;}).catch(()=>{const e=$("#lim"+i); if(e){e.replaceWith(Object.assign(document.createElement("p"),{className:"small muted",textContent:"Illustration indisponible hors ligne."}));}}));
-}
-function lieuClose(){ $("#lieuOv").classList.add("hidden"); $("#lieuOv").innerHTML=""; document.body.style.overflow=""; }
-let ZOOM=1;
-function zoomSet(z,keep){ const sc=$("#zoomSc"), img=$("#zoomImg"); const cx=(sc.scrollLeft+sc.clientWidth/2)/(img.offsetWidth||1), cy=(sc.scrollTop+sc.clientHeight/2)/(img.offsetHeight||1);
-  ZOOM=Math.max(1,Math.min(4,z)); img.style.width=(sc.clientWidth*ZOOM)+"px";
-  if(keep){ sc.scrollLeft=cx*img.offsetWidth-sc.clientWidth/2; sc.scrollTop=cy*img.offsetHeight-sc.clientHeight/2; } }
-document.addEventListener("input",e=>{ if(e.target.id==="lcode"){ e.target.value=e.target.value.replace(/\D/g,"").slice(0,3); if(e.target.value.length===3) lieuUnlock(); } });
-document.addEventListener("keydown",e=>{ if(e.target.id==="lcode"&&e.key==="Enter") lieuUnlock(); });
 document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-act]"); if(!b) return; const a=b.dataset.act;
-  switch(a){
-    case "lunlock": lieuUnlock(); break;
-    case "lieu": closeSheet(); lieuOpen(b.dataset.id); break;
-    case "piece": pieceOpen(b.dataset.id); break;
-    case "lseg": L.seg=b.dataset.s; lsave(); render(); break;
-    case "fz": { FZ=Math.max(.8,Math.min(1.8,Math.round((FZ+(+b.dataset.d)*.15)*100)/100)); try{localStorage.setItem("aria-fz",FZ);}catch(e){} const pb=$("#pieceBody"); if(pb) pb.style.setProperty("--fz",FZ); break; }
-    case "pzoom": { if(!b.src) break; const ov=$("#zoomOv"); $("#zoomImg").src=b.src; ov.classList.remove("hidden"); ZOOM=1; setTimeout(()=>zoomSet(2),30); break; }
-    case "lieux-pt": { const ids=b.dataset.ids.split(","); if(ids.length===1){ lieuOpen(ids[0]); break; }
-      openSheet(`<h3 style="margin:0 0 10px">Lieux découverts ici</h3>${ids.map(id=>L.found[id].p).sort((x,y)=>x.ordre-y.ordre).map(p=>`<button class="lieu-it" data-act="lieu" data-id="${p.id}"><span class="ic">${lieuIcon(p.id)}</span><span class="grow"><b>${esc(p.titre)}</b><small>${esc(p.sous||"")}</small></span></button>`).join("")}<button class="btn" style="width:100%" data-act="close">Fermer</button>`); break; }
-    case "lclose": lieuClose(); break;
-    case "lhere": L.cur=b.dataset.id; lsave(); lieuOpen(b.dataset.id); render(); toast("Position mise à jour"); break;
-    case "lzoom": { const ov=$("#zoomOv"); $("#zoomImg").src=b.src; ov.classList.remove("hidden"); ZOOM=1; setTimeout(()=>zoomSet(1.6),30); break; }
-    case "zin": zoomSet(ZOOM*1.5,true); break;
-    case "zout": zoomSet(ZOOM/1.5,true); break;
-    case "zclose": $("#zoomOv").classList.add("hidden"); break;
-    case "monde": mondeOpen(); break;
-  }
+  const b=e.target.closest("[data-jeu],[data-sc],[data-go],[data-copie],[data-memo]"); if(!b) return;
+  if(b.dataset.jeu){ st={jeu:b.dataset.jeu,sc:null}; const j=jeu(st.jeu); if(j.scenarios.length===1) st.sc=j.scenarios[0].id; }
+  else if(b.dataset.sc) st.sc=b.dataset.sc;
+  else if(b.dataset.go==="0") st={jeu:null,sc:null};
+  else if(b.dataset.go==="1"){ st.sc=null; }
+  else if(b.dataset.copie){ const url=new URL(b.dataset.copie,location.href).href; (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast("Lien copié")).catch(()=>prompt("Lien joueurs :",url)); return; }
+  else if(b.hasAttribute("data-memo")){ try{localStorage.setItem(KEY,JSON.stringify(st));}catch(_){} return; }
+  render(); scrollTo(0,0);
 });
-
-/* ============ Achat : prix de l'équipement (ARIA 1, p. 327-331) ============ */
-let ACH=null, achQ="";
-const norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
-const fmtPrix=r=>{ if(r>=1000&&r%1000===0){const n=r/1000;return n+" couronne"+(n>1?"s":"");} if(r>=100&&r%100===0){const n=r/100;return n+" orbe"+(n>1?"s":"");} if(r>=10&&r%10===0){const n=r/10;return n+" sceptre"+(n>1?"s":"");} return r+" roi"+(r>1?"s":""); };
-function achLoad(){ if(ACH) return Promise.resolve(ACH); return fetch("achats.json").then(r=>r.json()).then(j=>ACH=j); }
-function vAchat(){
-  const f=S.ach||(S.ach={cat:"all",tri:"cat"});
-  const cats=ACH?ACH.cats:[];
-  const n=id=>ACH?ACH.items.filter(x=>id==="all"||x.cat===id).length:0;
-  return `<div class="sec"><h2>Achat</h2>
-  <p class="conv">1 couronne = 10 orbes = 100 sceptres = 1 000 rois · ${S.hero?`votre bourse : <b>${(()=>{const t=total(P().bourse),f=fmtPrix(t);return t?f+(/rois?$/.test(f)?"":` (${t} rois)`):"vide";})()}</b>`:""}</p>
-  <input id="achQ" class="asearch" type="search" placeholder="Chercher un objet, une arme…" value="${esc(achQ)}" autocomplete="off">
-  <div class="chips"><button class="chip ${f.cat==="all"?"on":""}" data-act="achcat" data-c="all">Tout · ${n("all")}</button>${cats.map(c=>`<button class="chip ${f.cat===c.id?"on":""}" data-act="achcat" data-c="${c.id}">${c.ic} ${esc(c.nom)} · ${n(c.id)}</button>`).join("")}</div>
-  <label class="atri">Trier <select id="achTri"><option value="cat"${f.tri==="cat"?" selected":""}>par catégorie</option><option value="asc"${f.tri==="asc"?" selected":""}>du moins cher au plus cher</option><option value="desc"${f.tri==="desc"?" selected":""}>du plus cher au moins cher</option><option value="nom"${f.tri==="nom"?" selected":""}>par nom (A → Z)</option></select></label>
-  <div id="achList"><p class="small muted">Chargement des prix…</p></div>
-  <p class="small muted" style="margin-top:14px">Prix indicatifs du livre : le MJ peut marchander, majorer en temps de crise ou faire un geste.</p></div>`;
-}
-function achDraw(){
-  const el=$("#achList"); if(!el) return;
-  if(!ACH){ achLoad().then(()=>{ if(S.tab==="achat") render(); }).catch(()=>{ const e=$("#achList"); if(e) e.innerHTML='<p class="small muted">Prix indisponibles hors ligne : ouvrez le carnet une fois avec du réseau.</p>'; }); return; }
-  const f=S.ach, q=norm(achQ.trim()), budget=S.hero?total(P().bourse):Infinity;
-  const ordre=Object.fromEntries(ACH.cats.map((c,i)=>[c.id,i]));
-  let it=ACH.items.filter(x=>(f.cat==="all"||x.cat===f.cat)&&(!q||norm(x.nom+" "+(x.info||"")+" "+(x.dg||"")).includes(q)));
-  const byNom=(a,b)=>a.nom.localeCompare(b.nom,"fr");
-  it.sort(f.tri==="asc"?(a,b)=>a.rois-b.rois||byNom(a,b):f.tri==="desc"?(a,b)=>b.rois-a.rois||byNom(a,b):f.tri==="nom"?byNom:(a,b)=>ordre[a.cat]-ordre[b.cat]||a.rois-b.rois||byNom(a,b));
-  if(!it.length){ el.innerHTML='<p class="small muted">Aucun objet trouvé.</p>'; return; }
-  let h="", last=null;
-  for(const x of it){
-    if(f.tri==="cat"&&x.cat!==last){ const c=ACH.cats[ordre[x.cat]]; h+=`<div class="agrp">${c.ic} ${esc(c.nom)}</div>`; last=x.cat; }
-    const det=[x.dg?`🎲 ${x.dg}`:"",x.prot?`🛡️ protection ${x.prot}`:"",x.info||"",x.unite||"",f.tri!=="cat"&&f.cat==="all"?ACH.cats[ordre[x.cat]].nom.toLowerCase():""].filter(Boolean).join(" · ");
-    const sub=fmtPrix(x.rois).endsWith("roi")||fmtPrix(x.rois).endsWith("rois")?"":`${x.rois.toLocaleString("fr-FR")} rois`;
-    h+=`<div class="arow ${x.rois>budget?"cher":""}"><span class="n"><b>${esc(x.nom)}</b>${det?`<small>${esc(det)}</small>`:""}</span><span class="pr">${fmtPrix(x.rois)}${x.unite?" / km":""}${sub?`<small>${sub}</small>`:""}${x.rois>budget?"<small>au-dessus de votre bourse</small>":""}</span>${S.hero?`<button class="btn s abuy" data-act="achbuy" data-i="${ACH.items.indexOf(x)}" aria-label="Acheter ${esc(x.nom)}">🛒</button>`:""}</div>`;
-  }
-  el.innerHTML=h;
-  const on=document.querySelector(".chip.on"), bar=on&&on.parentElement; if(bar) bar.scrollLeft=on.offsetLeft-bar.offsetLeft-(bar.clientWidth-on.offsetWidth)/2;
-}
-document.addEventListener("input",e=>{ if(e.target.id==="achQ"){ achQ=e.target.value; achDraw(); } });
-document.addEventListener("change",e=>{ if(e.target.id==="achTri"){ S.ach.tri=e.target.value; save(); achDraw(); } });
-document.addEventListener("click",e=>{ const b=e.target.closest('[data-act="achcat"]'); if(!b) return; S.ach.cat=b.dataset.c; save(); render(); });
-/* Acheter : l'objet passe dans le sac, le prix (négocié si besoin) est retiré de la bourse */
-const UNITES=[["couronnes",1000],["orbes",100],["sceptres",10],["rois",1]];
-const unitDe=r=>UNITES.find(([,v])=>r>=v&&r%v===0)||UNITES[3];
-const prixTxt=r=>{ const f=fmtPrix(r); return /rois?$/.test(f)?f:`${f} (${r} rois)`; };
-function achBuy(i){
-  const x=ACH.items[i]; if(!x||!S.hero) return; const [u,v]=unitDe(x.rois);
-  openSheet(`<h3 style="margin:0 0 4px">🛒 ${esc(x.nom)}</h3>
-  <p class="small muted" style="margin:0">Prix du livre : ${fmtPrix(x.rois)}${x.unite?" / km":""}. Vous avez négocié ? Changez le prix ci-dessous.</p>
-  <div class="buyf"><label for="bq">Quantité</label><input id="bq" type="number" inputmode="numeric" min="1" value="1">
-    <label for="bp">Prix pièce</label><div class="buyp"><input id="bp" type="number" inputmode="decimal" min="0" value="${x.rois/v}"><select id="bu">${UNITES.map(([n,val])=>`<option value="${val}"${n===u?" selected":""}>${n}</option>`).join("")}</select></div></div>
-  <div class="bres" id="bres"></div>
-  <div class="row"><button class="btn p grow" id="bok" data-act="achok" data-i="${i}">Acheter</button><button class="btn grow" data-act="close">Annuler</button></div>`);
-  achCalc();
-}
-function achCout(){ const q=Math.max(1,Math.floor(+$("#bq").value||1)), pr=Math.max(0,+$("#bp").value||0), un=+$("#bu").value; return {q,cout:Math.round(q*pr*un)}; }
-function achCalc(){ const el=$("#bres"); if(!el) return; const {cout}=achCout(), t=total(P().bourse), reste=t-cout, ok=reste>=0;
-  el.innerHTML=`Coût : <b>${cout?prixTxt(cout):"gratuit"}</b><br>${ok?`Il vous restera : <b>${reste?prixTxt(reste):"plus rien"}</b>`:`<span class="ko">Bourse insuffisante : il manque ${prixTxt(-reste)}.</span>`}`;
-  const b=$("#bok"); if(b) b.disabled=!ok; }
-document.addEventListener("input",e=>{ if(e.target.id==="bq"||e.target.id==="bp") achCalc(); });
-document.addEventListener("change",e=>{ if(e.target.id==="bu") achCalc(); });
-document.addEventListener("click",e=>{ const b=e.target.closest('[data-act="achbuy"],[data-act="achok"]'); if(!b) return;
-  if(b.dataset.act==="achbuy"){ achBuy(+b.dataset.i); return; }
-  const x=ACH.items[+b.dataset.i], p=P(), {q,cout}=achCout(), t=total(p.bourse);
-  if(cout>t){ toast("Bourse insuffisante"); return; }
-  const r=t-cout; p.bourse={c:Math.floor(r/1000),o:Math.floor(r%1000/100),s:Math.floor(r%100/10),r:r%10};
-  const it=p.sac.find(o=>norm(o.n)===norm(x.nom)); if(it) it.q+=q; else p.sac.push({n:x.nom,q});
-  save(); closeSheet(); render(); toast(`${q>1?q+" × ":""}${x.nom} dans le sac · reste ${r?fmtPrix(r):"plus rien"}`);
-});
-
-/* ============ Carte du monde (toujours accessible par 🌍) ============ */
-function mondeOpen(){
-  const img=$("#zoomImg"), sc=$("#zoomSc");
-  img.onload=()=>{ img.onload=null; zoomSet(Math.max(1,sc.clientHeight/(sc.clientWidth*img.naturalHeight/img.naturalWidth))); sc.scrollLeft=img.offsetWidth*.47-sc.clientWidth/2; sc.scrollTop=0; };
-  img.alt="Carte du monde d'Aria"; $("#zoomOv").classList.remove("hidden"); ZOOM=1; img.style.width=sc.clientWidth+"px";
-  if(img.src.endsWith("monde.jpg")&&img.complete) img.onload(); else img.src="monde.jpg";
-}
-$("#btnMonde").onclick=mondeOpen;
-
-applyTheme(); render();
-if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
-
-/* Bouton/geste « retour » du téléphone : ferme la visionneuse ou la fiche ouverte au lieu de quitter l'appli */
-(function(){ const ids=["zoomOv","lieuOv"]; let skip=0;
-  ids.forEach(id=>{ const el=document.getElementById(id); if(!el) return; let was=!el.classList.contains("hidden");
-    new MutationObserver(()=>{ const vis=!el.classList.contains("hidden"); if(vis===was) return; was=vis;
-      if(vis) history.pushState({ov:id},"");
-      else if(history.state&&history.state.ov===id){ skip++; history.back(); } }).observe(el,{attributes:true,attributeFilter:["class"]}); });
-  addEventListener("popstate",()=>{ if(skip){ skip--; return; }
-    for(const id of ids){ const el=document.getElementById(id); if(el&&!el.classList.contains("hidden")){ const b=el.querySelector('[data-act="zclose"],[data-act="lclose"]'); if(b) b.click(); else el.classList.add("hidden"); return; } } });
-})();
+render();
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")) navigator.serviceWorker.register(RACINE+"sw.js").catch(()=>{});
 </script>
 </body>
 </html>

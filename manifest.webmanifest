@@ -1,15 +1,25 @@
 {
-  "name": "Carnet d'Aria",
-  "short_name": "Aria",
-  "description": "Le carnet de votre héros pour les parties d'ARIA.",
+  "name": "Ma table de jeu",
+  "short_name": "Ma table",
+  "description": "Les applis de jeu de rôle de la table : choisir le jeu puis le scénario.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#13100c",
-  "theme_color": "#13100c",
+  "background_color": "#111014",
+  "theme_color": "#111014",
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }

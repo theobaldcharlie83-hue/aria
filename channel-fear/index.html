@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b0c">
+<title>Channel Fear — Carnet d'enquêteur</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=VT323&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0b0c;--card:#141417;--card2:#1b1b1f;--line:#26262b;--ink:#ecebe6;--mute:#8d8b86;--red:#e0322b;--red2:#ff8b80;--amb:#f2b84b;--ok:#6fd08c;--blue:#8fb8ff}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:20;background:#0b0b0cf2;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:max(8px,env(safe-area-inset-top)) 12px 8px;display:flex;align-items:center;gap:10px}
+.top img.av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--red);cursor:pointer;background:#222}
+.top .who{flex:1;line-height:1.2;cursor:pointer}
+.top .who b{font:600 1.05rem Oswald,sans-serif;letter-spacing:.04em;display:block}
+.top .who small{color:var(--mute)}
+.rec{font:1rem VT323,monospace;color:var(--red);display:flex;align-items:center;gap:5px}
+.rec i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+.jauges{display:flex;gap:6px}
+.jauge{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:2px 8px;text-align:center;font-size:.62rem;color:var(--mute);line-height:1.1}
+.jauge b{display:block;font:1.35rem VT323,monospace;color:var(--ink)}
+.jauge.bas b{color:var(--red2)}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:30;display:flex;background:#0b0b0cf5;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;background:none;border:0;padding:7px 2px 6px;font-size:.68rem;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer}
+nav.tabs button span{font-size:1.25rem}
+nav.tabs button.on{color:var(--ink);box-shadow:inset 0 2px 0 var(--red)}
+main{max-width:640px;margin:0 auto;padding:12px}
+h2{font:600 1.35rem Oswald,sans-serif;letter-spacing:.04em;margin:8px 0 10px;text-transform:uppercase}
+h3{font:600 1rem Oswald,sans-serif;letter-spacing:.06em;margin:16px 0 8px;text-transform:uppercase;color:#d6d3cb}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px}
+.muted{color:var(--mute)}.small{font-size:.85rem}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:.92rem}
+a.btn{color:inherit;text-decoration:none}
+.btn.p{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+.btn.s{padding:5px 9px;font-size:.82rem}
+.btn.on{outline:2px solid var(--amb)}
+.btn:disabled{opacity:.4}
+.big{width:100%;padding:13px}
+/* Choix du perso */
+.pre{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center;cursor:pointer;text-align:left;width:100%}
+.pre img{width:84px;height:104px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+.pre b{font:600 1.15rem Oswald,sans-serif;letter-spacing:.04em}
+.pre .pr{color:var(--red2);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+/* Fiche */
+.ident{display:grid;grid-template-columns:110px 1fr;gap:12px}
+.ident img{width:110px;height:140px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#222}
+.ident .nm{font:600 1.35rem Oswald,sans-serif;letter-spacing:.03em;line-height:1.15}
+.ident .pr{color:var(--red2);font-size:.8rem;text-transform:uppercase;letter-spacing:.12em}
+.cases{display:flex;gap:6px;margin:6px 0}
+.cases button{flex:1;height:38px;border-radius:8px;border:1px solid var(--line);background:var(--card2);cursor:pointer;font:1.2rem VT323,monospace;color:var(--mute)}
+.cases button.on{background:#3a1416;border-color:var(--red);color:#fff}
+.cases.res button.on{background:#2c2312;border-color:var(--amb)}
+.apt{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.apt button{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:7px 9px;cursor:pointer;text-align:left}
+.apt button b{font:1.5rem VT323,monospace;width:22px;text-align:center;color:var(--amb)}
+.apt button span{font:600 .9rem Oswald,sans-serif;letter-spacing:.05em;text-transform:uppercase}
+.apt button.on{border-color:var(--red);background:#2a1214}
+.spec{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line);padding:6px 0}
+.spec:first-child{border-top:0}
+.spec .r{display:flex;gap:3px}
+.spec .r i{width:14px;height:14px;border:1px solid #666;border-radius:3px;display:inline-block}
+.spec .r i.on{background:var(--ink);border-color:var(--ink)}
+.def{background:#17150f;border:1px solid #3b331f;border-left:4px solid var(--amb);border-radius:10px;padding:10px 12px}
+/* Dés */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--card2);border:1px solid var(--line);border-radius:99px;padding:5px 11px;cursor:pointer;font-size:.86rem}
+.chip.on{background:#2a1214;border-color:var(--red);color:#fff}
+.des{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.d{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;font:1.8rem VT323,monospace;background:#26262b;border:2px solid #3a3a42;position:relative;animation:roll .35s ease-out}
+@keyframes roll{0%{transform:rotate(-90deg) scale(.4);opacity:0}100%{transform:none;opacity:1}}
+.d.ok{background:#1d2a20;border-color:#3f8a55;color:#bff0cc}
+.d.six{border-color:var(--amb)}
+.d.re::after{content:"↻";position:absolute;top:-7px;right:-4px;font-size:.85rem;color:var(--blue)}
+.d.ex::after{content:"+";position:absolute;top:-8px;right:-3px;font-size:1rem;color:var(--amb)}
+.d.auto{background:#2c2312;border-color:var(--amb);color:#ffe2a6;font-size:1.1rem}
+.res{font:600 1.3rem Oswald,sans-serif;letter-spacing:.04em}
+.res.ok{color:var(--ok)}.res.ko{color:var(--red2)}
+/* Indices */
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:300px;margin:10px auto}
+.pad button{height:54px;border-radius:12px;background:var(--card2);border:1px solid var(--line);font:1.8rem VT323,monospace;cursor:pointer}
+.code{font:3rem VT323,monospace;text-align:center;letter-spacing:.5em;margin:4px 0;color:var(--amb)}
+.ind{display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer}
+.ind .ic{font-size:1.5rem}
+.doc{background:#efeadd;color:#222;border-radius:8px;padding:12px 14px;font-family:'Special Elite','Courier New',monospace;margin:6px 0}
+.doc .note{color:#7a2a22;font-size:.9em}.doc .tc{color:#c0392b}
+.doc .aff{border:2px solid #222;padding:6px 8px;margin:6px 0;background:#fff}.doc .aff b{display:block;letter-spacing:.2em}.doc .aff span{display:block}
+.doc .cadre{width:90px;height:110px;border:1px dashed #888;display:grid;place-items:center;color:#888;float:left;margin:0 10px 6px 0}
+.doc .idl{display:flex;gap:10px}.doc .idl .cadre{float:none}
+.doc .etat{font-weight:700;letter-spacing:.1em;color:#1d3d6b}.doc .titre-carte{font-weight:700;color:#5b2a86}.doc .en-tete{font-weight:700;border-bottom:1px solid #222}
+.doc::after{content:"";display:block;clear:both}
+.plan svg{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line)}
+.vis img{width:100%;border-radius:10px;display:block;margin:6px 0;cursor:zoom-in}
+/* Divers */
+textarea,input[type=text],select{width:100%;background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font:inherit}
+textarea{min-height:200px;resize:vertical}
+.step{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.step button{background:var(--card2);border:0;padding:5px 11px;cursor:pointer;font-size:1rem}
+.step b{min-width:28px;text-align:center;font:1.3rem VT323,monospace}
+.rush{border-top:1px solid var(--line);padding:7px 0;display:flex;gap:8px}
+.rush:first-child{border-top:0}
+.rush time{font:1rem VT323,monospace;color:var(--mute);white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(140px);background:#000e;border:1px solid var(--line);color:#fff;padding:10px 16px;border-radius:12px;transition:.25s;z-index:60;max-width:92vw;text-align:center}
+#toast.show{transform:translateX(-50%)}
+.zoom{position:fixed;inset:0;background:#000;z-index:90;display:none;overflow:auto}
+.zoom.on{display:block}.zoom img,.zoom svg{display:block;width:180%;max-width:none;height:auto}
+.zoom .x{position:fixed;top:max(10px,env(safe-area-inset-top));right:10px;z-index:2}
+.cr{font-size:.72rem;color:#5f5d59;text-align:center;margin:30px 0 10px}
+.err{color:var(--red2);font-size:.85rem}
+.titre{display:block;max-width:280px;margin:10px auto 4px;width:80%}
+.epcard{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:0 0 10px}
+.epcard img{width:100%;display:block;opacity:.7}
+.epcard div{position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,#000d)}
+.epcard b{font:600 1.5rem Oswald,sans-serif;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<header class="top" id="top"></header>
+<main id="app"></main>
+<nav class="tabs" id="tabs">
+  <button data-tab="fiche"><span>🪪</span>Fiche</button>
+  <button data-tab="des"><span>🎲</span>Dés</button>
+  <button data-tab="indices"><span>🔓</span>Indices</button>
+  <button data-tab="rushes"><span>🎥</span>Rushes</button>
+  <button data-tab="van"><span>🚐</span>Van</button>
+  <button data-tab="notes"><span>✒️</span>Notes</button>
+</nav>
+<div id="toast"></div>
+<div class="zoom" id="zoom"><button class="btn x" id="zoomX">✕ Fermer</button><div id="zoomIn"></div></div>
+<script>
+const REGLES={"APTITUDES":[{"id":"agir","nom":"Agir","aide":"Agilité, réflexes, sauter, esquiver.","ex":["Équilibre","Réflexes","Saut"]},{"id":"connaitre","nom":"Connaître","aide":"Savoirs théoriques : histoire, sciences, actualité.","ex":["Actualité","Informatique","Réseau","Paranormal","Démonologie"]},{"id":"endurer","nom":"Endurer","aide":"Courir longtemps, retenir son souffle, résister.","ex":["Course","Respiration","Résistance"]},{"id":"forcer","nom":"Forcer","aide":"Soulever, pousser, tirer, lancer fort.","ex":["Lancer (force)","Pousser","Tirer"]},{"id":"percevoir","nom":"Percevoir","aide":"Voir, entendre, sentir, s'orienter.","ex":["Écoute","Observation","Orientation"]},{"id":"simposer","nom":"S'imposer","aide":"Argumenter, commander, intimider.","ex":["Argumentation","Gestion","Intimidation"]},{"id":"savoirfaire","nom":"Savoir-Faire","aide":"Savoirs pratiques : conduire, réparer, soigner.","ex":["Conduire","Mécanique","Premiers secours","Technologie","Spiritisme","Exorcisme"]},{"id":"sebattre","nom":"Se battre","aide":"Corps à corps, parer, esquiver un coup.","ex":["Armes blanches","Armes improvisées","Mains nues"]},{"id":"secontroler","nom":"Se contrôler","aide":"Discrétion, sang-froid, concentration, mémoire.","ex":["Discrétion","Maîtrise de soi","Volonté"]},{"id":"viser","nom":"Viser","aide":"Tirer, lancer avec précision.","ex":["Armes à feu","Cibler","Lancer (précision)"]}],"PRETIRES":[{"id":"sunny","nom":"Sunny O","profil":"Experte technique","portrait":"sunny.jpg","mots":"34 ans. Métisse. Taille moyenne. Brune. Mi-longs. Blouson en cuir. Sac en bandoulière avec matériel.","deformation":{"nom":"Attentive aux sons","txt":"En utilisant 1 point de Ressource, Sunny capte des sons inaudibles à l'oreille et des phénomènes de voix électroniques grâce à son équipement."},"apt":{"agir":3,"connaitre":3,"endurer":3,"forcer":3,"percevoir":4,"simposer":3,"savoirfaire":5,"sebattre":3,"secontroler":4,"viser":4},"specs":[{"nom":"Écoute","apt":"percevoir","r":1},{"nom":"Technologie","apt":"savoirfaire","r":2},{"nom":"Discrétion","apt":"secontroler","r":1},{"nom":"Volonté","apt":"secontroler","r":1}],"armes":[{"nom":"Poing & cie","apt":"sebattre","deg":"1D (0R)"}]},{"id":"archie","nom":"Archie « Bulldog » Grimm","profil":"Ancien policier","portrait":"archie.jpg","mots":"53 ans. Caucasien. Taille moyenne. Cheveux blancs. Costume noir. Pardessus beige. Mine renfrognée.","deformation":{"nom":"Psychologue","txt":"En utilisant 1 point de Ressource, Archie sait si on lui ment ou si on lui cache sciemment des informations."},"apt":{"agir":4,"connaitre":3,"endurer":3,"forcer":4,"percevoir":5,"simposer":3,"savoirfaire":3,"sebattre":3,"secontroler":3,"viser":4},"specs":[{"nom":"Observation","apt":"percevoir","r":2},{"nom":"Armes à feu","apt":"viser","r":2}],"armes":[{"nom":"Poing & cie","apt":"sebattre","deg":"1D (1R)"},{"nom":"Colt 45","apt":"viser","deg":"4D (2R)"}]},{"id":"elsa","nom":"Elsa Faust","profil":"Historienne","portrait":"elsa.jpg","mots":"47 ans. Caucasienne. Grande. Longs cheveux blancs. Teint pâle. Châle. Robe noire. Air supérieur et hautain.","deformation":{"nom":"Charismatique","txt":"En utilisant 1 point de Ressource, Elsa convainc un tiers de ce qu'elle affirme."},"apt":{"agir":3,"connaitre":5,"endurer":3,"forcer":3,"percevoir":4,"simposer":4,"savoirfaire":3,"sebattre":3,"secontroler":4,"viser":3},"specs":[{"nom":"Paranormal","apt":"connaitre","r":2},{"nom":"Argumentation","apt":"simposer","r":2}],"armes":[{"nom":"Poing & cie","apt":"sebattre","deg":"1D (0R)"}]},{"id":"julian","nom":"Julian Cross","profil":"Médium","portrait":"julian.jpg","mots":"61 ans. Caucasien. Grand. Cheveux courts blancs. Chapeau panama. Col roulé. Long pardessus marron.","deformation":{"nom":"Sensibilité","txt":"En utilisant 1 point de Ressource, Julian sent si un esprit hante le lieu précis où il se trouve."},"apt":{"agir":4,"connaitre":3,"endurer":3,"forcer":3,"percevoir":4,"simposer":3,"savoirfaire":5,"sebattre":3,"secontroler":4,"viser":3},"specs":[{"nom":"Spiritisme","apt":"savoirfaire","r":2},{"nom":"Discrétion","apt":"secontroler","r":1},{"nom":"Maîtrise de soi","apt":"secontroler","r":1},{"nom":"Volonté","apt":"secontroler","r":1}],"armes":[{"nom":"Poing & cie","apt":"sebattre","deg":"1D (0R)"}]},{"id":"damien","nom":"Damien Barnes","profil":"Exorciste","portrait":"damien.jpg","mots":"33 ans. Noir. Taille moyenne. Cheveux courts bruns. Bouc. Cernés. Soutane. Chapelet en main.","deformation":{"nom":"Imposition des mains","txt":"En utilisant 1 point de Ressource et en touchant quelqu'un, Damien sait si la personne est possédée ou étroitement liée à un démon."},"apt":{"agir":3,"connaitre":4,"endurer":3,"forcer":3,"percevoir":3,"simposer":4,"savoirfaire":4,"sebattre":3,"secontroler":5,"viser":3},"specs":[{"nom":"Démonologie","apt":"connaitre","r":1},{"nom":"Exorcisme","apt":"savoirfaire","r":2},{"nom":"Maîtrise de soi","apt":"secontroler","r":1},{"nom":"Volonté","apt":"secontroler","r":1}],"armes":[{"nom":"Poing & cie","apt":"sebattre","deg":"1D (0R)"}]}],"EQUIPEMENT_VAN":["Lampes-torches (classiques et ultraviolet)","Caméras de tous types : numérique, appareil photo, téléphone, lunettes caméra (vision nocturne, infrarouge)","Thermomètres (une chute de 10° peut trahir une présence)","Magnétophones (ultrasons, infrasons, voix électroniques — EVP)","Magnétomètres (champs magnétiques et électromagnétiques — EMF)","Ordinateurs et tablettes","Détecteurs de mouvement","Spiritisme (planche ouija) et exorcisme (eau bénite, craie, croix)"],"AIDE_REGLES":[["Lancer les dés","Autant de d6 que l'Aptitude. Chaque 4, 5 ou 6 = 1 réussite. Chaque 6 se relance : nouvelle réussite possible (et ainsi de suite)."],["Difficulté","Le MJ annonce le nombre de réussites à obtenir (1 à 4), noté Aptitude/difficulté, ex. Agir/4. Une action facile ne demande aucun jet."],["Spécialité","Si une Spécialité s'applique, on relance autant de dés ratés que son niveau (1R, 2R, 3R), en une ou plusieurs fois."],["Marges","Plus de réussites que demandé (difficulté 2 ou plus) = réussite totale : +1 Ressource. Aucun dé à 4+ = échec total : −1 Ressource. Pas de marge sur une action relativement facile (1 réussite)."],["Ressource (0 à 6)","1 point = 1 réussite automatique (on peut en dépenser plusieurs d'un coup). 1 point = Déformation professionnelle sans jet, une fois par épisode. À 0 : évanoui, épuisé."],["Affrontement","Les deux camps lancent la même Aptitude ; la meilleure marge l'emporte. Égalité : plus haute Spécialité, puis plus haute Aptitude, puis celui qui a annoncé en premier."],["Dégâts","Le vainqueur lance les dés de l'arme : chaque 4+ = 1 point de Santé perdu. Poing 1D, pistolet 4D (2R). Coup « de toutes ses forces » : Forcer 4D = +1R, 5D = +2R, 6D = +3R."],["Santé (0 à 6)","À 2 : +1 réussite exigée. À 1 : +2. À 0 : inconscient, agonie (Endurer/4 toutes les 10 s). Premiers soins dans l'heure : Savoir-Faire/(points perdus), +1 Santé."],["Seconds rôles","Les PNJ n'ont pas de fiche : faible 2D, moyen 3D, fort 4D, ou réussite automatique s'ils sont bien trop puissants."],["Salaire","Pas d'argent : l'épisode rapporte 1 à 3 points d'évolution selon ce que chacun a filmé, interviewé, découvert. Matériel « tiré par les cheveux » = −1 point. Destruction injustifiable = −1 point pour chacun."]],"SANTE":[{"v":6,"etat":"En bonne santé","effet":""},{"v":5,"etat":"Pleine forme","effet":""},{"v":4,"etat":"Fatigué","effet":""},{"v":3,"etat":"Contusionné","effet":""},{"v":2,"etat":"Sérieux","effet":"+1 réussite exigée"},{"v":1,"etat":"Grave","effet":"+2 réussites exigées"},{"v":0,"etat":"Inconscient","effet":"Agonie 1D × 10 s : Endurer/4 toutes les 10 s"}],"DIFFICULTES":[[0,"Facile","aucun jet"],[1,"Relativement facile","1 réussite"],[2,"Moyenne","2 réussites"],[3,"Difficile","3 réussites"],[4,"Très difficile","4 réussites"]],"CREDITS":"Channel Fear © Mister Frankenstein · Anthony « Yno » Combrexelle · règles sous licence CC BY-NC-SA 3.0 FR · aide de jeu non officielle, usage privé."};
+const EPISODES=[{"id":"s01e02","code":"S01E02","titre":"24H/24","pitch":"Le temps d'un plein, l'équipe de Channel Fear s'arrête à une station-service en pleine nuit. Lorsqu'ils repartent, la route les mène à la station qu'ils viennent de quitter. Prisonniers d'une boucle sans fin… mais pas seuls.","date":"Dimanche 14 novembre 2021 · 23 h 55 · Station-service 160, Colorado","couverture":"s01e02/couverture.jpg"}];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const rnd=n=>1+Math.floor(Math.random()*n);
+const APT=REGLES.APTITUDES, aptNom=id=>(APT.find(a=>a.id===id)||{}).nom||id;
+const KEY="cf-carnet-v1";
+function defaultState(){return{tab:"fiche",perso:null,sante:6,res:6,defUsed:false,xp:0,objet:"",extras:0,notes:"",rushes:[],indices:{},ep:null,des:{apt:null,spec:null,diff:2,res:0},mode:"jet"};}
+let S; try{S=Object.assign(defaultState(),JSON.parse(localStorage.getItem(KEY)||"{}"));}catch(e){S=defaultState();}
+const qEp=new URLSearchParams(location.search).get("ep"); if(qEp&&EPISODES.some(e=>e.id===qEp)) S.ep=qEp; if(!S.ep||!EPISODES.some(e=>e.id===S.ep)) S.ep=(EPISODES[0]||{}).id;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function toast(m,ms){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),ms||Math.max(2200,String(m).length*55));}
+const EP=()=>EPISODES.find(e=>e.id===S.ep)||{};
+const portrait=p=>p&&p.portrait?"img/portraits/"+p.portrait:"icon-192.png";
+let CREA=null, DERNIER=null, CODE="";
+
+/* ---------- Dés ---------- */
+function malusSante(){return S.sante<=0?99:S.sante===1?2:S.sante===2?1:0;}
+function lancer({n,diff,rel,res}){
+  const r={des:[],auto:res,reussites:0,diff};
+  if(res>=diff){ r.reussites=res; r.ok=true; r.sansJet=true; return r; }
+  const jet=()=>{const v=rnd(6);return{v,ok:v>=4};};
+  for(let i=0;i<n;i++) r.des.push(jet());
+  let k=rel; for(const d of r.des){ if(!d.ok&&k>0){k--;const x=jet();d.v=x.v;d.ok=x.ok;d.re=true;} }
+  const ex=[]; let six=r.des.filter(d=>d.v===6).length; while(six>0){const x=jet();x.ex=true;ex.push(x);six--;if(x.v===6)six++;}
+  r.des=r.des.concat(ex); r.reussites=r.des.filter(d=>d.ok).length+res; r.ok=r.reussites>=diff;
+  r.totale=diff>=2&&r.reussites>diff; r.echecTotal=diff>=2&&!r.des.some(d=>d.ok)&&res===0; return r;
+}
+function degats(n,rel){ const r={des:[],deg:true}; for(let i=0;i<n;i++){const v=rnd(6);r.des.push({v,ok:v>=4});} let k=rel; for(const d of r.des){if(!d.ok&&k>0){k--;d.v=rnd(6);d.ok=d.v>=4;d.re=true;}} r.reussites=r.des.filter(d=>d.ok).length; return r; }
+function vResultat(r){ if(!r) return "";
+  let h=`<div class="des">${r.des.map(d=>`<div class="d ${d.ok?"ok":""} ${d.v===6&&!r.deg?"six":""} ${d.re?"re":""} ${d.ex?"ex":""}">${d.v}</div>`).join("")}${r.auto?`<div class="d auto">+${r.auto}</div>`:""}</div>`;
+  if(r.deg) return h+`<div class="res ko">${r.reussites} blessure${r.reussites>1?"s":""} infligée${r.reussites>1?"s":""}</div>`;
+  h+=`<div class="res ${r.ok?"ok":"ko"}">${r.sansJet?"Réussite automatique":r.ok?"RÉUSSI":"RATÉ"} — ${r.reussites} réussite${r.reussites>1?"s":""} sur ${r.diff}</div>`;
+  if(r.totale) h+=`<p class="small" style="color:var(--ok)">Réussite totale : +1 Ressource (ajoutée).</p>`;
+  if(r.echecTotal) h+=`<p class="small" style="color:var(--red2)">Échec total : −1 Ressource (retirée).</p>`;
+  if(r.ressourceDep) h+=`<p class="small muted">${r.ressourceDep} point${r.ressourceDep>1?"s":""} de Ressource dépensé${r.ressourceDep>1?"s":""}.</p>`;
+  return h; }
+
+/* ---------- En-tête ---------- */
+function vTop(){ const p=S.perso;
+  if(!p) return `<div class="rec"><i></i>REC</div><div class="who"><b>CHANNEL FEAR</b><small>Carnet d'enquêteur</small></div><a class="btn s" href="../">⌂</a>`;
+  return `<img class="av" src="${portrait(p)}" alt="" data-act="changer"><div class="who" data-act="tab" data-t="fiche"><b>${esc(p.nom)}</b><small>${esc(p.profil)} · ${esc(EP().code||"")} ${esc(EP().titre||"")}</small></div>
+  <div class="jauges"><div class="jauge ${S.sante<=2?"bas":""}"><b>${S.sante}</b>Santé</div><div class="jauge ${S.res<=1?"bas":""}"><b>${S.res}</b>Ress.</div></div>`; }
+
+/* ---------- Choix / création ---------- */
+function vChoix(){
+  let h=`<img class="titre" src="img/titre.png" alt="Channel Fear">`;
+  const e=EP(); if(e.id) h+=`<div class="epcard">${e.couverture?`<img src="${e.couverture}" alt="">`:""}<div><span class="small muted">${esc(e.code)} · ${esc(e.date||"")}</span><br><b>${esc(e.titre)}</b></div></div>`;
+  h+=`<h2>Qui êtes-vous ?</h2><p class="small muted">Choisissez votre enquêteur pendant la réunion d'équipe, avant le départ.</p>`;
+  h+=REGLES.PRETIRES.map(p=>`<div class="card"><button class="pre" style="background:none;border:0;padding:0" data-act="choisir" data-id="${p.id}"><img src="${portrait(p)}" alt=""><span><span class="pr">${esc(p.profil)}</span><br><b>${esc(p.nom)}</b><br><span class="small muted">${esc(p.mots)}</span><br><span class="small">✦ ${esc(p.deformation.nom)}</span></span></button></div>`).join("");
+  h+=`<button class="btn big" data-act="creer">✚ Créer mon propre enquêteur</button>`;
+  return h;
+}
+function vCreation(){ const c=CREA, tot=Object.values(c.apt).reduce((a,b)=>a+b,0), nb5=Object.values(c.apt).filter(v=>v>=5).length;
+  const cout=c.specs.reduce((a,s)=>a+({1:5,2:15,3:30}[s.r]||0),0);
+  const errs=[]; if(tot!==35) errs.push(`Aptitudes : ${tot}/35 points.`); if(nb5>1) errs.push("Une seule Aptitude à 5D maximum."); if(Object.values(c.apt).some(v=>v>5)) errs.push("Pas d'Aptitude à 6D à la création.");
+  if(cout>30) errs.push(`Spécialités : ${cout}/30 points.`); if(c.specs.some(s=>s.r>=3)) errs.push("Pas de Spécialité à 3R à la création."); if(c.specs.some(s=>s.r>c.apt[s.apt])) errs.push("Une Spécialité ne peut dépasser son Aptitude."); if(!c.nom.trim()) errs.push("Il manque un nom.");
+  let h=`<h2>Nouvel enquêteur</h2><div class="card"><label class="small">Prénom + nom<input type="text" data-c="nom" value="${esc(c.nom)}"></label><label class="small">Profil (ex-flic, technicien, médium…)<input type="text" data-c="profil" value="${esc(c.profil)}"></label>
+  <label class="small">Mots-clefs (signalement : âge, allure, vêtements)<input type="text" data-c="mots" value="${esc(c.mots)}"></label>
+  <label class="small">Déformation professionnelle (nom)<input type="text" data-c="defn" value="${esc(c.defn)}"></label><label class="small">Ce qu'elle permet (1 point de Ressource)<input type="text" data-c="deft" value="${esc(c.deft)}"></label></div>
+  <h3>Aptitudes · ${tot}/35</h3><div class="card"><p class="small muted" style="margin-top:0">Minimum 1, une seule à 5D au plus.</p>${APT.map(a=>`<div class="row" style="justify-content:space-between;margin:4px 0"><span><b>${a.nom}</b> <span class="small muted">${esc(a.aide)}</span></span><span class="step"><button data-act="capt" data-id="${a.id}" data-d="-1">−</button><b>${c.apt[a.id]}</b><button data-act="capt" data-id="${a.id}" data-d="1">+</button></span></div>`).join("")}</div>
+  <h3>Spécialités · ${cout}/30 points</h3><div class="card"><p class="small muted" style="margin-top:0">1R = 5 points, 2R = 15 points. Les points restants vont « en réserve ».</p>
+  ${c.specs.map((s,i)=>`<div class="row" style="margin:4px 0"><b style="flex:1">${esc(s.nom)} <span class="small muted">(${aptNom(s.apt)})</span></b><span class="step"><button data-act="cspr" data-i="${i}" data-d="-1">−</button><b>${s.r}R</b><button data-act="cspr" data-i="${i}" data-d="1">+</button></span><button class="btn s" data-act="cspx" data-i="${i}">✕</button></div>`).join("")}
+  <div class="row" style="margin-top:8px"><input type="text" id="specNom" placeholder="Nouvelle spécialité" style="flex:2"><select id="specApt" style="flex:1">${APT.map(a=>`<option value="${a.id}">${a.nom}</option>`).join("")}</select><button class="btn s" data-act="cspa">Ajouter</button></div>
+  <p class="small muted">Idées : ${APT.map(a=>a.ex.join(", ")).join(" · ")}</p></div>
+  ${errs.length?`<div class="card err">${errs.map(esc).join("<br>")}</div>`:""}
+  <button class="btn p big" data-act="cvalide" ${errs.length?"disabled":""}>Valider l'enquêteur</button><button class="btn big" style="margin-top:8px" data-act="cannule">Annuler</button>`;
+  return h; }
+
+/* ---------- Onglets ---------- */
+function vFiche(){ const p=S.perso, st=REGLES.SANTE.find(x=>x.v===S.sante)||{};
+  let h=`<div class="card ident"><img src="${portrait(p)}" alt=""><div><div class="pr">${esc(p.profil)}</div><div class="nm">${esc(p.nom)}</div><p class="small muted" style="margin:6px 0">${esc(p.mots)}</p></div></div>
+  <div class="card"><div class="row"><b style="flex:1">Santé</b><span class="small ${S.sante<=2?"err":"muted"}">${esc(st.etat||"")}${st.effet?" · "+esc(st.effet):""}</span></div>
+   <div class="cases">${[1,2,3,4,5,6].map(v=>`<button class="${v<=S.sante?"on":""}" data-act="sante" data-v="${v}">${v}</button>`).join("")}</div>
+   <div class="row"><b style="flex:1">Ressource</b><span class="small muted">${S.res===0?"Évanoui, épuisé":"réserve d'énergie"}</span></div>
+   <div class="cases res">${[1,2,3,4,5,6].map(v=>`<button class="${v<=S.res?"on":""}" data-act="res" data-v="${v}">${v}</button>`).join("")}</div>
+   <p class="small muted" style="margin:0">Toucher une case pour régler la jauge (toucher la plus basse allumée la vide).</p></div>
+  <div class="def"><div class="row"><b style="flex:1">✦ ${esc(p.deformation.nom)}</b><span class="small ${S.defUsed?"err":"muted"}">${S.defUsed?"utilisée cet épisode":"disponible"}</span></div><p class="small" style="margin:4px 0 8px">${esc(p.deformation.txt)}</p>
+   <button class="btn s" data-act="def">${S.defUsed?"↺ Rendre disponible":"Utiliser (−1 Ressource)"}</button></div>
+  <h3>Aptitudes <span class="small muted">— toucher pour lancer</span></h3><div class="apt">${APT.map(a=>`<button data-act="jet" data-apt="${a.id}"><b>${p.apt[a.id]}</b><span>${a.nom}</span></button>`).join("")}</div>
+  <h3>Spécialités</h3><div class="card">${p.specs.length?p.specs.map(s=>`<div class="spec"><span style="flex:1"><b>${esc(s.nom)}</b> <span class="small muted">(${aptNom(s.apt)})</span></span><span class="r">${[1,2,3].map(i=>`<i class="${i<=s.r?"on":""}"></i>`).join("")}</span></div>`).join(""):'<p class="small muted">Aucune.</p>'}</div>
+  <h3>Armes</h3><div class="card">${p.armes.map((a,i)=>`<div class="spec"><span style="flex:1"><b>${esc(a.nom)}</b> <span class="small muted">(${aptNom(a.apt)})</span></span><button class="btn s" data-act="degats" data-i="${i}">${esc(a.deg)} 🎲</button></div>`).join("")}<p class="small muted" style="margin:6px 0 0">Le van ne contient aucune arme. Coup « de toutes ses forces » : Forcer 4D = +1R, 5D = +2R, 6D = +3R.</p></div>
+  <h3>Évolution</h3><div class="card"><div class="row"><span style="flex:1">Points en réserve</span><span class="step"><button data-act="xp" data-d="-1">−</button><b>${S.xp}</b><button data-act="xp" data-d="1">+</button></span></div><p class="small muted" style="margin:6px 0 0">1R : 5 pts · 1R→2R : 10 · 2R→3R, +1D en Aptitude ou +1 Déformation : 15. Avec l'accord du MJ.</p></div>
+  <div class="row" style="margin-top:10px"><button class="btn s" data-act="nouvelEp">🎬 Nouvel épisode (Santé, Ressource, Déformation à neuf)</button><button class="btn s" data-act="changer">Changer d'enquêteur</button></div>`;
+  return h; }
+function vDes(){ const p=S.perso, d=S.des; const apt=d.apt||"agir", n=p.apt[apt]||0; const specs=p.specs.filter(s=>s.apt===apt); const sp=specs.find(s=>s.nom===d.spec);
+  const mal=malusSante(), diffEff=Math.min(4,d.diff+mal);
+  let h=`<h2>Lancer les dés</h2><div class="card"><b class="small">1 · Aptitude</b><div class="apt" style="margin-top:6px">${APT.map(a=>`<button class="${a.id===apt?"on":""}" data-act="dApt" data-apt="${a.id}"><b>${p.apt[a.id]}</b><span>${a.nom}</span></button>`).join("")}</div></div>
+  <div class="card"><b class="small">2 · Spécialité (relances)</b><div class="chips" style="margin-top:6px"><button class="chip ${!sp?"on":""}" data-act="dSpec" data-v="">Aucune</button>${specs.map(s=>`<button class="chip ${sp===s?"on":""}" data-act="dSpec" data-v="${esc(s.nom)}">${esc(s.nom)} · ${s.r}R</button>`).join("")}</div>${!specs.length?'<p class="small muted" style="margin:6px 0 0">Pas de spécialité pour cette Aptitude.</p>':""}</div>
+  <div class="card"><b class="small">3 · Difficulté annoncée par le MJ</b><div class="chips" style="margin-top:6px">${[1,2,3,4].map(x=>`<button class="chip ${d.diff===x?"on":""}" data-act="dDiff" data-v="${x}">${x} · ${REGLES.DIFFICULTES[x][1]}</button>`).join("")}</div>${mal?`<p class="small err" style="margin:6px 0 0">Blessé : +${mal} réussite${mal>1?"s":""} exigée${mal>1?"s":""} → ${diffEff}.</p>`:""}</div>
+  <div class="card"><b class="small">4 · Ressource à dépenser (réussites automatiques)</b><div class="chips" style="margin-top:6px">${[0,1,2,3,4].filter(x=>x<=S.res).map(x=>`<button class="chip ${d.res===x?"on":""}" data-act="dRes" data-v="${x}">${x}</button>`).join("")}</div></div>
+  <button class="btn p big" data-act="lancer">🎲 Lancer ${n} dé${n>1?"s":""}${sp?` + ${sp.r} relance${sp.r>1?"s":""}`:""} · ${aptNom(apt)}/${diffEff}</button>
+  <div id="desRes" class="card" style="${DERNIER?"":"display:none"};margin-top:10px">${vResultat(DERNIER)}</div>
+  <p class="small muted">4, 5 ou 6 = réussite. Les 6 se relancent (+). Les dés ratés sont relancés par la spécialité (↻).</p>`;
+  return h; }
+let IDATA=null; const IOUV={};
+async function iData(){ if(IDATA&&IDATA.ep===S.ep) return IDATA; IDATA=await (await fetch(S.ep+"/indices.json",{cache:"no-cache"})).json(); try{localStorage.setItem("cf-indices-"+S.ep,JSON.stringify(IDATA));}catch(e){} return IDATA; }
+async function iDataSafe(){ try{ return await iData(); }catch(e){ const c=localStorage.getItem("cf-indices-"+S.ep); if(c) return IDATA=JSON.parse(c); throw e; } }
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+const u8=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function ouvrir(code){ const D=await iDataSafe(); const tag=hex(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(["cf-indice",S.ep,code].join("|")))).slice(0,16);
+  const en=D.entries.find(e=>e.t===tag); if(!en) return null;
+  const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(code),"PBKDF2",false,["deriveKey"]);
+  const k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:u8(en.s),iterations:D.it,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+  const p=JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-GCM",iv:u8(en.i)},k,u8(en.c)))); p.k=k; p.code=code; return p; }
+async function imgUrl(p,f){ const buf=new Uint8Array(await (await fetch(f)).arrayBuffer()); const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:buf.slice(0,12)},p.k,buf.slice(12)); return URL.createObjectURL(new Blob([pt],{type:"image/jpeg"})); }
+function vIndices(){ const L=S.indices[S.ep]||[];
+  let h=`<h2>Indices</h2><div class="card"><p class="small muted" style="margin:0">Le MJ vous donne un code à 3 chiffres : tapez-le pour débloquer l'indice.</p><div class="code">${(CODE+"___").slice(0,3)}</div>
+  <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-act="k" data-v="${n}">${n}</button>`).join("")}<button data-act="k" data-v="x">⌫</button><button data-act="k" data-v="0">0</button><button data-act="k" data-v="ok" style="background:var(--red);border-color:var(--red)">OK</button></div></div>`;
+  h+=L.length?`<h3>Débloqués · ${esc(EP().titre||"")}</h3>`+L.map(x=>`<div class="card"><button class="ind" style="background:none;border:0;padding:0" data-act="iOuvrir" data-code="${x.code}"><span class="ic">${x.ic||"📄"}</span><span style="flex:1"><b>${esc(x.titre)}</b><br><span class="small muted">${esc(x.sous)}</span></span><span class="small muted">${x.code}</span></button><div id="ib-${x.code}"></div></div>`).join(""):`<p class="small muted">Aucun indice pour l'instant.</p>`;
+  if(EPISODES.length>1) h+=`<h3>Épisode</h3><select data-act2="ep">${EPISODES.map(e=>`<option value="${e.id}" ${e.id===S.ep?"selected":""}>${esc(e.code)} · ${esc(e.titre)}</option>`).join("")}</select>`;
+  return h; }
+async function iAfficher(code){ const box=$("#ib-"+code); if(!box) return; if(box.innerHTML){ box.innerHTML=""; return; } box.innerHTML='<p class="small muted">Déchiffrement…</p>';
+  try{ const p=IOUV[code]||(IOUV[code]=await ouvrir(code)); let h="";
+    for(const b of p.blocs){ if(b.h) h+=b.h; else if(b.svg) h+=`<div class="plan" data-act="zoomSvg">${b.svg}</div><p class="small muted">${esc(b.leg)} · toucher pour agrandir</p>`; else if(b.f){ const u=await imgUrl(p,b.f); h+=`<div class="vis"><img src="${u}" alt="" data-act="zoomImg"></div><p class="small muted">${esc(b.leg)}</p>`; } }
+    box.innerHTML=`<div style="margin-top:8px">${h}</div>`; }
+  catch(e){ box.innerHTML='<p class="err">Indice indisponible hors ligne. Réessayez avec du réseau.</p>'; } }
+function vRushes(){ return `<h2>Rushes</h2><p class="small muted">Notez ce que vous filmez, enregistrez, qui vous interviewez : en fin d'épisode, le MJ s'en sert pour votre salaire (1 à 3 points).</p>
+  <div class="card"><div class="chips">${[["🎥","Filmé"],["🎙","Interview"],["📸","Photo"],["🔊","Son / EVP"],["🔎","Découverte"]].map(([i,t])=>`<button class="chip" data-act="rType" data-v="${i}">${i} ${t}</button>`).join("")}</div>
+  <input type="text" id="rushTxt" placeholder="ex. : filmé le tenancier masqué, interview du motard…" style="margin-top:8px"><button class="btn p big" data-act="rAjout" style="margin-top:8px">● REC — ajouter</button></div>
+  <div class="card">${S.rushes.length?S.rushes.map((r,i)=>`<div class="rush"><time>${esc(r.h)}</time><span style="flex:1">${r.i} ${esc(r.t)}</span><button class="btn s" data-act="rSuppr" data-i="${i}">✕</button></div>`).join(""):'<p class="small muted">Aucun rush pour l\'instant.</p>'}</div>`; }
+function vVan(){ return `<h2>Le van</h2><div class="card"><p class="small muted" style="margin-top:0">Le quartier général mobile de l'émission contient tout le matériel (sauf armes, taser ou fusil) :</p><ul class="small">${REGLES.EQUIPEMENT_VAN.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+  <div class="card"><b>Mon objet ajouté au van</b><input type="text" data-f="objet" value="${esc(S.objet)}" placeholder="ex. : fusée de détresse, corde, thermos de café…" style="margin-top:6px"></div>
+  <div class="card"><div class="row"><span style="flex:1"><b>Matériel « tiré par les cheveux »</b><br><span class="small muted">Chaque demande hors liste : −1 point de salaire</span></span><span class="step"><button data-act="extra" data-d="-1">−</button><b>${S.extras}</b><button data-act="extra" data-d="1">+</button></span></div></div>
+  <h3>Règles express</h3>${REGLES.AIDE_REGLES.map(([t,x])=>`<div class="card"><b>${esc(t)}</b><div class="small">${esc(x)}</div></div>`).join("")}`; }
+function vNotes(){ return `<h2>Notes</h2><textarea data-f="notes" placeholder="Ce que vous avez vu, entendu, compris…">${esc(S.notes)}</textarea><p class="small muted">Enregistré sur ce téléphone.</p>
+  <div class="card"><b>Sauvegarde</b><div class="row" style="margin-top:6px"><button class="btn s" data-act="export">⬇ Exporter mon carnet</button><button class="btn s" data-act="reset">Effacer le carnet</button></div></div>`; }
+
+function render(){
+  $("#top").innerHTML=vTop();
+  const noNav=!S.perso||CREA; $("#tabs").style.display=noNav?"none":"";
+  $$("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===S.tab));
+  let h; if(CREA) h=vCreation(); else if(!S.perso) h=vChoix(); else h=({fiche:vFiche,des:vDes,indices:vIndices,rushes:vRushes,van:vVan,notes:vNotes}[S.tab]||vFiche)();
+  $("#app").innerHTML=h+`<p class="cr">${esc(REGLES.CREDITS)}</p>`;
+}
+const clone=o=>JSON.parse(JSON.stringify(o));
+document.addEventListener("input",e=>{ const t=e.target;
+  if(t.dataset.f){ S[t.dataset.f]=t.value; save(); }
+  if(t.dataset.c&&CREA){ CREA[t.dataset.c]=t.value; }
+});
+document.addEventListener("change",e=>{ const t=e.target; if(t.dataset.act2==="ep"){ S.ep=t.value; IDATA=null; save(); render(); }
+  if(t.dataset.c&&CREA){ render(); } });
+let RTYPE="🎥";
+document.addEventListener("click",async e=>{
+  const tb=e.target.closest("#tabs button"); if(tb){ S.tab=tb.dataset.tab; save(); render(); scrollTo(0,0); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return; const a=b.dataset.act;
+  switch(a){
+    case "tab": S.tab=b.dataset.t; save(); render(); break;
+    case "choisir": { const p=REGLES.PRETIRES.find(x=>x.id===b.dataset.id); if(S.perso&&!confirm("Changer d'enquêteur ? (Notes, rushes et indices sont conservés.)")) break; S.perso=clone(p); S.sante=6; S.res=6; S.defUsed=false; S.tab="fiche"; save(); render(); scrollTo(0,0); toast("Bienvenue dans l'équipe, "+p.nom.split(" ")[0]+" !"); break; }
+    case "changer": if(confirm("Revenir au choix de l'enquêteur ?")){ S.perso=null; save(); render(); } break;
+    case "creer": CREA={nom:"",profil:"",mots:"",defn:"",deft:"",apt:Object.fromEntries(APT.map(x=>[x.id,3])),specs:[]}; CREA.apt.percevoir=4; CREA.apt.secontroler=4; CREA.apt.savoirfaire=4; CREA.apt.viser=2; render(); scrollTo(0,0); break;
+    case "capt": CREA.apt[b.dataset.id]=Math.max(1,Math.min(6,CREA.apt[b.dataset.id]+(+b.dataset.d))); render(); break;
+    case "cspa": { const n=$("#specNom").value.trim(); if(!n) break; CREA.specs.push({nom:n,apt:$("#specApt").value,r:1}); render(); break; }
+    case "cspr": { const s=CREA.specs[+b.dataset.i]; s.r=Math.max(1,Math.min(2,s.r+(+b.dataset.d))); render(); break; }
+    case "cspx": CREA.specs.splice(+b.dataset.i,1); render(); break;
+    case "cvalide": { const c=CREA, cout=c.specs.reduce((x,s)=>x+({1:5,2:15}[s.r]||0),0);
+      S.perso={id:"perso",nom:c.nom.trim(),profil:c.profil.trim()||"Enquêteur",mots:c.mots,portrait:null,deformation:{nom:c.defn||"Déformation professionnelle",txt:c.deft||"À définir avec le MJ."},apt:{...c.apt},specs:c.specs,armes:[{nom:"Poing & cie",apt:"sebattre",deg:c.apt.forcer>=4?`1D (${Math.min(3,c.apt.forcer-3)}R)`:"1D (0R)"}]};
+      S.xp=30-cout; S.sante=6; S.res=6; S.defUsed=false; CREA=null; S.tab="fiche"; save(); render(); scrollTo(0,0); break; }
+    case "cannule": CREA=null; render(); break;
+    case "sante": { const v=+b.dataset.v; S.sante=(S.sante===v)?v-1:v; save(); render(); break; }
+    case "res": { const v=+b.dataset.v; S.res=(S.res===v)?v-1:v; save(); render(); break; }
+    case "def": if(S.defUsed){ S.defUsed=false; } else { if(S.res<1){ toast("Plus de Ressource !"); break; } S.res--; S.defUsed=true; toast("Déformation utilisée : préviens le MJ."); } save(); render(); break;
+    case "xp": S.xp=Math.max(0,S.xp+(+b.dataset.d)); save(); render(); break;
+    case "nouvelEp": if(confirm("Nouvel épisode : Santé et Ressource à 6, Déformation disponible, rushes effacés ?")){ S.sante=6; S.res=6; S.defUsed=false; S.rushes=[]; S.extras=0; save(); render(); } break;
+    case "jet": S.des.apt=b.dataset.apt; S.des.spec=null; S.des.res=0; S.tab="des"; DERNIER=null; save(); render(); scrollTo(0,0); break;
+    case "dApt": S.des.apt=b.dataset.apt; S.des.spec=null; save(); render(); break;
+    case "dSpec": S.des.spec=b.dataset.v||null; save(); render(); break;
+    case "dDiff": S.des.diff=+b.dataset.v; save(); render(); break;
+    case "dRes": S.des.res=+b.dataset.v; save(); render(); break;
+    case "lancer": { const d=S.des, apt=d.apt||"agir", sp=S.perso.specs.find(s=>s.apt===apt&&s.nom===d.spec); const res=Math.min(d.res,S.res);
+      if(S.sante<=0){ toast("Inconscient : impossible d'agir."); break; }
+      DERNIER=lancer({n:S.perso.apt[apt],diff:Math.min(4,d.diff+malusSante()),rel:sp?sp.r:0,res}); DERNIER.ressourceDep=res; S.res-=res;
+      if(DERNIER.totale) S.res=Math.min(6,S.res+1); if(DERNIER.echecTotal) S.res=Math.max(0,S.res-1); S.des.res=0; save(); render(); const r=$("#desRes"); if(r) r.scrollIntoView({behavior:"smooth",block:"center"}); break; }
+    case "degats": { const w=S.perso.armes[+b.dataset.i]; const m=w.deg.match(/(\d+)D\s*\((\d+)R\)/); DERNIER=degats(+m[1],+m[2]); S.tab="des"; save(); render(); break; }
+    case "k": { const v=b.dataset.v; if(v==="x") CODE=CODE.slice(0,-1); else if(v==="ok"){ if(CODE.length!==3) break; const code=CODE; CODE="";
+        const deja=(S.indices[S.ep]||[]).find(x=>x.code===code); if(deja){ toast("Déjà débloqué !"); render(); break; }
+        try{ const p=await ouvrir(code); if(!p){ toast("Code inconnu pour cet épisode."); if(navigator.vibrate) navigator.vibrate(200); render(); break; }
+          IOUV[code]=p; (S.indices[S.ep]=S.indices[S.ep]||[]).push({code,titre:p.titre,sous:p.sous,ic:p.blocs.some(x=>x.svg)?"🗺️":p.blocs.some(x=>x.f)?"🖼️":"📄"}); save(); render(); toast("🔓 "+p.titre); setTimeout(()=>iAfficher(code),50);
+          p.blocs.forEach(x=>{ if(x.f) fetch(x.f).catch(()=>{}); }); }
+        catch(err){ toast("Impossible de vérifier le code (pas de réseau ?)."); render(); } break; }
+      else if(CODE.length<3) CODE+=v; $(".code").textContent=(CODE+"___").slice(0,3); break; }
+    case "iOuvrir": iAfficher(b.dataset.code); break;
+    case "zoomImg": $("#zoomIn").innerHTML=`<img src="${b.src}" alt="">`; $("#zoom").classList.add("on"); break;
+    case "zoomSvg": $("#zoomIn").innerHTML=b.innerHTML; $("#zoom").classList.add("on"); break;
+    case "rType": RTYPE=b.dataset.v; $$("[data-act=rType]").forEach(x=>x.classList.toggle("on",x===b)); break;
+    case "rAjout": { const t=$("#rushTxt").value.trim(); if(!t) break; S.rushes.unshift({i:RTYPE,t,h:new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}); save(); render(); break; }
+    case "rSuppr": S.rushes.splice(+b.dataset.i,1); save(); render(); break;
+    case "extra": S.extras=Math.max(0,S.extras+(+b.dataset.d)); save(); render(); break;
+    case "export": { const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"}); const l=document.createElement("a"); l.href=URL.createObjectURL(blob); l.download="channel-fear-carnet.json"; l.click(); break; }
+    case "reset": if(confirm("Effacer tout le carnet (enquêteur, notes, rushes, indices) ?")){ const ep=S.ep; S=defaultState(); S.ep=ep; save(); render(); } break;
+  }
+});
+$("#zoomX").onclick=()=>$("#zoom").classList.remove("on");
+render();
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")) navigator.serviceWorker.register("../sw.js").catch(()=>{});
+</script>
+</body>
+</html>
