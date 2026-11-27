@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111014">
-<title>Le Grimoire de Pipou</title><meta name="apple-mobile-web-app-title" content="Le Grimoire de Pipou">
+<title>Grimoire PJ</title><meta name="apple-mobile-web-app-title" content="Grimoire PJ">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -48,6 +48,7 @@ h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mu
 .lien{color:var(--mute);font-size:.85rem;text-align:center;margin:30px 0 0}
 .lien a{color:var(--mute)}
 .mjtag{display:inline-block;background:#5a1d1d;color:#ffd9d3;font-size:.7rem;letter-spacing:.1em;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
+.mjtag.pj{background:#3a3220;color:#f1e4c6}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:#000c;color:#fff;padding:10px 16px;border-radius:10px;transition:.25s;font-size:.9rem}
 #toast.show{transform:translateX(-50%)}
 </style>
@@ -81,7 +82,7 @@ function supprimerPartie(s){ const c=etat(s), g=c.garder||[];
 function theme(j){return `--c-bg:${j.couleurs.fond};--c-ink:${j.couleurs.encre};--c-acc:${j.couleurs.accent}`;}
 
 function render(){
-  $("#titre").innerHTML=MODE==="mj"?'Ma table · MJ <span class="mjtag">MJ</span>':"Le Grimoire de Pipou";
+  $("#titre").innerHTML=MODE==="mj"?'Grimoire <span class="mjtag">MJ</span>':'Grimoire <span class="mjtag pj">PJ</span>';
   $("#sous").textContent=MODE==="mj"?"Choisis le jeu, puis le scénario à mener.":"Choisis ton jeu, puis le scénario de la soirée.";
   const j=jeu(st.jeu), s=scen(j,st.sc);
   let h=`<nav class="etapes"><button class="${!j?"on":""}" data-go="0">1 · Jeu</button><button class="${j&&!s?"on":""}" data-go="1" ${j?"":"disabled"}>2 · Scénario</button><button class="${s?"on":""}" ${s?"":"disabled"}>3 · ${MODE==="mj"?"Mener":"Jouer"}</button></nav>`;

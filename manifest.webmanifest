@@ -1,6 +1,6 @@
 {
-  "name": "Le Grimoire de Pipou",
-  "short_name": "Le Grimoire de Pipou",
+  "name": "Grimoire PJ",
+  "short_name": "Grimoire PJ",
   "description": "Les applis de jeu de rôle de la table : choisir le jeu puis le scénario.",
   "lang": "fr",
   "start_url": "./",
