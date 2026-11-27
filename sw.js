@@ -1,6 +1,6 @@
 // Cache hors ligne de tout le site (accueil, Aria, Channel Fear…).
 // publier.sh change VERSION à chaque mise en ligne pour forcer la mise à jour des téléphones.
-const VERSION = "aria-20261127-1628";
+const VERSION = "aria-20261127-1756";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "mj/", "mj/index.html",
   "aria/", "aria/index.html", "aria/manifest.webmanifest", "aria/icon-192.png", "aria/campagne.json", "aria/lieux.json", "aria/achats.json", "aria/monde.jpg",
   "aria/mj/", "aria/mj/index.html", "aria/mj/manifest.webmanifest",

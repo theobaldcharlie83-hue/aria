@@ -24,6 +24,8 @@ button{font:inherit;color:inherit}
 .top .who{flex:1;line-height:1.2;cursor:pointer}
 .top .who b{font:600 1.05rem Oswald,sans-serif;letter-spacing:.04em;display:block}
 .top .who small{color:var(--mute)}
+.top .quit{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);color:var(--mute);text-decoration:none;font-size:1rem;line-height:1}
+.top .quit:active,.top .quit:hover{color:#fff;border-color:var(--red)}
 .rec{font:1rem VT323,monospace;color:var(--red);display:flex;align-items:center;gap:5px}
 .rec i{width:9px;height:9px;border-radius:50%;background:var(--red);animation:blink 1.2s steps(2) infinite}
 @keyframes blink{50%{opacity:.15}}
@@ -182,9 +184,10 @@ function vResultat(r){ if(!r) return "";
 
 /* ---------- En-tête ---------- */
 function vTop(){ const p=S.perso;
-  if(!p) return `<div class="rec"><i></i>REC</div><div class="who"><b>CHANNEL FEAR</b><small>Carnet d'enquêteur</small></div><a class="btn s" href="../">⌂</a>`;
+  if(!p) return `<div class="rec"><i></i>REC</div><div class="who"><b>CHANNEL FEAR</b><small>Carnet d'enquêteur</small></div><a class="quit" href="../" title="Revenir à l'accueil" aria-label="Revenir à l'accueil">✕</a>`;
   return `<button class="avbtn" data-act="changer" title="Changer d'enquêteur" aria-label="Changer d'enquêteur"><img class="av" src="${portrait(p)}" alt=""><span class="sw">⇄</span></button><div class="who" data-act="tab" data-t="fiche"><b>${esc(p.nom)}</b><small>${esc(p.profil)} · ${esc(EP().code||"")} ${esc(EP().titre||"")}</small></div>
-  <div class="jauges"><div class="jauge ${S.sante<=2?"bas":""}"><b>${S.sante}</b>Santé</div><div class="jauge ${S.res<=1?"bas":""}"><b>${S.res}</b>Ress.</div></div>`; }
+  <div class="jauges"><div class="jauge ${S.sante<=2?"bas":""}"><b>${S.sante}</b>Santé</div><div class="jauge ${S.res<=1?"bas":""}"><b>${S.res}</b>Ress.</div></div>
+  <a class="quit" href="../" title="Fermer le scénario et revenir à l'accueil" aria-label="Fermer le scénario et revenir à l'accueil">✕</a>`; }
 
 /* ---------- Choix / création ---------- */
 function vChoix(){
@@ -295,9 +298,16 @@ document.addEventListener("input",e=>{ const t=e.target;
 });
 document.addEventListener("change",e=>{ const t=e.target; if(t.dataset.act2==="ep"){ S.ep=t.value; IDATA=null; save(); render(); }
   if(t.dataset.c&&CREA){ render(); } });
+/* Retire le zoom « pincé » du navigateur (iOS/Android) : on bloque l'échelle un instant puis on la rend. */
+function dezoomer(){ const m=document.querySelector('meta[name="viewport"]'); if(!m) return; const v=m.content;
+  if(window.visualViewport&&visualViewport.scale<=1.01) return;
+  m.content=v+",maximum-scale=1,minimum-scale=1"; setTimeout(()=>{ m.content=v; },400); }
 document.addEventListener("click",async e=>{
   const tb=e.target.closest("#tabs button"); if(tb){ S.tab=tb.dataset.tab; save(); render(); scrollTo(0,0); return; }
-  const poi=e.target.closest("#carte [data-poi]"); if(poi){ const x=carteLieux().find(l=>l.lieu.id===poi.dataset.poi); if(x){ const c=$("#li-"+x.code); if(c) c.scrollIntoView({behavior:"smooth",block:"center"}); const box=$("#ib-"+x.code); if(box&&!box.innerHTML) iAfficher(x.code); } return; }
+  const poi=e.target.closest("#carte [data-poi], #zoomIn [data-poi]"); if(poi){ const x=carteLieux().find(l=>l.lieu.id===poi.dataset.poi); if(x){
+      $("#zoom").classList.remove("on"); dezoomer();
+      const box=$("#ib-"+x.code); if(box&&!box.innerHTML) await iAfficher(x.code);
+      setTimeout(()=>{ const c=$("#li-"+x.code); if(c) c.scrollIntoView({behavior:"smooth",block:"center"}); },120); } return; }
   const fondC=e.target.closest("#carte"); if(fondC){ $("#zoomIn").innerHTML=fondC.innerHTML; $("#zoom").classList.add("on"); return; }
   const b=e.target.closest("[data-act]"); if(!b) return; const a=b.dataset.act;
   switch(a){
