@@ -44,6 +44,7 @@ h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mu
 .reprendre{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:1px solid var(--acc);border-radius:14px;padding:12px 14px;color:var(--ink);text-decoration:none;margin:0 0 6px}
 .reprendre .i{font-size:1.6rem}
 .reprendre small{display:block;color:var(--mute);font-size:.78rem}
+.effacer{display:block;margin:0 0 14px auto;background:none;border:0;color:#ff8a80;font:inherit;font-size:.82rem;text-decoration:underline;cursor:pointer;padding:4px 2px}
 .lien{color:var(--mute);font-size:.85rem;text-align:center;margin:30px 0 0}
 .lien a{color:var(--mute)}
 .mjtag{display:inline-block;background:#5a1d1d;color:#ffd9d3;font-size:.7rem;letter-spacing:.1em;padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:middle}
@@ -59,7 +60,7 @@ h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;color:var(--mu
 </div>
 <div id="toast"></div>
 <script>
-const JEUX=[{"id":"aria","nom":"Aria","genre":"Fantasy médiévale","accroche":"Royaume d'Aria · magie, intrigues et vieilles légendes.","couleurs":{"fond":"#1b140c","encre":"#f1e4c6","accent":"#dcaa4a"},"police":"'Cormorant Garamond',Georgia,serif","scenarios":[{"id":"jours-de-peste","nom":"Jours de peste","type":"Prélude 2 · one-shot ~4 h","resume":"Une épidémie, un village qui se meurt et un seigneur qui se fait attendre.","joueurs":"aria/","mj":"aria/mj/"}]},{"id":"channel-fear","nom":"Channel Fear","genre":"Horreur contemporaine · found footage","accroche":"Une équipe de télé-réalité paranormale sillonne les États-Unis… et disparaît.","couleurs":{"fond":"#0b0b0c","encre":"#ecebe6","accent":"#e0322b"},"police":"Oswald,'Arial Narrow',sans-serif","scenarios":[{"id":"s01e02","nom":"Samsara, les animaux fantômes","type":"Saison 1 · épisode 2 · ~2 h","resume":"Au Kansas, un couple jure que les fantômes de leurs animaux de compagnie hantent leur maison. Rendez-vous demain, 8 h.","joueurs":"channel-fear/?ep=s01e02","mj":"channel-fear/mj/?ep=s01e02"}]}];
+const JEUX=[{"id":"aria","nom":"Aria","genre":"Fantasy médiévale","accroche":"Royaume d'Aria · magie, intrigues et vieilles légendes.","couleurs":{"fond":"#1b140c","encre":"#f1e4c6","accent":"#dcaa4a"},"police":"'Cormorant Garamond',Georgia,serif","scenarios":[{"id":"jours-de-peste","nom":"Jours de peste","type":"Prélude 2 · one-shot ~4 h","resume":"Une épidémie, un village qui se meurt et un seigneur qui se fait attendre.","joueurs":"aria/","mj":"aria/mj/","etatMj":{"cles":["aria-grimoire-mj-v1"],"garder":["precedemment"]},"etatJoueurs":{"cles":["aria-carnet-v1","aria-lieux-v1"]}}]},{"id":"channel-fear","nom":"Channel Fear","genre":"Horreur contemporaine · found footage","accroche":"Une équipe de télé-réalité paranormale sillonne les États-Unis… et disparaît.","couleurs":{"fond":"#0b0b0c","encre":"#ecebe6","accent":"#e0322b"},"police":"Oswald,'Arial Narrow',sans-serif","scenarios":[{"id":"s01e02","nom":"Samsara, les animaux fantômes","type":"Saison 1 · épisode 2 · ~2 h","resume":"Au Kansas, un couple jure que les fantômes de leurs animaux de compagnie hantent leur maison. Rendez-vous demain, 8 h.","joueurs":"channel-fear/?ep=s01e02","mj":"channel-fear/mj/?ep=s01e02","etatMj":{"cles":["cf-regie-v1-s01e02"]},"etatJoueurs":{"cles":["cf-carnet-v1"]}}]}];
 const MODE="joueur";          // "joueur" (racine du site) ou "mj" (site/mj/)
 const RACINE=MODE==="mj"?"../":"./";      // liens du catalogue relatifs à la racine du site
 const KEY="table-accueil-"+MODE;
@@ -70,6 +71,13 @@ let dernier=null; try{dernier=JSON.parse(localStorage.getItem(KEY)||"null");}cat
 const jeu=id=>JEUX.find(j=>j.id===id), scen=(j,id)=>j&&j.scenarios.find(s=>s.id===id);
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2200);}
 function lienDe(j,s,role){return RACINE+(role==="mj"?s.mj:s.joueurs);}
+const etat=s=>s&&(MODE==="mj"?s.etatMj:s.etatJoueurs);
+function partieEnCours(s){ const c=etat(s); if(!c) return false;
+  return c.cles.some(k=>{ try{ const v=localStorage.getItem(k); if(!v||v==="null") return false; const o=JSON.parse(v); return !o||typeof o!=="object"||Object.keys(o).some(x=>!(c.garder||[]).includes(x)); }catch(e){ return true; } }); }
+function supprimerPartie(s){ const c=etat(s), g=c.garder||[];
+  for(const k of c.cles){ let o={}; try{o=JSON.parse(localStorage.getItem(k)||"{}")||{};}catch(e){}
+    const reste={}; for(const x of g) if(o[x]!==undefined&&o[x]!=="") reste[x]=o[x];
+    if(Object.keys(reste).length) localStorage.setItem(k,JSON.stringify(reste)); else localStorage.removeItem(k); } }
 function theme(j){return `--c-bg:${j.couleurs.fond};--c-ink:${j.couleurs.encre};--c-acc:${j.couleurs.accent}`;}
 
 function render(){
@@ -80,6 +88,7 @@ function render(){
   if(!j){
     const dj=dernier&&jeu(dernier.jeu), ds=scen(dj,dernier&&dernier.sc);
     if(ds) h+=`<a class="reprendre" href="${lienDe(dj,ds,MODE)}"><span class="i">▶</span><span><b>Reprendre : ${esc(dj.nom)} — ${esc(ds.nom)}</b><small>${MODE==="mj"?"Espace MJ":"Mon carnet"} · dernière partie ouverte</small></span></a>`;
+    if(ds&&partieEnCours(ds)) h+=`<button class="effacer" data-suppr="${dj.id}|${ds.id}">🗑 Supprimer ${MODE==="mj"?"la":"ma"} partie en cours et repartir de zéro</button>`;
     h+=`<h2>Jeux de rôle</h2>`+JEUX.map(x=>`<button class="jeu" style="${theme(x)}" data-jeu="${x.id}"><span class="nb">${x.scenarios.length} scénario${x.scenarios.length>1?"s":""}</span><div class="genre">${esc(x.genre)}</div><div class="nom" style="font-family:${x.police}">${esc(x.nom)}</div><p class="acc">${esc(x.accroche)}</p></button>`).join("");
   } else if(!s){
     h+=`<button class="jeu" style="${theme(j)};padding:14px 18px" data-go="0"><div class="genre">← Changer de jeu</div><div class="nom" style="font-family:${j.police};font-size:1.6rem">${esc(j.nom)}</div></button>`;
@@ -92,8 +101,10 @@ function render(){
       h+=`<a class="go p" style="background:var(--c-acc)" href="${lienDe(j,s,"mj")}" data-memo>🔒 Ouvrir l'espace MJ</a>
           <a class="go g" style="color:var(--c-ink)" href="${lienDe(j,s,"joueur")}" target="_blank">👁 Voir l'appli des joueurs</a>
           <button class="go g" style="color:var(--c-ink)" data-copie="${lienDe(j,s,"joueur")}">🔗 Copier le lien joueurs (Discord)</button>`;
+      if(partieEnCours(s)) h+=`<button class="go g" style="color:#ff8a80;border-color:#ff8a8066" data-suppr="${j.id}|${s.id}">🗑 Supprimer la partie en cours</button>`;
     } else {
       h+=`<a class="go p" style="background:var(--c-acc);color:var(--c-bg)" href="${lienDe(j,s,"joueur")}" data-memo>Ouvrir mon carnet</a>`;
+      if(partieEnCours(s)) h+=`<button class="go g" style="color:#ff8a80;border-color:#ff8a8066" data-suppr="${j.id}|${s.id}">🗑 Supprimer ma partie en cours</button>`;
     }
     h+=`<button class="go g" style="color:var(--c-ink)" data-go="1">← Autre scénario</button></div>`;
   }
@@ -101,7 +112,13 @@ function render(){
   $("#bas").innerHTML=MODE==="mj"?`<a href="../">Accueil des joueurs</a>`:`<a href="mj/">Espace MJ</a>`;
 }
 document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-jeu],[data-sc],[data-go],[data-copie],[data-memo]"); if(!b) return;
+  const b=e.target.closest("[data-jeu],[data-sc],[data-go],[data-copie],[data-memo],[data-suppr]"); if(!b) return;
+  if(b.dataset.suppr){ const [ij,is]=b.dataset.suppr.split("|"), j=jeu(ij), s=scen(j,is); if(!s) return;
+    const quoi=MODE==="mj"?"Progression, notes, équipe et chronos de l'espace MJ":"Personnage, notes, cartes et indices de ton carnet";
+    const garde=(etat(s).garder||[]).includes("precedemment")?" (Le résumé « Précédemment » est conservé.)":"";
+    if(!confirm("Supprimer la partie en cours de « "+s.nom+" » ?\n\n"+quoi+" seront effacés sur cet appareil. C'est définitif."+garde)) return;
+    supprimerPartie(s); if(dernier&&dernier.jeu===ij&&dernier.sc===is){ dernier=null; try{localStorage.removeItem(KEY);}catch(_){} }
+    toast("Partie supprimée · prête à repartir de zéro"); render(); return; }
   if(b.dataset.jeu){ st={jeu:b.dataset.jeu,sc:null}; const j=jeu(st.jeu); if(j.scenarios.length===1) st.sc=j.scenarios[0].id; }
   else if(b.dataset.sc) st.sc=b.dataset.sc;
   else if(b.dataset.go==="0") st={jeu:null,sc:null};
