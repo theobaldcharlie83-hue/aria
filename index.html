@@ -110,7 +110,7 @@ function render(){
     h+=`<button class="go g" style="color:var(--c-ink)" data-go="1">← Autre scénario</button></div>`;
   }
   $("#app").innerHTML=h;
-  $("#bas").innerHTML=MODE==="mj"?`<a href="../">Accueil des joueurs</a>`:`<a href="mj/">Espace MJ</a>`;
+  $("#bas").innerHTML=MODE==="mj"?`<a href="../">Accueil des joueurs</a>`:"";
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-jeu],[data-sc],[data-go],[data-copie],[data-memo],[data-suppr]"); if(!b) return;
