@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111014">
-<title>Ma table de jeu</title>
+<title>Le Grimoire de Pipou</title><meta name="apple-mobile-web-app-title" content="Le Grimoire de Pipou">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -81,7 +81,7 @@ function supprimerPartie(s){ const c=etat(s), g=c.garder||[];
 function theme(j){return `--c-bg:${j.couleurs.fond};--c-ink:${j.couleurs.encre};--c-acc:${j.couleurs.accent}`;}
 
 function render(){
-  $("#titre").innerHTML=MODE==="mj"?'Ma table · MJ <span class="mjtag">MJ</span>':"Ma table de jeu";
+  $("#titre").innerHTML=MODE==="mj"?'Ma table · MJ <span class="mjtag">MJ</span>':"Le Grimoire de Pipou";
   $("#sous").textContent=MODE==="mj"?"Choisis le jeu, puis le scénario à mener.":"Choisis ton jeu, puis le scénario de la soirée.";
   const j=jeu(st.jeu), s=scen(j,st.sc);
   let h=`<nav class="etapes"><button class="${!j?"on":""}" data-go="0">1 · Jeu</button><button class="${j&&!s?"on":""}" data-go="1" ${j?"":"disabled"}>2 · Scénario</button><button class="${s?"on":""}" ${s?"":"disabled"}>3 · ${MODE==="mj"?"Mener":"Jouer"}</button></nav>`;

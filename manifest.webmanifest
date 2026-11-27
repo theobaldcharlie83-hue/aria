@@ -1,6 +1,6 @@
 {
-  "name": "Ma table de jeu",
-  "short_name": "Ma table",
+  "name": "Le Grimoire de Pipou",
+  "short_name": "Le Grimoire de Pipou",
   "description": "Les applis de jeu de rôle de la table : choisir le jeu puis le scénario.",
   "lang": "fr",
   "start_url": "./",
